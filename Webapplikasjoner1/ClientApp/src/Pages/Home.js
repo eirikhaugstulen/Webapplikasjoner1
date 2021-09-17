@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import {Button, Card, CardBody, Nav, NavItem, TabContent, TabPane, NavLink} from "reactstrap";
 import explore from '../Media/explore.svg'
+import history from "../history";
 
 export const Home = () => {
 
@@ -17,7 +18,13 @@ export const Home = () => {
                                 </p>
                             </div>
                             <div className={'d-flex justify-content-center'}>
-                                <Button outline color={'primary'}>Bestill</Button>
+                                <Button 
+                                    outline 
+                                    color={'primary'}
+                                    onClick={() => history.push('/bestill')}
+                                >
+                                    Bestill
+                                </Button>
                             </div>
                         </div>
                         <div className={'col-6 p-5'}>
