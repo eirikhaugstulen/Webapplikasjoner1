@@ -7,10 +7,10 @@ export const Home = () => {
     return (
         <div>
                 <CardBody className={'d-flex flex-column justify-content-center text-center'}>
-                    <h3 className={'m-3 font-italic'}>Klar for tur?</h3>
+                    <h3 className={'m-3 font-italic'}>Bestill din drømmetur</h3>
                     <div className={'row mb-5'}>
                         <div className={'col d-flex flex-column justify-content-between p-5'}>
-                            <h5 style={{color: '#720505'}}>Lorem Ipsum</h5>
+                            <h5 style={{color: '#720505'}}>Hvor vil du reise?</h5>
                             <div className={'p-3'}>
                                 <p className={'lh-lg text-muted'}>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id ligula placerat, convallis magna at, vulputate ligula. Suspendisse consequat mauris vel lorem fringilla, quis rhoncus lectus mollis. Duis et justo sit amet
