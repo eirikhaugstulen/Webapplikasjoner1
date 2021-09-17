@@ -6,7 +6,6 @@ export const Home = () => {
 
     return (
         <div>
-            <Card>
                 <CardBody className={'d-flex flex-column justify-content-center text-center'}>
                     <h3 className={'m-3 font-italic'}>Klar for tur?</h3>
                     <div className={'row mb-5'}>
@@ -29,7 +28,6 @@ export const Home = () => {
                     </div>
                     
                 </CardBody>
-            </Card>
         </div>
     );
 }
