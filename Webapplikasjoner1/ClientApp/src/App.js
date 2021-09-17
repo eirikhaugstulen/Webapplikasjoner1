@@ -2,7 +2,8 @@
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './Pages/Home';
-import {Reiser} from "./Pages/Reiser";
+import { Reiser } from "./Pages/Reiser";
+import { Bestilling } from "./Pages/Bestilling";
 
 
 export default class App extends Component {
@@ -13,6 +14,7 @@ export default class App extends Component {
       <Layout>
         <Route exact path='/' component={Home} />
         <Route path={'/reiser'} component={Reiser} />
+        <Route path={'/bestill'} component={Bestilling} />
       </Layout>
     );
   }

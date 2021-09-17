@@ -6,11 +6,10 @@ export const Home = () => {
 
     return (
         <div>
-            <Card>
                 <CardBody className={'d-flex flex-column justify-content-center text-center'}>
                     <h3 className={'m-3 font-italic'}>Bestill din drømmetur</h3>
                     <div className={'row mb-5'}>
-                        <div className={'col d-flex flex-column justify-content-between p-5'}>
+                        <div className={'col d-flex flex-column p-5 mt-5'}>
                             <h5 style={{color: '#720505'}}>Hvor vil du reise?</h5>
                             <div className={'p-3'}>
                                 <p className={'lh-lg text-muted'}>
@@ -29,7 +28,6 @@ export const Home = () => {
                     </div>
                     
                 </CardBody>
-            </Card>
         </div>
     );
 }
