@@ -83,12 +83,12 @@ namespace Webapplikasjoner1.DAL
         {
             try
             {
-                Biletter enBillett await _db.Biletter.FindAsync(endreBillett.id);
-                enBillett.Fornavn = endreBillett.Fornavn
-                enBillett.Etternavn = endreBillett.Etternavn
-                enBillett.Strekning = endreBillett.Strekning
-                enBillett.Antall = endreBillett.Antall
-                enBillett.Dato = endreBillett.Dato
+                Billetter enBillett await _db.Billetter.FindAsync(endreBillett.Id);
+                enBillett.Fornavn = endreBillett.Fornavn,
+                enBillett.Etternavn = endreBillett.Etternavn,
+                enBillett.Strekning = endreBillett.Strekning,
+                enBillett.Antall = endreBillett.Antall,
+                enBillett.Dato = endreBillett.Dato,
                 
             }
             catch
