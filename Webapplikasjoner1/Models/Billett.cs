@@ -1,15 +1,12 @@
 namespace Webapplikasjoner1.Models
 {
     public class Billett
-    {
-        public Billett()
-        {
-            public int id { get; set; }
-            public string strekning { get; set; }
-            public string fornavn { get; set; }
-            public string etternavn { get; set; }
-            public int antall { get; set; }
-            public Date dato { get; set; }
-        }
+    {  
+        public int Id { get; set; }
+        public string Strekning { get; set; }
+        public string Fornavn { get; set; }
+        public string Etternavn { get; set; }
+        public int Antall { get; set; }
+        public string Dato { get; set; }
     }
 }

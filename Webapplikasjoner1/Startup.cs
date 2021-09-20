@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Webapplikasjoner1.DAL;
+using Webapplikasjoner1.Models;
 
 namespace Webapplikasjoner1
 {
@@ -22,6 +25,9 @@ namespace Webapplikasjoner1
         {
 
             services.AddControllersWithViews();
+            services.AddControllers();
+            services.AddDbContext<BillettKontekst>(options => options.UseSqlite("Data source=Billetter.db"));
+            services.AddScoped<IBillettRepository,  BillettRepository>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
