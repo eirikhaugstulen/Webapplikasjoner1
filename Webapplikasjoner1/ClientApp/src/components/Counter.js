@@ -9,7 +9,7 @@ export class Counter extends Component {
     this.incrementCounter = this.incrementCounter.bind(this);
   }
 
-  incrementCounter() {
+  incrementCounter() { 
     this.setState({
       currentCount: this.state.currentCount + 1
     });
