@@ -9,7 +9,6 @@ using Webapplikasjoner1.Models;
 
 namespace Webapplikasjoner1.Controllers
 {
-    [ApiController]
     [Route("[controller]/[action]")]
     public class BillettController : ControllerBase
     {

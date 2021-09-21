@@ -42,6 +42,7 @@ namespace Webapplikasjoner1
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            
             }
             else
             {

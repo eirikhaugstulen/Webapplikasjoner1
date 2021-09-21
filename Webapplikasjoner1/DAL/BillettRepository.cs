@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Webapplikasjoner1.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Webapplikasjoner1.DAL
 {
@@ -83,17 +82,18 @@ namespace Webapplikasjoner1.DAL
         {
             try
             {
-                Billetter enBillett await _db.Billetter.FindAsync(endreBillett.Id);
-                enBillett.Fornavn = endreBillett.Fornavn,
-                enBillett.Etternavn = endreBillett.Etternavn,
-                enBillett.Strekning = endreBillett.Strekning,
-                enBillett.Antall = endreBillett.Antall,
-                enBillett.Dato = endreBillett.Dato,
-                
+                Billett enBillett = await _db.Billetter.FindAsync(endreBillett.Id);
+                enBillett.Fornavn = endreBillett.Fornavn;
+                enBillett.Etternavn = endreBillett.Etternavn;
+                enBillett.Strekning = endreBillett.Strekning;
+                enBillett.Antall = endreBillett.Antall;
+                enBillett.Dato = endreBillett.Dato;
+                await _db.SaveChangesAsync();
+                return true;
             }
             catch
             {
-
+                return false;
             }
         }
 
