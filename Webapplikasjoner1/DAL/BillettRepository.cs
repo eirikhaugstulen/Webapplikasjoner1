@@ -23,7 +23,8 @@ namespace Webapplikasjoner1.DAL
             {
                 var nyBillettRad = new Billett();
                 nyBillettRad.Id = innBillett.Id;
-                nyBillettRad.Strekning = innBillett.Strekning;
+                nyBillettRad.TilSted = innBillett.TilSted;
+                nyBillettRad.FraSted = innBillett.FraSted;
                 nyBillettRad.Fornavn = innBillett.Fornavn;
                 nyBillettRad.Etternavn = innBillett.Etternavn;
                 nyBillettRad.Antall = innBillett.Antall;
@@ -37,6 +38,32 @@ namespace Webapplikasjoner1.DAL
                 return false;
             }
         }
+        /*
+        public async Task<bool> LagreFler(Billett [] innBilletter)
+        {
+            try
+            {
+                foreach(Billett b in innBilletter)
+                {
+                    var nyBillettRad = new Billett();
+                    nyBillettRad.Id = b.Id;
+                    nyBillettRad.TilSted = b.TilSted;
+                    nyBillettRad.FraSted = b.FraSted;
+                    nyBillettRad.Fornavn = b.Fornavn;
+                    nyBillettRad.Etternavn = b.Etternavn;
+                    nyBillettRad.Antall = b.Antall;
+                    nyBillettRad.Dato = b.Dato;
+                    _db.Billetter.Add(nyBillettRad);
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }*/
 
 
         public async Task<List<Billett>> HentAlle()
@@ -46,7 +73,8 @@ namespace Webapplikasjoner1.DAL
                 List<Billett> alleBillettene = await _db.Billetter.Select(b => new Billett
                 {
                     Id = b.Id,
-                    Strekning = b.Strekning,
+                    TilSted = b.TilSted,
+                    FraSted = b.FraSted,
                     Fornavn = b.Fornavn,
                     Etternavn = b.Etternavn,
                     Antall = b.Antall,
@@ -68,7 +96,8 @@ namespace Webapplikasjoner1.DAL
                 var hentetBillett = new Billett()
                 {
                     Id = enBillett.Id,
-                    Strekning = enBillett.Strekning,
+                    TilSted = enBillett.TilSted,
+                    FraSted = enBillett.FraSted,
                     Fornavn = enBillett.Fornavn,
                     Etternavn = enBillett.Etternavn,
                     Antall = enBillett.Antall,
@@ -85,7 +114,8 @@ namespace Webapplikasjoner1.DAL
                 Billett enBillett = await _db.Billetter.FindAsync(endreBillett.Id);
                 enBillett.Fornavn = endreBillett.Fornavn;
                 enBillett.Etternavn = endreBillett.Etternavn;
-                enBillett.Strekning = endreBillett.Strekning;
+                enBillett.TilSted = endreBillett.TilSted;
+                enBillett.FraSted = endreBillett.FraSted;
                 enBillett.Antall = endreBillett.Antall;
                 enBillett.Dato = endreBillett.Dato;
                 await _db.SaveChangesAsync();

@@ -7,7 +7,9 @@ namespace Webapplikasjoner1.DAL
     public interface IBillettRepository
     {
         Task<bool> Lagre(Billett innBillett);
-
+        /*
+        Task<bool> LagreFler(Billett[] innBilletter);
+       */
         Task<List<Billett>> HentAlle();
 
         Task<Billett> HentEn(int id);
