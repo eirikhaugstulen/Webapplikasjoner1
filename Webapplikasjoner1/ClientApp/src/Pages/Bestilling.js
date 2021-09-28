@@ -16,6 +16,8 @@ export const Bestilling = () => {
         updateIsTouched,
         handleSubmit,
     ] = useBestillingsForm();
+    const [fornavn, setFornavn] = useState('');
+    const [etternavn, setEtternavn] = useState('');
 
     const changeRetur = () => returState.setRetur(!returState.retur);
     
@@ -67,7 +69,19 @@ export const Bestilling = () => {
                     </FormGroup>
                 </Col>
             </Row>
-
+            
+            <Row form>
+                <Col md={3}>
+                    <FormGroup>
+                        <Input type={'text'} value={fornavn} onChange={(e) => setFornavn(e.value)} placeholder={'Fornavn'}/>
+                    </FormGroup>
+                </Col>
+                <Col md={3}>
+                    <FormGroup>
+                        <Input type={'text'} value={etternavn} onChange={(e) => setEtternavn(e.value)} placeholder={'Etternavn'}/>
+                    </FormGroup>
+                </Col>
+            </Row>
             <div className={'mt-3'}>
                 <Button
                     color={'primary'}
