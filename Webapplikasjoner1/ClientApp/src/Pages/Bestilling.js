@@ -11,13 +11,13 @@ export const Bestilling = () => {
             fraDatoState,
             tilDatoState,
             returState,
+            fornavnState,
+            etternavnState,
         }, 
         valid,
         updateIsTouched,
         handleSubmit,
     ] = useBestillingsForm();
-    const [fornavn, setFornavn] = useState('');
-    const [etternavn, setEtternavn] = useState('');
 
     const changeRetur = () => returState.setRetur(!returState.retur);
     
@@ -40,7 +40,7 @@ export const Bestilling = () => {
                 <Col md={12}>
                     <FormGroup check>
                         <Input type={'checkbox'} onChange={() => changeRetur()} />
-                        <Label>Tur/Retur?</Label>
+                        <Label>Retur?</Label>
                     </FormGroup>
                 </Col>
             </Row>
@@ -51,34 +51,54 @@ export const Bestilling = () => {
                         <Label>Velg avgang</Label>
                         <Input
                             type={'date'}
-                            onBlur={e => fraDatoState.setFraDato(e.target.value)}
+                            onChange={e => fraDatoState.setFraDato(e.target.value)}
                         />
                     </FormGroup>
                 </Col>
             </Row>
 
+            {returState.retur && (
+                <Row form>
+                    <Col md={12}>
+                        <FormGroup>
+                            <Label>Velg retur</Label>
+                            <Input
+                                type={'date'}
+                                disabled={!returState.retur}
+                                onChange={e => tilDatoState.setTilDato(e.target.value)}
+                            />
+                        </FormGroup>
+                    </Col>
+                </Row>
+            )}
             <Row form>
-                <Col md={12}>
+                <Col md={6}>
+                    <h6>Personlig info</h6>
+                </Col>
+            </Row>
+            <Row form>
+                <Col md={6}>
                     <FormGroup>
-                        <Label>Velg retur</Label>
                         <Input 
-                            type={'date'} 
-                            disabled={!returState.retur}
-                            onBlur={e => tilDatoState.setTilDato(e.target.value)}
+                            type={'text'} 
+                            onChange={(e) => {
+                                updateIsTouched('fornavn')
+                                fornavnState.setFornavn(e.target.value)
+                            }} 
+                            placeholder={'Fornavn'}
                         />
                     </FormGroup>
                 </Col>
-            </Row>
-            
-            <Row form>
-                <Col md={3}>
+                <Col md={6}>
                     <FormGroup>
-                        <Input type={'text'} value={fornavn} onChange={(e) => setFornavn(e.value)} placeholder={'Fornavn'}/>
-                    </FormGroup>
-                </Col>
-                <Col md={3}>
-                    <FormGroup>
-                        <Input type={'text'} value={etternavn} onChange={(e) => setEtternavn(e.value)} placeholder={'Etternavn'}/>
+                        <Input 
+                            type={'text'} 
+                            onChange={(e) => {
+                                updateIsTouched('etternavn')
+                                etternavnState.setEtternavn(e.target.value)
+                            }} 
+                            placeholder={'Etternavn'}
+                        />
                     </FormGroup>
                 </Col>
             </Row>

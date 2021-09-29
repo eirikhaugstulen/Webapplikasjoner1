@@ -6,7 +6,8 @@ export const useBestillingsForm = () => {
     const [tilDato, setTilDato] = useState();
     const [retur, setRetur] = useState(false);
     const [isTouched, setIsTouched] = useState({});
-    const valid = true;
+    const [fornavn, setFornavn] = useState('');
+    const [etternavn, setEtternavn] = useState('');
     
     const updateIsTouched = useCallback(inputName => {
         if (!(isTouched?.[inputName])) {
@@ -32,28 +33,33 @@ export const useBestillingsForm = () => {
         return !!(retur && tilDato)
     }, [tilDato, retur])
     
-    const handleSubmit = async () => {
-        let error = false;
-        if (avgangsstedValid && ankomststedValid && fraDatoValid) {
+    const fornavnValid = useMemo(() => {
+        return !!(isTouched?.fornavn && fornavn && fornavn !== '')
+    }, [isTouched, fornavn])
+    
+    const etternavnValid = useMemo(() => {
+        return !!(isTouched?.etternavn && etternavn && etternavn !== '')
+    }, [isTouched, etternavn])
+    
+    const valid = useMemo(() => {
+        if (avgangsstedValid && ankomststedValid && fraDatoValid && fornavnValid && etternavnValid) {
             if (retur && !tilDatoValid) {
-                error = true;
+                return false;
             }
         } else {
-            error = true;
+            return false;
         }
-        
-        if (!error) {
-            //axios.post
-            console.log('Godkjent')
-        } else {
-            console.log('IG')
-        }
-    };
+        return true;
+    }, [avgangsstedValid, ankomststedValid, fraDatoValid, tilDatoValid, retur, fornavnValid, etternavnValid]);
+    
+    const handleSubmit = () => {}
     
     return [
         {
             avgangsstedState: { avgangssted, setAvgangssted, valid: avgangsstedValid },
             ankomststedState: { ankomststed, setAnkomssted, valid: ankomststedValid },
+            fornavnState: { fornavn, setFornavn, valid: fornavnValid},
+            etternavnState: { etternavn, setEtternavn, valid: etternavnValid },
             fraDatoState: { fraDato, setFraDato, valid: fraDatoValid },
             tilDatoState: { tilDato, setTilDato, valid: tilDatoValid },
             returState: { retur, setRetur },
