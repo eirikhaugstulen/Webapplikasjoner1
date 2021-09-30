@@ -1,6 +1,7 @@
 import React, {useCallback, useMemo, useState} from "react";
 import axios from "axios";
 import history from "../../history";
+import qs from 'qs';
 
 export const useBestillingsForm = () => {
     const [avgangssted, setAvgangssted] = useState('default');
@@ -59,13 +60,19 @@ export const useBestillingsForm = () => {
         if (retur) {
             
         } else {
-            axios.post('/Billett/Lagre', {
+            const innBillett = {
+            }
+            axios.post('/Billett/Lagre', qs.stringify({
                 TilSted: ankomststed,
                 FraSted: avgangssted,
                 Fornavn: fornavn,
                 Etternavn: etternavn,
                 Dato: fraDato,
                 Antall: 3,
+            }), {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
             })
                 .then(() => history.push('/reiser'))
                 .catch(e => console.log(e))
