@@ -1,4 +1,7 @@
 import React, {useCallback, useMemo, useState} from "react";
+import axios from "axios";
+import history from "../../history";
+
 export const useBestillingsForm = () => {
     const [avgangssted, setAvgangssted] = useState('default');
     const [ankomststed, setAnkomssted] = useState('default')
@@ -52,7 +55,20 @@ export const useBestillingsForm = () => {
         return true;
     }, [avgangsstedValid, ankomststedValid, fraDatoValid, tilDatoValid, retur, fornavnValid, etternavnValid]);
     
-    const handleSubmit = () => {}
+    const handleSubmit = async () => {
+        if (retur) {
+            
+        } else {
+            axios.post('/Billett/Lagre', {
+                Fornavn: fornavn,
+                Etternavn: etternavn,
+                Strekning: `${avgangssted}${ankomststed}`,
+                Dato: fraDato,
+            })
+                .then(() => history.push('/reiser'))
+                .catch(e => console.log(e))
+        }
+    }
     
     return [
         {

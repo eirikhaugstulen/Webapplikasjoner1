@@ -25,7 +25,7 @@ export const StrekningsVelger = ({ avgangsstedState, ankomststedState, updateIsT
         updateIsTouched('avgangssted');
         avgangsstedState.setAvgangssted(e.target.value);
         setOutputankomststed(inputFraReiser
-            .filter(destinasjon => destinasjon.id.toString() !== e.target.value)
+            .filter(destinasjon => destinasjon.displayName.toString() !== e.target.value)
         );
     }
     
@@ -59,7 +59,7 @@ export const StrekningsVelger = ({ avgangsstedState, ankomststedState, updateIsT
                         {fraReiser?.map(avgang => (
                             <option
                                 key={avgang.id}
-                                value={avgang.id}
+                                value={avgang.displayName}
                             >
                                 {avgang.displayName}
                             </option>
@@ -88,7 +88,7 @@ export const StrekningsVelger = ({ avgangsstedState, ankomststedState, updateIsT
                         {outputAnkomststed?.map(ankomst => (
                             <option
                                 key={ankomst.id}
-                                value={ankomst.id}
+                                value={ankomst.displayName}
                             >
                                 {ankomst.displayName}
                             </option>
