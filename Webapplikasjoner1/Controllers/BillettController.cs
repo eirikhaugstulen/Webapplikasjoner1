@@ -13,49 +13,103 @@ namespace Webapplikasjoner1.Controllers
     public class BillettController : ControllerBase
     {
         private readonly IBillettRepository _db;
+        private ILogger<BillettController> _log;
 
-        public BillettController(IBillettRepository db)
+        public BillettController(IBillettRepository db ,ILogger<BillettController> log)
         {
             _db = db;
+            _log = log;
         }
 
-        public async Task<bool> Lagre(Billett innBillett)
+        public async Task<ActionResult> Lagre(Billett innBillett)
         {
+            bool returOk = false;
             if (ModelState.IsValid)
             {
-                return await _db.Lagre(innBillett);
+                 returOk = await _db.Lagre(innBillett);
             }
-            else
+         
+            if (!returOk )
             {
-                return false;
+                _log.LogInformation("Billetten ble ikke lagret");
+                return BadRequest("Billettten ble ikke lagret");
             }
+
+            return Ok("Billett lagret");
         }
 
-        public async Task<List<Billett>> HentAlle()
+        public async Task<ActionResult> LagreFler(Billett [] billetter)
         {
-            return await _db.HentAlle();
+           bool returOk = false;
+            if (billetter.Length == 2)
+            {
+                foreach (Billett b in billetter)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        returOk = await _db.Lagre(b);
+                    }
+                    else
+                    {
+                        returOk = false;
+                    }
+                }
+            }
+
+            if (!returOk)
+            {
+                _log.LogInformation("Billettene ble ikke lagret");
+                return BadRequest("Billetttene ble ikke lagret");
+            }
+
+            return Ok("Billettene lagret");
         }
 
-        public async Task<Billett> HentEn(int id)
+        public async Task<ActionResult> HentAlle()
         {
-            return await _db.HentEn(id);
+            List<Billett> alleBilletter = await _db.HentAlle();  
+
+            return Ok(alleBilletter);
+         
         }
 
-        public async Task<bool> Endre(Billett endreBillett)
+        public async Task<ActionResult> HentEn(int id)
         {
+            Billett enBillett = await _db.HentEn(id);
+            if(enBillett == null)
+            {
+                _log.LogInformation("Fant ikke billetten");
+                return NotFound("Fant ikke billetten");
+            }
+            return Ok(enBillett);
+        }
+
+        public async Task<ActionResult> Endre(Billett endreBillett)
+        {
+            bool returOK = false;
             if (ModelState.IsValid)
             {
-                return await _db.Endre(endreBillett);
+                returOK = await _db.Endre(endreBillett);
             }
-            else
+            if (!returOK)
             {
-                return false;
+                _log.LogInformation("Billetten ble ikke endret");
+                return BadRequest("Billettten ble ikke endret");
             }
+            return Ok("Billett ble endret");  
         }
 
-        public async Task<bool> Slett(int id)
+        public async Task<ActionResult> Slett(int id)
         {
-            return await _db.Slett(id);
+
+            bool returOk = await _db.Slett(id);
+
+            if (!returOk)
+            {
+                _log.LogInformation("Billetten ble ikke slettet");
+                return NotFound("Billetten ble ikke slettet");
+            }
+            return Ok("Billett slettet");
         }
     }
 }

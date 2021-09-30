@@ -7,7 +7,8 @@ namespace Webapplikasjoner1.Models
 {   public class Billetter
     {
         public int Id { get; set; }
-        public string Strekning { get; set; }
+        public string TilSted { get; set; }
+        public string FraSted { get; set; }
         public string Fornavn { get; set; }
         public string Etternavn { get; set; }
         public int Antall { get; set; }

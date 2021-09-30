@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Webapplikasjoner1.DAL;
 using Webapplikasjoner1.Models;
 
@@ -26,7 +27,8 @@ namespace Webapplikasjoner1
 
             services.AddControllersWithViews();
             services.AddControllers();
-            services.AddDbContext<BillettKontekst>(options => options.UseSqlite("Data source=Billetter.db"));
+            services.AddDbContext<BillettKontekst>(options => 
+                                        options.UseSqlite("Data source=Billetter.db"));
             services.AddScoped<IBillettRepository,  BillettRepository>();
 
             // In production, the React files will be served from this directory
@@ -37,11 +39,12 @@ namespace Webapplikasjoner1
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                loggerFactory.AddFile("Logs/Billettlog.txt");
             
             }
             else
