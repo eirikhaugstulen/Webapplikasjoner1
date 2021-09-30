@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Col, FormGroup, Input, Label} from "reactstrap";
 
+// JSON vil byttes ut med API-kall i del 2
 const inputFraReiser = [
     {
         id: 1,
@@ -16,24 +17,26 @@ const inputFraReiser = [
     }
 ]
 
-export const StrekningsVelger = ({ avgangssted, setAvgangssted, loading, setLoading }) => {
+export const StrekningsVelger = ({ avgangsstedState, ankomststedState, updateIsTouched }) => {
     const [fraReiser, setFraReiser] = useState();
-    const [tilReiser, setTilReiser] = useState();
+    const [outputAnkomststed, setOutputankomststed] = useState();
+    
+    const changeAvgangsstedHandler = (e) => {
+        updateIsTouched('avgangssted');
+        avgangsstedState.setAvgangssted(e.target.value);
+        setOutputankomststed(inputFraReiser
+            .filter(destinasjon => destinasjon.displayName.toString() !== e.target.value)
+        );
+    }
+    
+    const changeAnkomsstedHandler = e => {
+        updateIsTouched('ankomststed');
+        ankomststedState.setAnkomssted(e.target.value);
+    }
 
     useEffect(() => {
-        setTimeout(() => {
-            setFraReiser(inputFraReiser);
-            setLoading(false);
-        }, 500);
+        setFraReiser(inputFraReiser);
     }, [])
-
-    if (loading) {
-        return (
-            <div>
-                ...Laster inn
-            </div>
-        )
-    }
     
     return (
         <>
@@ -41,10 +44,10 @@ export const StrekningsVelger = ({ avgangssted, setAvgangssted, loading, setLoad
                 <FormGroup className={'d-block'}>
                     <Label for={'fraSted'}>Hvor vil du reise fra?</Label>
                     <Input 
-                        type={'select'} 
-                        id={'fraSted'} 
-                        value={avgangssted} 
-                        onChange={e => setAvgangssted(e)}
+                        type={'select'}
+                        id={'fraSted'}
+                        value={avgangsstedState.avgangssted}
+                        onChange={e => changeAvgangsstedHandler(e)}
                     >
                         <option
                             disabled
@@ -53,10 +56,10 @@ export const StrekningsVelger = ({ avgangssted, setAvgangssted, loading, setLoad
                             Velg sted
                         </option>
     
-                        {fraReiser?.map((avgang, index) => (
+                        {fraReiser?.map(avgang => (
                             <option
-                                key={index}
-                                value={avgang.id}
+                                key={avgang.id}
+                                value={avgang.displayName}
                             >
                                 {avgang.displayName}
                             </option>
@@ -68,11 +71,28 @@ export const StrekningsVelger = ({ avgangssted, setAvgangssted, loading, setLoad
             <Col md={6} sm={12}>
                 <FormGroup className={'d-block'}>
                     <Label for={'tilSted'}>og hvor vil du reise til?</Label>
-                    <Input type={'select'} id={'tilSted'}>
-                        <option>Velg sted</option>
-                        <option>Bergen</option>
-                        <option>Langesund</option>
-                        <option>Kristiansand</option>
+                    <Input 
+                        type={'select'} 
+                        id={'tilSted'} 
+                        value={ankomststedState.ankomststed}
+                        disabled={avgangsstedState.avgangssted === 'default'}
+                        onChange={e => changeAnkomsstedHandler(e)}
+                    >
+                        <option
+                            disabled
+                            value={'default'}
+                        >
+                            Velg sted
+                        </option>
+
+                        {outputAnkomststed?.map(ankomst => (
+                            <option
+                                key={ankomst.id}
+                                value={ankomst.displayName}
+                            >
+                                {ankomst.displayName}
+                            </option>
+                        ))}
                     </Input>
                 </FormGroup>
             </Col>

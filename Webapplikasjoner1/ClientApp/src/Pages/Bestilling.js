@@ -1,20 +1,28 @@
 import React, {useState} from "react";
 import {Button, Col, Form, FormGroup, Input, Label, Row} from "reactstrap";
 import {StrekningsVelger} from "../components/BestillForm/StrekningsVelger";
+import {useBestillingsForm} from "./hooks/useBestillingsForm";
 
 export const Bestilling = () => {
-    const [avgangssted, setAvgangssted] = useState('default');
-    const [fraDato, setFraDato] = useState();
-    const [tilDato, setTilDato] = useState();
-    const [fornavn, setFornavn] = useState('');
-    const [etternavn, setEtternavn] = useState('');
-    const [retur, setRetur] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [
+        { 
+            avgangsstedState, 
+            ankomststedState,
+            fraDatoState,
+            tilDatoState,
+            returState,
+            fornavnState,
+            etternavnState,
+        }, 
+        valid,
+        updateIsTouched,
+        handleSubmit,
+    ] = useBestillingsForm();
 
-    const changeRetur = () => setRetur(!retur);
-    console.log(fornavn)
+    const changeRetur = () => returState.setRetur(!returState.retur);
+    
     return (
-        <Form>
+        <>
             <Row form>
                 <Col md={12}>
                     <p>Reisedetaljer</p>
@@ -22,10 +30,9 @@ export const Bestilling = () => {
             </Row>
             <Row form>
                 <StrekningsVelger
-                    avgangssted={avgangssted}
-                    setAvgangssted={setAvgangssted}
-                    setLoading={setLoading}
-                    loading={loading}
+                    avgangsstedState={avgangsstedState}
+                    ankomststedState={ankomststedState}
+                    updateIsTouched={updateIsTouched}
                 />
             </Row>
             
@@ -33,7 +40,7 @@ export const Bestilling = () => {
                 <Col md={12}>
                     <FormGroup check>
                         <Input type={'checkbox'} onChange={() => changeRetur()} />
-                        <Label>Tur/Retur?</Label>
+                        <Label>Retur?</Label>
                     </FormGroup>
                 </Col>
             </Row>
@@ -42,39 +49,68 @@ export const Bestilling = () => {
                 <Col md={12}>
                     <FormGroup>
                         <Label>Velg avgang</Label>
-                        <Input type={'date'} />
+                        <Input
+                            type={'date'}
+                            onChange={e => fraDatoState.setFraDato(e.target.value)}
+                        />
                     </FormGroup>
                 </Col>
             </Row>
 
+            {returState.retur && (
+                <Row form>
+                    <Col md={12}>
+                        <FormGroup>
+                            <Label>Velg retur</Label>
+                            <Input
+                                type={'date'}
+                                disabled={!returState.retur}
+                                onChange={e => tilDatoState.setTilDato(e.target.value)}
+                            />
+                        </FormGroup>
+                    </Col>
+                </Row>
+            )}
             <Row form>
-                <Col md={12}>
-                    <FormGroup>
-                        <Label>Velg retur</Label>
-                        <Input type={'date'} disabled={!retur}/>
-                    </FormGroup>
+                <Col md={6}>
+                    <h6>Personlig info</h6>
                 </Col>
             </Row>
-            
             <Row form>
-                <Col md={3}>
+                <Col md={6}>
                     <FormGroup>
-                        <Input type={'text'} value={fornavn} onChange={(e) => setFornavn(e.value)} placeholder={'Fornavn'}/>
+                        <Input 
+                            type={'text'} 
+                            onChange={(e) => {
+                                updateIsTouched('fornavn')
+                                fornavnState.setFornavn(e.target.value)
+                            }} 
+                            placeholder={'Fornavn'}
+                        />
                     </FormGroup>
                 </Col>
-                <Col md={3}>
+                <Col md={6}>
                     <FormGroup>
-                        <Input type={'text'} value={etternavn} onChange={(e) => setEtternavn(e.value)} placeholder={'Etternavn'}/>
+                        <Input 
+                            type={'text'} 
+                            onChange={(e) => {
+                                updateIsTouched('etternavn')
+                                etternavnState.setEtternavn(e.target.value)
+                            }} 
+                            placeholder={'Etternavn'}
+                        />
                     </FormGroup>
                 </Col>
             </Row>
             <div className={'mt-3'}>
                 <Button
                     color={'primary'}
+                    disabled={!valid}
+                    onClick={handleSubmit}
                 >
-                    Neste
+                    Bestill
                 </Button>
             </div>
-        </Form>
+        </>
     )
 }
