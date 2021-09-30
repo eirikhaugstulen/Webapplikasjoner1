@@ -60,10 +60,12 @@ export const useBestillingsForm = () => {
             
         } else {
             axios.post('/Billett/Lagre', {
+                TilSted: ankomststed,
+                FraSted: avgangssted,
                 Fornavn: fornavn,
                 Etternavn: etternavn,
-                Strekning: `${avgangssted}${ankomststed}`,
                 Dato: fraDato,
+                Antall: 3,
             })
                 .then(() => history.push('/reiser'))
                 .catch(e => console.log(e))
