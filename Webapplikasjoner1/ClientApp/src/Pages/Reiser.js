@@ -30,7 +30,7 @@ export const Reiser = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {billetter.map(b=>
+                {billetter && billetter.map(b=>
                     <tr>
                         <td>
                             {b.dato}
