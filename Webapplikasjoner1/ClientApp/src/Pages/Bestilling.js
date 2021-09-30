@@ -6,11 +6,13 @@ export const Bestilling = () => {
     const [avgangssted, setAvgangssted] = useState('default');
     const [fraDato, setFraDato] = useState();
     const [tilDato, setTilDato] = useState();
+    const [fornavn, setFornavn] = useState('');
+    const [etternavn, setEtternavn] = useState('');
     const [retur, setRetur] = useState(false);
     const [loading, setLoading] = useState(true);
 
     const changeRetur = () => setRetur(!retur);
-    
+    console.log(fornavn)
     return (
         <Form>
             <Row form>
@@ -53,7 +55,19 @@ export const Bestilling = () => {
                     </FormGroup>
                 </Col>
             </Row>
-
+            
+            <Row form>
+                <Col md={3}>
+                    <FormGroup>
+                        <Input type={'text'} value={fornavn} onChange={(e) => setFornavn(e.value)} placeholder={'Fornavn'}/>
+                    </FormGroup>
+                </Col>
+                <Col md={3}>
+                    <FormGroup>
+                        <Input type={'text'} value={etternavn} onChange={(e) => setEtternavn(e.value)} placeholder={'Etternavn'}/>
+                    </FormGroup>
+                </Col>
+            </Row>
             <div className={'mt-3'}>
                 <Button
                     color={'primary'}
