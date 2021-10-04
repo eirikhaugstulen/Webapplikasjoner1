@@ -196,6 +196,7 @@ UpgradeLog*.htm
 # SQL Server files
 *.mdf
 *.ldf
+package-lock.json
 
 # Business Intelligence projects
 *.rdl.data

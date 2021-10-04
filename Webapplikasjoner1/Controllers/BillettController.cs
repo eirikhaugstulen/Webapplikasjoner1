@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,19 +24,19 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> Lagre(Billett innBillett)
         {
-            bool returOk = false;
+            
             if (ModelState.IsValid)
             {
-                 returOk = await _db.Lagre(innBillett);
+                bool returOk = await _db.Lagre(innBillett);
+                if (!returOk )
+                {
+                    _log.LogInformation("Billetten ble ikke lagret");
+                    return BadRequest("Billettten ble ikke lagret");
+                }
+                return Ok("Billett lagret");
             }
-         
-            if (!returOk )
-            {
-                _log.LogInformation("Billetten ble ikke lagret");
-                return BadRequest("Billettten ble ikke lagret");
-            }
-
-            return Ok("Billett lagret");
+            _log.LogInformation("Feil i inputvalidering");
+            return BadRequest("Feil i inputvalidering");
         }
 
         public async Task<ActionResult> LagreFler(Billett [] billetter)
