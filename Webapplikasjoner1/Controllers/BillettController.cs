@@ -22,21 +22,40 @@ namespace Webapplikasjoner1.Controllers
             _log = log;
         }
 
+        public void Validering(Billett innBillett)
+        {
+            Regex reg = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,20}");
+            bool testFrasted = reg.IsMatch(innBillett.FraSted);
+            bool testTilsted = reg.IsMatch(innBillett.TilSted);
+            bool testFornavn = reg.IsMatch(innBillett.Fornavn);
+            bool testEtternavn = reg.IsMatch(innBillett.Etternavn);
+
+            if (!testFrasted || !testTilsted || !testFornavn || !testEtternavn)
+            {
+                throw new Exception("Feil i inputvalidering");
+            }
+
+        }
+
         public async Task<ActionResult> Lagre(Billett innBillett)
         {
-            
-            if (ModelState.IsValid)
+            try
             {
-                bool returOk = await _db.Lagre(innBillett);
+                Validering(innBillett);
+            }
+            catch (Exception e)
+            {
+                _log.LogInformation(e.Message);
+                return BadRequest(e.Message);
+            }
+
+            bool returOk = await _db.Lagre(innBillett);
                 if (!returOk )
                 {
                     _log.LogInformation("Billetten ble ikke lagret");
                     return BadRequest("Billettten ble ikke lagret");
                 }
                 return Ok("Billett lagret");
-            }
-            _log.LogInformation("Feil i inputvalidering");
-            return BadRequest("Feil i inputvalidering");
         }
 
         public async Task<ActionResult> LagreFler(Billett [] billetter)
