@@ -1,30 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {Col, FormGroup, Input, Label} from "reactstrap";
 
-// JSON vil byttes ut med API-kall i del 2
-const inputFraReiser = [
-    {
-        id: 1,
-        displayName: 'Bergen',
-    },
-    {
-        id: 2,
-        displayName: 'Langesund',
-    },
-    {
-        id: 3,
-        displayName: 'Kristiansand',
-    }
-]
-
-export const StrekningsVelger = ({ avgangsstedState, ankomststedState, updateIsTouched }) => {
+export const StrekningsVelger = ({ reiselokasjoner, avgangsstedState, ankomststedState, updateIsTouched, prisState, returState }) => {
     const [fraReiser, setFraReiser] = useState();
     const [outputAnkomststed, setOutputankomststed] = useState();
     
     const changeAvgangsstedHandler = (e) => {
         updateIsTouched('avgangssted');
         avgangsstedState.setAvgangssted(e.target.value);
-        setOutputankomststed(inputFraReiser
+        setOutputankomststed(reiselokasjoner
             .filter(destinasjon => destinasjon.displayName.toString() !== e.target.value)
         );
     }
@@ -35,8 +19,25 @@ export const StrekningsVelger = ({ avgangsstedState, ankomststedState, updateIsT
     }
 
     useEffect(() => {
-        setFraReiser(inputFraReiser);
-    }, [])
+        setFraReiser(reiselokasjoner);
+    }, [reiselokasjoner])
+    
+    useEffect(() => {
+        const { avgangssted, valid: avgangsstedValid } = avgangsstedState;
+        const { ankomststed, valid: ankomststedValid }  = ankomststedState;
+        if ((avgangssted && avgangsstedValid) && (ankomststed && ankomststedValid)) {
+            if (avgangssted !== ankomststed) {
+                const indexOfAvgang = reiselokasjoner.findIndex(lokasjon => lokasjon.displayName === avgangssted);
+                const indexOfAnkomst = reiselokasjoner.findIndex(lokasjon => lokasjon.displayName === ankomststed);
+                const difference = Math.abs(indexOfAvgang - indexOfAnkomst);
+                let pris = (difference*50)-1;
+                if (returState.retur) {
+                    pris = pris*2
+                }
+                prisState.setPris(pris);
+            }
+        }
+    }, [avgangsstedState, ankomststedState, prisState, returState, reiselokasjoner])
     
     return (
         <>
