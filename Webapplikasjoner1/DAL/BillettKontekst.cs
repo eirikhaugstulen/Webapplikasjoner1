@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Webapplikasjoner1.Models;
 
-namespace Webapplikasjoner1.Models
+namespace Webapplikasjoner1.DAL
 {   public class Billetter
     {
         public int Id { get; set; }

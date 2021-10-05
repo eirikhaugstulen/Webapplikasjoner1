@@ -29,6 +29,8 @@ namespace Webapplikasjoner1.DAL
                 nyBillettRad.Etternavn = innBillett.Etternavn;
                 nyBillettRad.Antall = innBillett.Antall;
                 nyBillettRad.Dato = innBillett.Dato;
+                nyBillettRad.Retur = innBillett.Retur;
+                nyBillettRad.ReturDato = innBillett.ReturDato;
                 _db.Billetter.Add(nyBillettRad);
                 await _db.SaveChangesAsync();
                 return true;
@@ -38,34 +40,7 @@ namespace Webapplikasjoner1.DAL
                 return false;
             }
         }
-        /*
-        public async Task<bool> LagreFler(Billett [] innBilletter)
-        {
-            try
-            {
-                foreach(Billett b in innBilletter)
-                {
-                    var nyBillettRad = new Billett();
-                    nyBillettRad.Id = b.Id;
-                    nyBillettRad.TilSted = b.TilSted;
-                    nyBillettRad.FraSted = b.FraSted;
-                    nyBillettRad.Fornavn = b.Fornavn;
-                    nyBillettRad.Etternavn = b.Etternavn;
-                    nyBillettRad.Antall = b.Antall;
-                    nyBillettRad.Dato = b.Dato;
-                    _db.Billetter.Add(nyBillettRad);
-                    await _db.SaveChangesAsync();
-                    return true;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
-        }*/
-
-
+        
         public async Task<List<Billett>> HentAlle()
         {
             try
@@ -79,6 +54,8 @@ namespace Webapplikasjoner1.DAL
                     Etternavn = b.Etternavn,
                     Antall = b.Antall,
                     Dato = b.Dato,
+                    Retur = b.Retur,
+                    ReturDato = b.ReturDato,
                 }).ToListAsync();
                 return alleBillettene;
             }
@@ -91,8 +68,7 @@ namespace Webapplikasjoner1.DAL
 
         public async Task<Billett> HentEn(int id)
         {
-
-                Billett enBillett = await _db.Billetter.FindAsync(id);
+            Billett enBillett = await _db.Billetter.FindAsync(id);
                 var hentetBillett = new Billett()
                 {
                     Id = enBillett.Id,
@@ -102,11 +78,14 @@ namespace Webapplikasjoner1.DAL
                     Etternavn = enBillett.Etternavn,
                     Antall = enBillett.Antall,
                     Dato = enBillett.Dato,
+                    Retur = enBillett.Retur,
+                    ReturDato = enBillett.ReturDato,
                 };
                 return hentetBillett;
               
         }
 
+        /*Brukes ikke nå, men beholder den for Oblig 2*/
         public async Task<bool> Endre (Billett endreBillett)
         {
             try
@@ -118,6 +97,8 @@ namespace Webapplikasjoner1.DAL
                 enBillett.FraSted = endreBillett.FraSted;
                 enBillett.Antall = endreBillett.Antall;
                 enBillett.Dato = endreBillett.Dato;
+                enBillett.Retur = endreBillett.Retur;
+                enBillett.ReturDato = endreBillett.ReturDato;
                 await _db.SaveChangesAsync();
                 return true;
             }
