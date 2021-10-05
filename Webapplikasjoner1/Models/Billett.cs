@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 
 namespace Webapplikasjoner1.Models
 {
@@ -11,5 +12,9 @@ namespace Webapplikasjoner1.Models
         public string Etternavn { get; set; }
         public int Antall { get; set; }
         public string Dato { get; set; }
+        
+        public bool Retur { get; set; }
+        
+        public string ReturDato { get; set; }
     }
 }

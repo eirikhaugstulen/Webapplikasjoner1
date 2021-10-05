@@ -38,35 +38,7 @@ namespace Webapplikasjoner1.Controllers
             _log.LogInformation("Feil i inputvalidering");
             return BadRequest("Feil i inputvalidering");
         }
-
-        public async Task<ActionResult> LagreFler(Billett [] billetter)
-        {
-           bool returOk = false;
-            if (billetter.Length == 2)
-            {
-                foreach (Billett b in billetter)
-                {
-                    bool valideringOk = Validering.BillettValidering(b);
-                    if (valideringOk)
-                    {
-                        returOk = await _db.Lagre(b);
-                    }
-                    else
-                    {
-                        returOk = false;
-                    }
-                }
-            }
-
-            if (!returOk)
-            {
-                _log.LogInformation("Billettene ble ikke lagret");
-                return BadRequest("Billetttene ble ikke lagret");
-            }
-
-            return Ok("Billettene lagret");
-        }
-
+        
         public async Task<ActionResult> HentAlle()
         {
             List<Billett> alleBilletter = await _db.HentAlle();  
@@ -86,24 +58,27 @@ namespace Webapplikasjoner1.Controllers
             return Ok(enBillett);
         }
 
+        /*Brukes ikke nå, men beholder den for Oblig 2*/
         public async Task<ActionResult> Endre(Billett endreBillett)
         {
-            bool returOK = false;
-            if (ModelState.IsValid)
+            bool validering = Validering.BillettValidering(endreBillett);
+            if (validering)
             {
-                returOK = await _db.Endre(endreBillett);
+                bool returOK = await _db.Endre(endreBillett);
+                if (!returOK)
+                {
+                    _log.LogInformation("Billetten ble ikke endret");
+                    return BadRequest("Billettten ble ikke endret");
+                }
+                return Ok("Billett ble endret");  
             }
-            if (!returOK)
-            {
-                _log.LogInformation("Billetten ble ikke endret");
-                return BadRequest("Billettten ble ikke endret");
-            }
-            return Ok("Billett ble endret");  
+            
+            _log.LogInformation("Feil i inputvalidering");
+            return BadRequest("Feil i inputvalidering");
         }
 
         public async Task<ActionResult> Slett(int id)
         {
-
             bool returOk = await _db.Slett(id);
 
             if (!returOk)
