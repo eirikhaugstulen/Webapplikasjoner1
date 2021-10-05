@@ -17,14 +17,29 @@ export const Home = () => {
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id ligula placerat, convallis magna at, vulputate ligula. Suspendisse consequat mauris vel lorem fringilla, quis rhoncus lectus mollis. Duis et justo sit amet
                             </p>
                         </div>
-                        <div className={'d-flex justify-content-center'}>
+                        <div className={'d-flex flex-column justify-content-center'} style={{gap: '10px'}}>
                             <Button
                                 outline
                                 color={'primary'}
                                 onClick={() => history.push('/bestill')}
                             >
-                                Bestill
+                                Fortsett som gjest
                             </Button>
+                            
+                            <Button
+                                color={'primary'}
+                                disabled
+                            >
+                                Logg inn
+                            </Button>
+                            
+                            <Button
+                                outline
+                                disabled
+                            >
+                                Registrer ny bruker
+                            </Button>
+                            
                         </div>
                     </div>
                     <div className={'col-6 p-5'}>

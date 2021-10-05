@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import axios from "axios";
 import history from "../../history";
 import qs from 'qs';
@@ -12,6 +12,8 @@ export const useBestillingsForm = () => {
     const [isTouched, setIsTouched] = useState({});
     const [fornavn, setFornavn] = useState('');
     const [etternavn, setEtternavn] = useState('');
+    const [pris, setPris] = useState();
+    const [submitting, setSubmitting] = useState(false)
     
     const updateIsTouched = useCallback(inputName => {
         if (!(isTouched?.[inputName])) {
@@ -60,8 +62,7 @@ export const useBestillingsForm = () => {
         if (retur) {
             
         } else {
-            const innBillett = {
-            }
+            setSubmitting(prevState => !prevState);
             axios.post('/Billett/Lagre', qs.stringify({
                 TilSted: ankomststed,
                 FraSted: avgangssted,
@@ -88,9 +89,12 @@ export const useBestillingsForm = () => {
             fraDatoState: { fraDato, setFraDato, valid: fraDatoValid },
             tilDatoState: { tilDato, setTilDato, valid: tilDatoValid },
             returState: { retur, setRetur },
+            prisState: { pris, setPris },
         },
         valid,
         updateIsTouched,
         handleSubmit,
+        submitting,
+        isTouched,
     ]
 }

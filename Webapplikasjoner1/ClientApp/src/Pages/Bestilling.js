@@ -1,7 +1,24 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Col, Form, FormGroup, Input, Label, Row} from "reactstrap";
 import {StrekningsVelger} from "../components/BestillForm/StrekningsVelger";
 import {useBestillingsForm} from "./hooks/useBestillingsForm";
+import history from "../history";
+
+// JSON vil byttes ut med API-kall i del 2
+const reiselokasjoner = [
+    {
+        id: 1,
+        displayName: 'Bergen',
+    },
+    {
+        id: 2,
+        displayName: 'Langesund',
+    },
+    {
+        id: 3,
+        displayName: 'Kristiansand',
+    }
+]
 
 export const Bestilling = () => {
     const [
@@ -13,11 +30,20 @@ export const Bestilling = () => {
             returState,
             fornavnState,
             etternavnState,
+            prisState,
         }, 
         valid,
         updateIsTouched,
         handleSubmit,
+        submitting,
+        isTouched,
     ] = useBestillingsForm();
+    
+    useEffect(() => {
+        if (ankomststedState.ankomststed && avgangsstedState.avgangssted) {
+            reiselokasjoner.find(lokasjon => lokasjon.displayName === ankomststedState.ankomststed)
+        }
+    }, avgangsstedState, ankomststedState)
 
     const changeRetur = () => returState.setRetur(!returState.retur);
     
@@ -30,9 +56,12 @@ export const Bestilling = () => {
             </Row>
             <Row form>
                 <StrekningsVelger
+                    reiselokasjoner={reiselokasjoner}
                     avgangsstedState={avgangsstedState}
                     ankomststedState={ankomststedState}
+                    returState={returState}
                     updateIsTouched={updateIsTouched}
+                    prisState={prisState}
                 />
             </Row>
             
@@ -102,13 +131,27 @@ export const Bestilling = () => {
                     </FormGroup>
                 </Col>
             </Row>
-            <div className={'mt-3'}>
+            <Row>
+                <Col md={12}>
+                    <h3>Ordredetaljer:</h3>
+                    {(isTouched.avgangssted && isTouched.ankomststed) && <p>Strekning: {avgangsstedState?.avgangssted} - {ankomststedState?.ankomststed}</p>}
+                    <h5>{prisState.pris && (`Pris:  ${prisState.pris},-`)}</h5>
+                </Col>
+            </Row>
+            <div className={'mt-3 d-flex'} style={{gap: '5px'}}>
                 <Button
                     color={'primary'}
                     disabled={!valid}
                     onClick={handleSubmit}
                 >
-                    Bestill
+                    {submitting ? 'Sender...' : 'Bestill'}
+                </Button>
+                <Button
+                    color={'secondary'}
+                    onClick={() => history.push("/")}
+                    outline
+                >
+                    Avbryt
                 </Button>
             </div>
         </>

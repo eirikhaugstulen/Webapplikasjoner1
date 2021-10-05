@@ -24,11 +24,8 @@ namespace Webapplikasjoner1.Controllers
         public async Task<ActionResult> Lagre(Billett innBillett)
         {
             bool returOk = false;
-            if (ModelState.IsValid)
-            {
-                 returOk = await _db.Lagre(innBillett);
-            }
-         
+            returOk = await _db.Lagre(innBillett);
+
             if (!returOk )
             {
                 _log.LogInformation("Billetten ble ikke lagret");
