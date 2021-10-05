@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Col, Form, FormGroup, Input, Label, Row} from "reactstrap";
+import {Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row} from "reactstrap";
 import {StrekningsVelger} from "../components/BestillForm/StrekningsVelger";
 import {useBestillingsForm} from "./hooks/useBestillingsForm";
 import history from "../history";
@@ -8,15 +8,27 @@ import history from "../history";
 const reiselokasjoner = [
     {
         id: 1,
-        displayName: 'Bergen',
+        displayName: 'Oslo',
     },
     {
         id: 2,
-        displayName: 'Langesund',
+        displayName: 'Kristiansand',
     },
     {
         id: 3,
-        displayName: 'Kristiansand',
+        displayName: 'Stavanger',
+    },
+    {
+        id: 4,
+        displayName: 'Bergen',
+    },
+    {
+        id: 5,
+        displayName: 'Ålesund',
+    },
+    {
+        id: 6,
+        displayName: 'Trondheim',
     }
 ]
 
@@ -67,21 +79,26 @@ export const Bestilling = () => {
             
             <Row form>
                 <Col md={12}>
-                    <FormGroup check>
-                        <Input type={'checkbox'} onChange={() => changeRetur()} />
-                        <Label>Retur?</Label>
-                    </FormGroup>
-                </Col>
-            </Row>
-
-            <Row form>
-                <Col md={12}>
                     <FormGroup>
                         <Label>Velg avgang</Label>
                         <Input
                             type={'date'}
-                            onChange={e => fraDatoState.setFraDato(e.target.value)}
+                            onChange={e => {
+                                updateIsTouched('fraDato')
+                                fraDatoState.setFraDato(e.target.value)
+                            }}
+                            invalid={isTouched.fraDato && !fraDatoState.valid}
                         />
+                        <FormFeedback>Avreise må være fram i tid</FormFeedback>
+                    </FormGroup>
+                </Col>
+            </Row>
+            
+            <Row form>
+                <Col md={12}>
+                    <FormGroup check>
+                        <Input type={'checkbox'} onChange={() => changeRetur()} />
+                        <Label>Retur?</Label>
                     </FormGroup>
                 </Col>
             </Row>
@@ -90,12 +107,16 @@ export const Bestilling = () => {
                 <Row form>
                     <Col md={12}>
                         <FormGroup>
-                            <Label>Velg retur</Label>
+                            <Label>Velg returdato</Label>
                             <Input
                                 type={'date'}
-                                disabled={!returState.retur}
-                                onChange={e => tilDatoState.setTilDato(e.target.value)}
+                                onChange={e => {
+                                    updateIsTouched('tilDato')
+                                    tilDatoState.setTilDato(e.target.value)
+                                }}
+                                invalid={isTouched.tilDato && !tilDatoState.valid}
                             />
+                            <FormFeedback>Dato kan ikke være før avreise</FormFeedback>
                         </FormGroup>
                     </Col>
                 </Row>
@@ -115,7 +136,9 @@ export const Bestilling = () => {
                                 fornavnState.setFornavn(e.target.value)
                             }} 
                             placeholder={'Fornavn'}
+                            invalid={isTouched.fornavn && !fornavnState.valid}
                         />
+                        <FormFeedback>Vennligst skriv inn et gyldig fornavn</FormFeedback>
                     </FormGroup>
                 </Col>
                 <Col md={6}>
@@ -127,7 +150,9 @@ export const Bestilling = () => {
                                 etternavnState.setEtternavn(e.target.value)
                             }} 
                             placeholder={'Etternavn'}
+                            invalid={isTouched.etternavn && !etternavnState.valid}
                         />
+                        <FormFeedback>Vennligst skriv inn et gyldig etternavn</FormFeedback>
                     </FormGroup>
                 </Col>
             </Row>

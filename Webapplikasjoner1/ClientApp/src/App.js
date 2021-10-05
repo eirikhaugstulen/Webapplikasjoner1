@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import { Home } from './Pages/Home';
 import { Reiser } from "./Pages/Reiser";
 import { Bestilling } from "./Pages/Bestilling";
+import { Kvittering } from "./Pages/Kvittering";
 
 
 export default class App extends Component {
@@ -15,6 +16,7 @@ export default class App extends Component {
         <Route exact path='/' component={Home} />
         <Route path={'/reiser'} component={Reiser} />
         <Route path={'/bestill'} component={Bestilling} />
+        <Route path={'/kvittering'} component={Kvittering} />
       </Layout>
     );
   }

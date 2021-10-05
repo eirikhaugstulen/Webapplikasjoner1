@@ -32,19 +32,19 @@ export const useBestillingsForm = () => {
     }, [ankomststed, isTouched])
     
     const fraDatoValid = useMemo(() => {
-        return !!(fraDato)
+        return !!(fraDato && new Date(Date.parse(fraDato)) > new Date().setHours(1));
     }, [fraDato])
     
     const tilDatoValid = useMemo(() => {
-        return !!(retur && tilDato)
+        return !!(retur && tilDato && (new Date(Date.parse(tilDato)) > new Date(Date.parse(fraDato))))
     }, [tilDato, retur])
     
     const fornavnValid = useMemo(() => {
-        return !!(isTouched?.fornavn && fornavn && fornavn !== '')
+        return !!(isTouched?.fornavn && fornavn && /^[a-zA-Z ]{2,20}$/.test(fornavn))
     }, [isTouched, fornavn])
     
     const etternavnValid = useMemo(() => {
-        return !!(isTouched?.etternavn && etternavn && etternavn !== '')
+        return !!(isTouched?.etternavn && etternavn && /^[a-zA-Z ]{2,20}$/.test(etternavn))
     }, [isTouched, etternavn])
     
     const valid = useMemo(() => {
@@ -57,27 +57,25 @@ export const useBestillingsForm = () => {
         }
         return true;
     }, [avgangsstedValid, ankomststedValid, fraDatoValid, tilDatoValid, retur, fornavnValid, etternavnValid]);
-    
+
     const handleSubmit = async () => {
-        if (retur) {
-            
-        } else {
-            setSubmitting(prevState => !prevState);
-            axios.post('/Billett/Lagre', qs.stringify({
-                TilSted: ankomststed,
-                FraSted: avgangssted,
-                Fornavn: fornavn,
-                Etternavn: etternavn,
-                Dato: fraDato,
-                Antall: 3,
-            }), {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            })
-                .then(() => history.push('/reiser'))
-                .catch(e => console.log(e))
-        }
+        setSubmitting(prevState => !prevState);
+        axios.post('/Billett/Lagre', qs.stringify({
+            TilSted: ankomststed,
+            FraSted: avgangssted,
+            Fornavn: fornavn,
+            Etternavn: etternavn,
+            Dato: fraDato,
+            Retur: retur,
+            returDato: tilDato,
+            Pris: pris,
+        }), {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(() => history.push('/reiser'))
+            .catch(e => console.log(e))
     }
     
     return [
