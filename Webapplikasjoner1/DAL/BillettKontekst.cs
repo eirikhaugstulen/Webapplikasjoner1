@@ -11,7 +11,6 @@ namespace Webapplikasjoner1.DAL
         public string FraSted { get; set; }
         public string Fornavn { get; set; }
         public string Etternavn { get; set; }
-        public int Antall { get; set; }
         public string Dato { get; set; }
         
      

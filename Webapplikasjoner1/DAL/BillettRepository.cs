@@ -27,10 +27,10 @@ namespace Webapplikasjoner1.DAL
                 nyBillettRad.FraSted = innBillett.FraSted;
                 nyBillettRad.Fornavn = innBillett.Fornavn;
                 nyBillettRad.Etternavn = innBillett.Etternavn;
-                nyBillettRad.Antall = innBillett.Antall;
                 nyBillettRad.Dato = innBillett.Dato;
                 nyBillettRad.Retur = innBillett.Retur;
                 nyBillettRad.ReturDato = innBillett.ReturDato;
+                nyBillettRad.Pris = innBillett.Pris;
                 _db.Billetter.Add(nyBillettRad);
                 await _db.SaveChangesAsync();
                 return true;
@@ -52,10 +52,10 @@ namespace Webapplikasjoner1.DAL
                     FraSted = b.FraSted,
                     Fornavn = b.Fornavn,
                     Etternavn = b.Etternavn,
-                    Antall = b.Antall,
                     Dato = b.Dato,
                     Retur = b.Retur,
                     ReturDato = b.ReturDato,
+                    Pris = b.Pris,
                 }).ToListAsync();
                 return alleBillettene;
             }
@@ -76,10 +76,10 @@ namespace Webapplikasjoner1.DAL
                     FraSted = enBillett.FraSted,
                     Fornavn = enBillett.Fornavn,
                     Etternavn = enBillett.Etternavn,
-                    Antall = enBillett.Antall,
                     Dato = enBillett.Dato,
                     Retur = enBillett.Retur,
                     ReturDato = enBillett.ReturDato,
+                    Pris = enBillett.Pris,
                 };
                 return hentetBillett;
               
@@ -95,10 +95,10 @@ namespace Webapplikasjoner1.DAL
                 enBillett.Etternavn = endreBillett.Etternavn;
                 enBillett.TilSted = endreBillett.TilSted;
                 enBillett.FraSted = endreBillett.FraSted;
-                enBillett.Antall = endreBillett.Antall;
                 enBillett.Dato = endreBillett.Dato;
                 enBillett.Retur = endreBillett.Retur;
                 enBillett.ReturDato = endreBillett.ReturDato;
+                enBillett.Pris = endreBillett.Pris;
                 await _db.SaveChangesAsync();
                 return true;
             }
