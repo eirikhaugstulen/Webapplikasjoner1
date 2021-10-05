@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 import axios from "axios";
 import history from "../../history";
 import qs from 'qs';
@@ -37,7 +37,7 @@ export const useBestillingsForm = () => {
     
     const tilDatoValid = useMemo(() => {
         return !!(retur && tilDato && (new Date(Date.parse(tilDato)) > new Date(Date.parse(fraDato))))
-    }, [tilDato, retur])
+    }, [tilDato, retur, fraDato])
     
     const fornavnValid = useMemo(() => {
         return !!(isTouched?.fornavn && fornavn && /^[a-zA-Z ]{2,20}$/.test(fornavn))

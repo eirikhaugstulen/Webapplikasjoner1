@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Badge, Button, Table} from "reactstrap";
+import {Button, Table} from "reactstrap";
 import axios from "axios";
 import {StatusBadge} from "../components/StatusBadge";
 import history from "../history";
@@ -12,29 +12,32 @@ const fetchBilletter = async() => {
 export const Reiser = () => {
     //usestate
     const [billetter, setBilletter] = useState([]);
+    
+    
     //useeffect res
     useEffect( () => {
+        const convertInputBilletter = (inpBilletter) => {
+            if (!inpBilletter) {
+                return null;
+            }
+            
+            const sortedBilletter = inpBilletter
+                .filter(billett => billett.dato)
+                .map(billett => {
+                    billett.dato = convertDate(billett.dato)
+                    billett.returDato = convertDate(billett.returDato)
+                    billett.status = billett.dato > new Date().setHours(1)
+                    return billett;
+                })
+                .sort((a,b) => (b.dato - a.dato))
+            
+            setBilletter(sortedBilletter);
+        }
+        
         fetchBilletter()
             .then(res => convertInputBilletter(res.data))
     }, [])
     
-    const convertInputBilletter = (inpBilletter) => {
-        if (!inpBilletter) {
-            return null;
-        }
-        
-        const sortedBilletter = inpBilletter
-            .filter(billett => billett.dato)
-            .map(billett => {
-                billett.dato = convertDate(billett.dato)
-                billett.returDato = convertDate(billett.returDato)
-                billett.status = billett.dato > new Date().setHours(1)
-                return billett;
-            })
-            .sort((a,b) => (b.dato - a.dato))
-        
-        setBilletter(sortedBilletter);
-    }
     
     const convertDate = (dateStr) => new Date(Date.parse(dateStr));
    

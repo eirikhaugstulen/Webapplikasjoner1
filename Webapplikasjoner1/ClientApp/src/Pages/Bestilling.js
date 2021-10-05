@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row} from "reactstrap";
+import React, {useEffect} from "react";
+import {Button, Col, FormFeedback, FormGroup, Input, Label, Row} from "reactstrap";
 import {StrekningsVelger} from "../components/BestillForm/StrekningsVelger";
 import {useBestillingsForm} from "./hooks/useBestillingsForm";
 import history from "../history";
@@ -55,7 +55,7 @@ export const Bestilling = () => {
         if (ankomststedState.ankomststed && avgangsstedState.avgangssted) {
             reiselokasjoner.find(lokasjon => lokasjon.displayName === ankomststedState.ankomststed)
         }
-    }, avgangsstedState, ankomststedState)
+    }, [avgangsstedState, ankomststedState])
 
     const changeRetur = () => returState.setRetur(!returState.retur);
     

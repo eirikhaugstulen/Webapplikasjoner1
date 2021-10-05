@@ -37,7 +37,7 @@ export const StrekningsVelger = ({ reiselokasjoner, avgangsstedState, ankomstste
                 prisState.setPris(pris);
             }
         }
-    }, [avgangsstedState, ankomststedState])
+    }, [avgangsstedState, ankomststedState, prisState, returState, reiselokasjoner])
     
     return (
         <>

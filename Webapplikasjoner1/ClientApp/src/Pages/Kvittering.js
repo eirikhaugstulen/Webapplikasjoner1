@@ -22,7 +22,7 @@ export const Kvittering = () => {
         fetchEnkeltbillettData(id)
             .then(res => setBillett(res.data))
             .catch(e => console.log(e))
-    }, [])
+    }, [id])
     
     return ( 
         <>
