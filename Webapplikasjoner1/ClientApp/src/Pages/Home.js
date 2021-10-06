@@ -10,7 +10,7 @@ export const Home = () => {
             <CardBody className={'d-flex flex-column justify-content-center text-center'}>
                 <h3 className={'m-3 font-italic'}>Bestill din drømmetur</h3>
                 <div className={'row mb-5'}>
-                    <Col sm={12} md={6} className={'d-flex flex-column p-5 mt-5'}>
+                    <Col sm={12} md={6} className={'d-flex flex-column p-5 mt-2'}>
                         <h5 style={{color: '#720505'}}>Hvor vil du reise?</h5>
                         <div className={'p-3'}>
                             <p className={'lh-lg text-muted'}>
