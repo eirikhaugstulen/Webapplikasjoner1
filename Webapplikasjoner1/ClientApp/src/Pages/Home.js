@@ -11,7 +11,7 @@ export const Home = () => {
                 <h3 className={'m-3 font-italic'}>Bestill din drømmetur</h3>
                 <div className={'row mb-5'}>
                     <Col sm={12} md={6} className={'d-flex flex-column p-5 mt-2'}>
-                        <h5 style={{color: '#720505'}}>Hvor vil du reise?</h5>
+                        <h4 style={{color: '#720505'}}>Hvor vil du reise?</h4>
                         <div className={'p-3'}>
                             <p className={'lh-lg text-muted'}>
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id ligula placerat, convallis magna at, vulputate ligula. Suspendisse consequat mauris vel lorem fringilla, quis rhoncus lectus mollis. Duis et justo sit amet
