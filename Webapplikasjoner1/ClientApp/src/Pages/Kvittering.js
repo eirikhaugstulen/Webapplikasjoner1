@@ -86,7 +86,6 @@ export const Kvittering = () => {
                     </tr>
                 </tbody>
             </Table>
-            <p className={'font-italic text-muted'}>Videre funksjonalitet vil bli implementert i del 2</p>
             <div
                 className={'d-flex'}
                 style={{ gap: '10px' }}
@@ -99,6 +98,7 @@ export const Kvittering = () => {
                 <Button
                     color={'danger'}
                     onClick={toggleModal}
+                    disabled={(new Date(Date.parse(billett.dato)) < (new Date().setHours(1)))}
                 >
                     Kanseller
                 </Button>
