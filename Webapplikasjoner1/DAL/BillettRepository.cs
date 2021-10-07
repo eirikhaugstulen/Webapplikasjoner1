@@ -114,6 +114,7 @@ namespace Webapplikasjoner1.DAL
                 {
                     Billett enBillett = await _db.Billetter.FindAsync(id);
                     _db.Billetter.Remove(enBillett);
+                    await _db.SaveChangesAsync();
                     return true;  
                 }
                 catch
