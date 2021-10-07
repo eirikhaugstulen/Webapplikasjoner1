@@ -17,8 +17,9 @@ Om man fortsatt får trøbbel med npm og imports i front end, slett package-lock
 
 
 <h4>Valg av validering</h4>
+Validering er blitt gjort på en alternativ måte til det som har blitt gjennomgått. Dette er fordi vi hadde noen problemer med bruken av modelState og legge inn regex rett i Billett-klassen som vi ikke forsto årsaken til. Løsningen vi har valgt kan sees i Validering.cs.
 
-
+<h4>Studentnummer</h4>
 <ul>
   <li>s344230</li>
   <li>s344223</li>
