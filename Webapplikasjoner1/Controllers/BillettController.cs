@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,11 +20,13 @@ namespace Webapplikasjoner1.Controllers
         }
         
         public async Task<ActionResult> Lagre(Billett innBillett)
-        {
+        { 
             bool valideringOk = Validering.BillettValidering(innBillett);
 
             if(valideringOk){
+                
                 bool returOk = await _db.Lagre(innBillett);
+                
                 if (!returOk )
                 {
                     _log.LogInformation("Billetten ble ikke lagret");
@@ -35,6 +34,7 @@ namespace Webapplikasjoner1.Controllers
                 }
                 return Ok("Billett lagret");
             }
+            
             _log.LogInformation("Feil i inputvalidering");
             return BadRequest("Feil i inputvalidering");
         }
@@ -44,17 +44,18 @@ namespace Webapplikasjoner1.Controllers
             List<Billett> alleBilletter = await _db.HentAlle();  
 
             return Ok(alleBilletter);
-         
         }
 
         public async Task<ActionResult> HentEn(int id)
         {
             Billett enBillett = await _db.HentEn(id);
+            
             if(enBillett == null)
             {
                 _log.LogInformation("Fant ikke billetten");
                 return NotFound("Fant ikke billetten");
             }
+            
             return Ok(enBillett);
         }
 
@@ -62,6 +63,7 @@ namespace Webapplikasjoner1.Controllers
         public async Task<ActionResult> Endre(Billett endreBillett)
         {
             bool validering = Validering.BillettValidering(endreBillett);
+            
             if (validering)
             {
                 bool returOK = await _db.Endre(endreBillett);
@@ -86,6 +88,7 @@ namespace Webapplikasjoner1.Controllers
                 _log.LogInformation("Billetten ble ikke slettet");
                 return NotFound("Billetten ble ikke slettet");
             }
+            
             return Ok("Billett slettet");
         }
     }

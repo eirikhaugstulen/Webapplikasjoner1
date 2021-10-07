@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,6 +56,7 @@ namespace Webapplikasjoner1.DAL
                     ReturDato = b.ReturDato,
                     Pris = b.Pris,
                 }).ToListAsync();
+                
                 return alleBillettene;
             }
             catch
@@ -69,6 +69,7 @@ namespace Webapplikasjoner1.DAL
         public async Task<Billett> HentEn(int id)
         {
             Billett enBillett = await _db.Billetter.FindAsync(id);
+            
                 var hentetBillett = new Billett()
                 {
                     Id = enBillett.Id,
@@ -81,8 +82,7 @@ namespace Webapplikasjoner1.DAL
                     ReturDato = enBillett.ReturDato,
                     Pris = enBillett.Pris,
                 };
-                return hentetBillett;
-              
+            return hentetBillett;
         }
 
         /*Brukes ikke nå, men beholder den for Oblig 2*/
@@ -100,6 +100,7 @@ namespace Webapplikasjoner1.DAL
                 enBillett.ReturDato = endreBillett.ReturDato;
                 enBillett.Pris = endreBillett.Pris;
                 await _db.SaveChangesAsync();
+                
                 return true;
             }
             catch
@@ -115,6 +116,7 @@ namespace Webapplikasjoner1.DAL
                     Billett enBillett = await _db.Billetter.FindAsync(id);
                     _db.Billetter.Remove(enBillett);
                     await _db.SaveChangesAsync();
+                    
                     return true;  
                 }
                 catch

@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Webapplikasjoner1.Models
 {
     public class Billett
