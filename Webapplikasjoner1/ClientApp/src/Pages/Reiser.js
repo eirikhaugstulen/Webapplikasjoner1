@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {Button, Table} from "reactstrap";
+import {Table} from "reactstrap";
 import axios from "axios";
-import {StatusBadge} from "../components/StatusBadge";
-import history from "../history";
+import yacht from '../Media/yacht.svg';
+import {ReiseTableRow} from "../components/ReiseTableRow";
 
 const fetchBilletter = async() => {
     const res = await axios('/Billett/hentalle');
@@ -44,7 +44,7 @@ export const Reiser = () => {
     return (
         <div className={'bg-white'}>
             <h2 className={'my-4'}>Dine reiser</h2>
-            <Table className={'table table-hover border'}>
+            <Table className={'table table-hover table-responsive-lg border rounded-3'}>
                 <thead className={"thead-light"}>
                 <tr>
                     <th>Status</th>
@@ -59,39 +59,18 @@ export const Reiser = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {billetter && billetter.map(b=>
-                    <tr key={b.id}>
-                        <StatusBadge active={b?.status} />
-                        <td>
-                            {b.dato?.toLocaleDateString()}
-                        </td>
-                        <td>
-                            {b.fornavn} {b.etternavn}
-                        </td>
-                        <td>
-                            {b.fraSted} - {b.tilSted}
-                        </td>
-                        <td>
-                            {b.retur ? 'Ja' : 'Nei'}
-                        </td>
-                        <td>
-                            {b.retur && b.returDato.toLocaleDateString()}
-                        </td>
-                        <td>
-                            {b.pris},-
-                        </td>
-                        <td>
-                            <Button
-                                size={'sm'}
-                                onClick={() => history.push(`/kvittering?id=${b.id}`)}
-                            >
-                                Se kvittering
-                            </Button>
-                        </td>
-                    </tr>
-                )}
+                {billetter && billetter.map(b=> <ReiseTableRow b={b} />)}
                 </tbody>
             </Table>
+            <div
+                className={'p-5 d-flex justify-content-center'}
+            >
+                <img 
+                    src={yacht} 
+                    alt={'Cruiseskip'}
+                    className={'w-25'}
+                />
+            </div>
         </div>
     )
 }
