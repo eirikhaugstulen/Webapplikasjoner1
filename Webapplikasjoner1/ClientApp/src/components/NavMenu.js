@@ -28,7 +28,7 @@ export class NavMenu extends Component {
             light
         >
           <Container>
-            <NavbarBrand tag={Link} to="/">WebLine</NavbarBrand>
+            <NavbarBrand tag={Link} to="/">AnvendtLine</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">

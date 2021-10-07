@@ -14,7 +14,7 @@ export const Home = () => {
                         <h4 style={{color: '#720505'}}>Hvor vil du reise?</h4>
                         <div className={'p-3'}>
                             <p className={'lh-lg text-muted'}>
-                                Velkommen til WebLine! Hos oss kan du reise langs store deler av norskekysten fra kun 49,-. Ombord tilbys herlige måltider og aktiviteter for hele familien. Planlegg din neste norgesferie på ett av våre skip!                            </p>
+                                Velkommen til AnvendtLine! Hos oss kan du reise langs store deler av norskekysten fra kun 49,-. Ombord tilbys herlige måltider og aktiviteter for hele familien. Planlegg din neste norgesferie på ett av våre skip!                            </p>
                         </div>
                         <div className={'d-flex flex-column justify-content-center'} style={{gap: '10px'}}>
                             <Button
