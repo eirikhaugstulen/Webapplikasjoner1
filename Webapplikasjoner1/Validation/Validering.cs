@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
+using Webapplikasjoner1.Models;
 
-namespace Webapplikasjoner1.Models
+namespace Webapplikasjoner1.Validation
 {
     public class Validering
     {

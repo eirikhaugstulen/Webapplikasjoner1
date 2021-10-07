@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Webapplikasjoner1.DAL;
 using Webapplikasjoner1.Models;
+using Webapplikasjoner1.Validation;
 
 namespace Webapplikasjoner1.Controllers
 {
@@ -20,7 +21,7 @@ namespace Webapplikasjoner1.Controllers
         }
         
         public async Task<ActionResult> Lagre(Billett innBillett)
-        { 
+        {
             bool valideringOk = Validering.BillettValidering(innBillett);
 
             if(valideringOk){
