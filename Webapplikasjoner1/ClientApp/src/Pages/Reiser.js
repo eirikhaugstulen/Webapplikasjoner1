@@ -59,7 +59,7 @@ export const Reiser = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {billetter && billetter.map(b=> <ReiseTableRow b={b} />)}
+                {billetter && billetter.map(b=> <ReiseTableRow b={b} key={b.id} />)}
                 </tbody>
             </Table>
             <div

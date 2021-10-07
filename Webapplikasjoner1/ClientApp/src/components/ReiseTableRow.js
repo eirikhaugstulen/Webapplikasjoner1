@@ -5,7 +5,6 @@ import {Button} from "reactstrap";
 
 export const ReiseTableRow = ({b}) => (
     <tr
-        key={b.id}
         onClick={() => history.push(`/kvittering?id=${b.id}`)}
         style={{cursor: 'pointer'}}
     >
