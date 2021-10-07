@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import axios from "axios";
 import {Button, Table} from "reactstrap";
+import history from "../history";
+import {SlettModal} from "../components/SlettModal";
 
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
@@ -15,21 +17,41 @@ const fetchEnkeltbillettData = async (id) => {
     }); 
 }
 
+const slettEnkeltbillett = async (id) => {
+    axios.get('/Billett/Slett', {
+        params: {
+            id
+        }
+    })
+        .then(() => history.push('/reiser'))
+        .catch(e => console.log(e));
+}
+
 export const Kvittering = () => {
     const [billett, setBillett] = useState();
+    const [modalOpen, setModalOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const id = useQuery().get('id');
-    const history = useHistory();
+    
+    const toggleModal = () => setModalOpen(prevState => !prevState);
     
     useEffect(() => {
         fetchEnkeltbillettData(id)
-            .then(res => setBillett(res.data))
+            .then(res => {
+                setBillett(res.data)
+                setIsLoading(false);
+            })
             .catch(e => console.log(e))
         
     }, [id])
     
+    if (isLoading) {
+        return 'Laster inn...'
+    }
+    
     return ( 
         <div className={'bg-white'}>
-            <h2>Takk for ditt kjøp!</h2>
+            <h2 className={'mb-3'}>Takk for ditt kjøp!</h2>
             <Table className={'table border'}>
                 <thead>
                     <tr>
@@ -39,35 +61,54 @@ export const Kvittering = () => {
                 </thead>
                 <tbody className={'table-bordered'}>
                     <tr>
-                        <td>Navn</td>
-                        <td>Jo Are</td>
+                        <td>Ordrenummer</td>
+                        <td>{billett.id}</td>
                     </tr>
                     <tr>
-                        <td>Ordrenummer</td>
-                        <td>1</td>
+                        <td>Navn</td>
+                        <td>{billett.fornavn} {billett.etternavn}</td>
                     </tr>
                     <tr>
                         <td>Avreisedato</td>
-                        <td>06.10.2021</td>
+                        <td>{new Date(Date.parse(billett.dato)).toLocaleDateString()}</td>
                     </tr>
                     <tr>
                         <td>Returdato</td>
-                        <td>08.10.2021</td>
+                        <td>{billett.returDato && new Date(Date.parse(billett.returDato)).toLocaleDateString()}</td>
                     </tr>
                     <tr>
                         <td>Strekning</td>
-                        <td>Oslo - Stavanger</td>
+                        <td>{billett.fraSted} - {billett.tilSted}</td>
                     </tr>
                     <tr>
                         <td>Pris</td>
-                        <td>400,-</td>
+                        <td>{billett.pris},-</td>
                     </tr>
                 </tbody>
             </Table>
-            <Button onClick={() => history.goBack()} color={'primary'}>Tilbake</Button>
-            <br/><br/>
-            
-            {JSON.stringify(billett)}
+            <p className={'font-italic text-muted'}>Videre funksjonalitet vil bli implementert i del 2</p>
+            <div
+                className={'d-flex'}
+                style={{ gap: '10px' }}
+            >
+                <Button
+                    onClick={() => history.push('/reiser')} 
+                    color={'secondary'}
+                    outline
+                >Tilbake</Button>
+                <Button
+                    color={'danger'}
+                    onClick={toggleModal}
+                >
+                    Kanseller
+                </Button>
+            </div>
+            <SlettModal 
+                id={billett.id} 
+                isOpen={modalOpen}
+                onConfirm={slettEnkeltbillett}
+                onCancel={toggleModal}
+            />
         </div>
     )
 } 
