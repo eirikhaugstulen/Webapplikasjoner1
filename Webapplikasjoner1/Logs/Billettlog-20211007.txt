@@ -1,0 +1,100 @@
+2021-10-07T10:12:14.5521100+02:00  [INF] Now listening on: "https://localhost:5001" (d826f4b8)
+2021-10-07T10:12:14.5554121+02:00  [INF] Now listening on: "http://localhost:5000" (d826f4b8)
+2021-10-07T10:12:14.5555211+02:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2021-10-07T10:12:14.5555345+02:00  [INF] Hosting environment: "Development" (c3307c92)
+2021-10-07T10:12:14.5555499+02:00  [INF] Content root path: "C:\Users\Public\Documents\WebApp\Webapplikasjoner1\Webapplikasjoner1" (b5d60022)
+2021-10-07T10:12:21.0693216+02:00  [ERR] Browserslist: caniuse-lite is outdated. Please run:
+ (02daff8f)
+2021-10-07T10:12:58.8832394+02:00 0HMC9D8M2VBV6:00000011 [ERR] Failed executing DbCommand ("3"ms) [Parameters=["@p0='?' (Size = 10), @p1='?' (Size = 3), @p2='?' (Size = 3), @p3='?' (Size = 4), @p4='?', @p5='?', @p6='?', @p7='?' (Size = 12)"], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"Billetter\" (\"Dato\", \"Etternavn\", \"Fornavn\", \"FraSted\", \"Pris\", \"Retur\", \"ReturDato\", \"TilSted\")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+SELECT \"Id\"
+FROM \"Billetter\"
+WHERE changes() = 1 AND \"rowid\" = last_insert_rowid();" (627a98df)
+2021-10-07T10:12:58.9599047+02:00 0HMC9D8M2VBV6:00000011 [ERR] An exception occurred in the database while saving changes for context type '"Webapplikasjoner1.DAL.BillettKontekst"'."
+""Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'table Billetter has no column named Pris'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)" (170f029e)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'table Billetter has no column named Pris'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Webapplikasjoner1.DAL.BillettRepository.Lagre(Billett innBillett) in C:\Users\Public\Documents\WebApp\Webapplikasjoner1\Webapplikasjoner1\DAL\BillettRepository.cs:line 35
+2021-10-07T10:12:58.9600934+02:00 0HMC9D8M2VBV6:00000011 [INF] Billetten ble ikke lagret (6c984eac)
+2021-10-07T10:22:29.9815164+02:00  [INF] Now listening on: "https://localhost:5001" (d826f4b8)
+2021-10-07T10:22:29.9853154+02:00  [INF] Now listening on: "http://localhost:5000" (d826f4b8)
+2021-10-07T10:22:29.9854500+02:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2021-10-07T10:22:29.9854652+02:00  [INF] Hosting environment: "Development" (c3307c92)
+2021-10-07T10:22:29.9854814+02:00  [INF] Content root path: "C:\Users\Public\Documents\WebApp\Webapplikasjoner1\Webapplikasjoner1" (b5d60022)
+2021-10-07T10:22:34.4638845+02:00  [ERR] Browserslist: caniuse-lite is outdated. Please run:
+ (02daff8f)
+2021-10-07T10:48:22.0135166+02:00  [INF] Now listening on: "https://localhost:5001" (d826f4b8)
+2021-10-07T10:48:22.0166525+02:00  [INF] Now listening on: "http://localhost:5000" (d826f4b8)
+2021-10-07T10:48:22.0167811+02:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2021-10-07T10:48:22.0167970+02:00  [INF] Hosting environment: "Development" (c3307c92)
+2021-10-07T10:48:22.0168126+02:00  [INF] Content root path: "C:\Users\Public\Documents\WebApp\Webapplikasjoner1\Webapplikasjoner1" (b5d60022)
+2021-10-07T10:48:26.5645635+02:00  [ERR] Browserslist: caniuse-lite is outdated. Please run:
+ (02daff8f)
+2021-10-07T11:09:14.1085714+02:00  [INF] Now listening on: "https://localhost:5001" (d826f4b8)
+2021-10-07T11:09:14.1125820+02:00  [INF] Now listening on: "http://localhost:5000" (d826f4b8)
+2021-10-07T11:09:14.1127461+02:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2021-10-07T11:09:14.1127675+02:00  [INF] Hosting environment: "Development" (c3307c92)
+2021-10-07T11:09:14.1127874+02:00  [INF] Content root path: "C:\Users\Public\Documents\WebApp\Webapplikasjoner1\Webapplikasjoner1" (b5d60022)
+2021-10-07T11:09:18.6867618+02:00  [ERR] Browserslist: caniuse-lite is outdated. Please run:
+ (02daff8f)
+2021-10-07T11:12:45.4960256+02:00 0HMC9E8H5RJKB:0000002B [ERR] An unhandled exception has occurred while executing the request. (48a46595)
+System.ArgumentNullException: Value cannot be null. (Parameter 'input')
+   at System.Text.RegularExpressions.Regex.IsMatch(String input)
+   at Webapplikasjoner1.Validering.Validering.BillettValidering(Billett innBillett) in C:\Users\Public\Documents\WebApp\Webapplikasjoner1\Webapplikasjoner1\Validering\Validering.cs:line 14
+   at Webapplikasjoner1.Controllers.BillettController.Lagre(Billett innBillett) in C:\Users\Public\Documents\WebApp\Webapplikasjoner1\Webapplikasjoner1\Controllers\BillettController.cs:line 25
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)

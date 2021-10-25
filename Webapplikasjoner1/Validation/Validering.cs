@@ -23,5 +23,26 @@ namespace Webapplikasjoner1.Validation
 
             return true;
         }
-    }
+
+        public static bool gyldigBrukernavn(string test)
+        {
+            Regex reg = new Regex(@"^[a-zA-ZæøåÆØÅ. \-]{2,20}$");
+            bool gyldig = reg.IsMatch(test);
+            if (!gyldig)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static bool gyldigPassord(string test)
+        {
+            Regex reg = new Regex(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"); // Må være 8 tegn med store/små bokstaver og tall.
+            bool gyldig = reg.IsMatch(test);
+            if (!gyldig)
+            {
+                return false;
+            }
+            return true;
+        }
 }

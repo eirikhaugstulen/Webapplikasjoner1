@@ -20,16 +20,38 @@ namespace Webapplikasjoner1.DAL
         {
             try
             {
-                var nyBillettRad = new Billett();
+                var nyBillettRad = new Billetter();
                 nyBillettRad.Id = innBillett.Id;
-                nyBillettRad.TilSted = innBillett.TilSted;
-                nyBillettRad.FraSted = innBillett.FraSted;
+             
                 nyBillettRad.Fornavn = innBillett.Fornavn;
                 nyBillettRad.Etternavn = innBillett.Etternavn;
                 nyBillettRad.Dato = innBillett.Dato;
                 nyBillettRad.Retur = innBillett.Retur;
                 nyBillettRad.ReturDato = innBillett.ReturDato;
                 nyBillettRad.Pris = innBillett.Pris;
+
+                var sjekkFraStrekning = await _db.Strekninger.FindAsync(innBillett.FraSted);
+                if(sjekkFraStrekning == null)
+                {
+                    _log.logInformation("Fant ikke Strekning i database");
+                    return false;
+                }
+                else
+                {
+                    nyBillettRad.FraSted = sjekkFraStrekning;
+                }
+                var sjekkTilStrekning = await _db.Strekninger.FindAsync(innBillett.TilSted);
+                if (sjekkFraStrekning == null)
+                {
+                    _log.logInformation("Fant ikke Strekning i database");
+                    return false;
+                }
+                else
+                {
+                    nyBillettRad.TilSted = sjekkTilStrekning;
+                }
+
+
                 _db.Billetter.Add(nyBillettRad);
                 await _db.SaveChangesAsync();
                 return true;
@@ -108,7 +130,7 @@ namespace Webapplikasjoner1.DAL
                 return false;
             }
         }
-
+        
         public async Task<bool> Slett(int id)
             {
                 try
