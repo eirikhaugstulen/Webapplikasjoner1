@@ -15,10 +15,10 @@ export default class App extends Component {
     return (
         <Layout>
             <Route exact path='/' component={Home} />
-            <Route exact path={'/admin'} component={HomeAdmin} />
             <Route path={'/reiser'} component={Reiser} />
             <Route path={'/bestill'} component={Bestilling} />
             <Route path={'/kvittering'} component={Kvittering} />
+            <Route path={'/admin'} component={HomeAdmin} />
         </Layout>
     );
   }
