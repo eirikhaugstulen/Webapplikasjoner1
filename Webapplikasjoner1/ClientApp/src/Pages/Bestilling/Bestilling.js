@@ -1,8 +1,8 @@
 import React, {useEffect} from "react";
 import {Button, Col, FormFeedback, FormGroup, Input, Label, Row} from "reactstrap";
-import {StrekningsVelger} from "../components/BestillForm/StrekningsVelger";
-import {useBestillingsForm} from "./hooks/useBestillingsForm";
-import history from "../history";
+import {StrekningsVelger} from "./BestillForm/StrekningsVelger";
+import {useBestillingsForm} from "../hooks/useBestillingsForm";
+import history from "../../history";
 
 // JSON vil byttes ut med API-kall i del 2
 const reiselokasjoner = [
