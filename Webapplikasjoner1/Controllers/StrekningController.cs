@@ -17,5 +17,6 @@ namespace Webapplikasjoner1.Controllers
             _db = db;
             _log = log;
         }
+        
     }
 }

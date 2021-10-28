@@ -3,7 +3,7 @@ using Webapplikasjoner1.Models;
 
 namespace Webapplikasjoner1.DAL
 {
-    public class IStrekningRepository
+    public interface IStrekningRepository
     {
         Task<bool> LagreStrekning(Strekning strekning);
         Task<bool> EndreStrekning(Strekning strekning);
