@@ -113,7 +113,7 @@ namespace Webapplikasjoner1.DAL
                 try
                 {
                     Avganger enAvgang = await _db.Avgangene.FindAsync(id);
-                    _db.Billettene.Remove(enAvgang);
+                    _db.Avgangene.Remove(enAvgang);
                     await _db.SaveChangesAsync();
                     
                     return true;  
