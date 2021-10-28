@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Webapplikasjoner1.DAL;
@@ -8,14 +9,13 @@ using Webapplikasjoner1.DAL;
 using Webapplikasjoner1.Models;
 namespace Webapplikasjoner1.Controllers
 {
-
     
-
     [Microsoft.AspNetCore.Components.Route("[controller]/[action]")]
     public class AvgangerController : ControllerBase
     {
         private readonly IAvgangerRepository _db;
         private ILogger<global::Webapplikasjoner1.Controllers.AvgangerController> _log;
+        private const string _loggetInn = "loggetInn";
 
         public AvgangerController(IAvgangerRepository db ,ILogger<global::Webapplikasjoner1.Controllers.AvgangerController> log)
         {
@@ -25,6 +25,11 @@ namespace Webapplikasjoner1.Controllers
         
         public async Task<ActionResult> Lagre(Avganger innAvganger)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized();
+            }
+
             bool valideringOk = Validering.AvgangValidering(innAvganger);
 
             if(valideringOk){
@@ -41,44 +46,59 @@ namespace Webapplikasjoner1.Controllers
             
             _log.LogInformation("Feil i inputvalidering");
             return BadRequest("Feil i inputvalidering");
-        }
+            }
         
         public async Task<ActionResult> HentAlle()
         {
-            List<Avganger> alleAvgangene = await _db.HentAlle();  
-
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized();
+            }
+            List<Avganger> alleAvgangene = await _db.HentAlle();
             return Ok(alleAvgangene);
         }
         
         public async Task<ActionResult> Endre(Avganger endreAvganger)
         {
-            bool validering = Validering.AvgangValidering(endreAvganger);
-            
-            if (validering)
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                bool returOK = await _db.Endre(endreAvganger);
-                if (!returOK)
-                {
-                    _log.LogInformation("Avgangen ble ikke endret");
-                    return BadRequest("Avgangen ble ikke endret");
-                }
-                return Ok("Avgangen ble endret");  
+                return Unauthorized();
             }
+                bool validering = Validering.AvgangValidering(endreAvganger);
+
+                if (validering)
+                {
+                    bool returOK = await _db.Endre(endreAvganger);
+                    if (!returOK)
+                    {
+                        _log.LogInformation("Avgangen ble ikke endret");
+                        return BadRequest("Avgangen ble ikke endret");
+                    }
+
+                    return Ok("Avgangen ble endret");
+                }
             
+
             _log.LogInformation("Feil i inputvalidering");
             return BadRequest("Feil i inputvalidering");
         }
 
         public async Task<ActionResult> Slett(int id)
         {
-            bool returOk = await _db.Slett(id);
-
-            if (!returOk)
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                _log.LogInformation("Avgangen ble ikke slettet");
-                return NotFound("Avgangen ble ikke slettet");
+                return Unauthorized();
             }
             
+            bool returOk = await _db.Slett(id);
+
+                if (!returOk)
+                {
+                    _log.LogInformation("Avgangen ble ikke slettet");
+                    return NotFound("Avgangen ble ikke slettet");
+                }
+            
+
             return Ok("Avgang slettet");
         }
     }
