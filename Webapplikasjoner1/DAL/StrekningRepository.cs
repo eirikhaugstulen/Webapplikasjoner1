@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Webapplikasjoner1.Models;
 using ILogger = Serilog.ILogger;
@@ -86,6 +89,25 @@ namespace Webapplikasjoner1.DAL
             catch
             {
                 return false;
+            }
+        }
+
+        public async Task<List<Strekning>> HentAlle()
+        { 
+            try
+            {
+                List<Strekning> alleStrekninger = await _db.Strekningene.Select(s => new Strekning
+                {
+                    Id = s.Id,
+                    FraSted = s.FraSted.Id,
+                    TilSted = s.TilSted.Id,
+                    
+                }).ToListAsync();
+                return alleStrekninger;
+            }
+            catch
+            {
+                return null;
             }
         }
     }

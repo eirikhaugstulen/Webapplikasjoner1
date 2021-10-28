@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -56,7 +57,13 @@ namespace Webapplikasjoner1.Controllers
             }
             
             return Ok("Strekning slettet");
-            
+        }
+
+        public async Task<ActionResult> HentAlle()
+        {
+            List<Strekning> alleStrekninger = await _db.HentAlle();
+
+            return Ok(alleStrekninger);
         }
         
     }
