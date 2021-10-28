@@ -13,7 +13,7 @@ namespace Webapplikasjoner1.DAL
         private readonly BillettKontekst _db;
         private ILogger<AvgangerRepository> _log;
 
-        public AvgangerRepository(BillettKontekst db,ILogger<BillettRepository> log )
+        public AvgangerRepository(BillettKontekst db,ILogger<AvgangerRepository> log )
         {
             _db = db;
             _log = log;
@@ -32,22 +32,10 @@ namespace Webapplikasjoner1.DAL
                 nyAvgangRad.Klokkeslett = innAvgang.Klokkeslett;
                 nyAvgangRad.Pris = innAvgang.Pris;
                 nyAvgangRad.Strekning = innAvgang.Strekning;
+            
                 
-
-                if (innAvgang.Retur == true)
-                {
-                    var sjekkReturDato = await _db.Avgangene.FindAsync(innBillett.ReturDato);
-                    if (sjekkReturDato == null)
-                    {
-                        _log.LogInformation("Fant ikke Avgang i database");
-                        return false;
-                    }
-                    else
-                    {
-                        nyBillettRad.ReturDato = sjekkReturDato;
-                    }
-                }
-                var sjekkAvgang = await _db.Avgangene.FindAsync(innBillett.Avgang);
+                var sjekkAvgang = await _db.Avgangene.FindAsync(innAvgang.Id);
+                
                 if (sjekkAvgang == null)
                 {
                     _log.LogInformation("Fant ikke Avgang i database");
@@ -55,9 +43,9 @@ namespace Webapplikasjoner1.DAL
                 }
                 else
                 {
-                    nyBillettRad.Avgang = sjekkAvgang;
+                    nyAvgangRad.Id = sjekkAvgang.Id;
                 }
-                _db.Billettene.Add(nyBillettRad);
+                _db.Avgangene.Add(nyAvgangRad);
                 await _db.SaveChangesAsync();
                 return true;
             }
