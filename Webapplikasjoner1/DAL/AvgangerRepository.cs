@@ -75,6 +75,19 @@ namespace Webapplikasjoner1.DAL
                 return null;
             }
         }
+        public async Task<Avganger> HentEn(int id)
+        {
+            Avganger enAvgang = await _db.Avgangene.FindAsync(id);
+            
+            var hentetAvgang = new Avganger()
+            {
+                Id = enAvgang.Id,
+                Dato = enAvgang.Dato,
+                Klokkeslett = enAvgang.Klokkeslett,
+                Pris = enAvgang.Pris
+            };
+            return hentetAvgang;
+        }
         
         public async Task<bool> Endre (Avganger endreAvgang)
         {

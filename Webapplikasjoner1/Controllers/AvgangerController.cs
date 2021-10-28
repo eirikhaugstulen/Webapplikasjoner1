@@ -57,6 +57,22 @@ namespace Webapplikasjoner1.Controllers
             List<Avganger> alleAvgangene = await _db.HentAlle();
             return Ok(alleAvgangene);
         }
+        public async Task<ActionResult> HentEn(int id)
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized();
+            }
+            Avganger enAvgang = await _db.HentEn(id);
+            
+            if(enAvgang == null)
+            {
+                _log.LogInformation("Fant ikke avgangen");
+                return NotFound("Fant ikke avgangen");
+            }
+            
+            return Ok(enAvgang);
+        }
         
         public async Task<ActionResult> Endre(Avganger endreAvganger)
         {
@@ -64,10 +80,11 @@ namespace Webapplikasjoner1.Controllers
             {
                 return Unauthorized();
             }
-                bool validering = Validering.AvgangValidering(endreAvganger);
+            
+            bool validering = Validering.AvgangValidering(endreAvganger);
 
-                if (validering)
-                {
+            if (validering)
+            {
                     bool returOK = await _db.Endre(endreAvganger);
                     if (!returOK)
                     {
@@ -76,7 +93,7 @@ namespace Webapplikasjoner1.Controllers
                     }
 
                     return Ok("Avgangen ble endret");
-                }
+            }
             
 
             _log.LogInformation("Feil i inputvalidering");

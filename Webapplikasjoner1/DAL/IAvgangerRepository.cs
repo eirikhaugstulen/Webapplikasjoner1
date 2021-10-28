@@ -9,6 +9,7 @@ namespace Webapplikasjoner1.DAL
         Task<bool> Lagre(Avganger innAvgang);
       
         Task<List<Avganger>> HentAlle();
+        Task<Avganger> HentEn(int id);
 
         Task<bool> Endre(Avganger endreAvgang);
 
