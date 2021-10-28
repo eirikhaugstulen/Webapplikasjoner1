@@ -11,5 +11,7 @@ namespace Webapplikasjoner1.Models
         public string Type { get; set; }
         public int Pris { get; set; }
         public int Antall { get; set; }
+        public string Dato { get; set; }
+        public string Klokkeslett { get; set; }
     }
 }

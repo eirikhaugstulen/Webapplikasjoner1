@@ -46,7 +46,7 @@ namespace Webapplikasjoner1.DAL
         {
             try
             {
-                Adminer fAdmin = await _db.Admins.FirstOrDefaultAsync(a => a.Brukernavn == admin.Brukernavn);
+                Adminer fAdmin = await _db.Adminene.FirstOrDefaultAsync(a => a.Brukernavn == admin.Brukernavn);
                 byte[] hash = LagHash(admin.Passord, fAdmin.Salt);
                 bool ok = hash.SequenceEqual(fAdmin.Passord);
                 if (ok)
@@ -75,7 +75,7 @@ namespace Webapplikasjoner1.DAL
             };
             try
             {
-                _db.Admins.Add(nyAdmin);
+                _db.Adminene.Add(nyAdmin);
                 await _db.SaveChangesAsync();
                 return true;
             }

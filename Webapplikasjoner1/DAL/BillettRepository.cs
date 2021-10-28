@@ -82,6 +82,8 @@ namespace Webapplikasjoner1.DAL
                     Pris = b.TotalPris,
                     Type = b.Type,
                     Antall =b.Antall,
+                    Dato =b.Avgang.Dato,
+                    Klokkeslett =b.Avgang.Klokkeslett,
 
                 }).ToListAsync();
                 
