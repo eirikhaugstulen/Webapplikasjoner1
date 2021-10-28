@@ -14,6 +14,7 @@ namespace Webapplikasjoner1.Controllers
     {
         private readonly ILokasjonReposity _db;
         private ILogger<LokasjonController> _logger;
+        private const string _loggetInn = "loggetInn";
 
         public LokasjonController(ILokasjonReposity db, ILogger<LokasjonController> logger)
         {
@@ -23,7 +24,7 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> RegistrerLokasjon(Lokasjon lokasjon)
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("loggetInn")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized();
             }
@@ -46,7 +47,7 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> SlettLokasjon(int id)
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("loggetInn")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized();
             }
@@ -64,7 +65,7 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> HentAlle()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("loggetInn")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized();
             }
@@ -75,7 +76,7 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> HentEn(int id)
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("loggetInn")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized();
             }
