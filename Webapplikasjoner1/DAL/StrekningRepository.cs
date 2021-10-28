@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Webapplikasjoner1.Models;
@@ -56,7 +57,19 @@ namespace Webapplikasjoner1.DAL
 
         public async Task<bool> EndreStrekning(Strekning innStrekning)
         {
-            return false;
+            try
+            {
+                var endreStrekning = await _db.Strekningene.FindAsync(innStrekning.Id);
+                endreStrekning.FraSted.Id = innStrekning.FraSted;
+                endreStrekning.TilSted.Id = innStrekning.TilSted;
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                _log.LogInformation(e.Message);
+            }
+
+            return true;
         }
 
         public async Task<bool> SlettStrekning(int id)
