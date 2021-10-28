@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Webapplikasjoner1.DAL;
 using Webapplikasjoner1.Models;
+using Webapplikasjoner1.Validation;
 using ILogger = Serilog.ILogger;
 
 namespace Webapplikasjoner1.Controllers
@@ -23,6 +24,12 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> LagreStrekning(Strekning innStrekning)
         {
+            if (!Validering.StrekningValidering(innStrekning))
+            {
+                _log.LogInformation("Feil i validering av strekning");
+                return BadRequest("Feil i validering av strekning");
+            }
+            
             bool returOk = await _db.LagreStrekning(innStrekning);
 
             if (!returOk)
@@ -36,6 +43,12 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> EndreStrekning(Strekning innStrekning)
         {
+            if (!Validering.StrekningValidering(innStrekning))
+            {
+                _log.LogInformation("Feil i validering av strekning");
+                return BadRequest("Feil i validering av strekning");
+            }
+            
             bool returOk = await _db.EndreStrekning(innStrekning);
             if (!returOk)
             {

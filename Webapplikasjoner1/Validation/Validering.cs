@@ -45,4 +45,14 @@ namespace Webapplikasjoner1.Validation
             }
             return true;
         }
+
+        public static bool StrekningValidering(Strekning innStrekning)
+        {
+            if (innStrekning.Id < 0 || innStrekning.FraSted < 0 || innStrekning.TilSted < 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
 }
