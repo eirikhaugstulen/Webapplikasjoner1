@@ -3,10 +3,11 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Webapplikasjoner1.Models;
+using ILogger = Serilog.ILogger;
 
 namespace Webapplikasjoner1.DAL
 {
-    public class StrekningRepository
+    public class StrekningRepository : IStrekningRepository
     {
         private readonly BillettKontekst _db;
         private ILogger<StrekningRepository> _log;
