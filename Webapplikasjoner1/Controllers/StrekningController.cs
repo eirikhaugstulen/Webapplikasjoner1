@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using Webapplikasjoner1.DAL;
 using Webapplikasjoner1.Models;
 using Webapplikasjoner1.Validation;
-using ILogger = Serilog.ILogger;
+
 
 namespace Webapplikasjoner1.Controllers
 {
@@ -15,6 +14,7 @@ namespace Webapplikasjoner1.Controllers
     {
         private readonly IStrekningRepository _db;
         private ILogger<StrekningController> _log;
+        private const string _loggetInn = "loggetInn";
     
     
         public StrekningController(IStrekningRepository db, ILogger <StrekningController> log)
@@ -25,6 +25,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> LagreStrekning(Strekning innStrekning)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized();
+            }
+            
             if (!Validering.StrekningValidering(innStrekning))
             {
                 _log.LogInformation("Feil i validering av strekning");
@@ -44,6 +49,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> EndreStrekning(Strekning innStrekning)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized();
+            }
+            
             if (!Validering.StrekningValidering(innStrekning))
             {
                 _log.LogInformation("Feil i validering av strekning");
@@ -62,6 +72,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> SlettStrekning(int id)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized();
+            }
+            
             bool returOk = await _db.SlettStrekning(id);
             
             if (!returOk)
@@ -75,13 +90,23 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> HentAlleStrekninger()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized();
+            }
+            
             List<Strekning> alleStrekninger = await _db.HentAlleStrekninger();
 
             return Ok(alleStrekninger);
         }
 
         public async Task<ActionResult> HentEnStrekning(int id)
-        {
+        { 
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
+            {
+                return Unauthorized();
+            }
+            
             Strekning enStrekning = await _db.HentEn(id);
 
             if (enStrekning == null)
