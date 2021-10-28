@@ -12,16 +12,15 @@ namespace Webapplikasjoner1.DAL
 
     public class Billetter
     {
-        public int Id { get; set; }  
+        public int Id { get; set; }
         public string Fornavn { get; set; }
         public string Etternavn { get; set; }
         public bool Retur { get; set; }
-        public string ReturDato { get; set; }
         public string Type { get; set; }
         public int TotalPris { get; set; }
-        public int Antall { get; set; } 
-        public virtual Strekninger FraSted { get; set; }
-        public virtual Strekninger TilSted { get; set; }
+        public int Antall { get; set; }
+        public virtual Avganger Avgang {get;set;}
+        public virtual Avganger ReturDato { get;set; }
     }
 
     public class Strekninger {
@@ -67,9 +66,10 @@ namespace Webapplikasjoner1.DAL
             Database.EnsureCreated();
         }
 
-        public DbSet<Billetter> Billetter { get; set; }
-        public DbSet<Adminer> Admins {get; set;}
-        public DbSet<Strekninger> Strekninger { get; set; }
+        public DbSet<Billetter> Billettene { get; set; }
+        public DbSet<Adminer> Adminene {get; set;}
+        public DbSet<Strekninger> Strekningene { get; set; }
+        public DbSet<Avganger> Avgangene { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
