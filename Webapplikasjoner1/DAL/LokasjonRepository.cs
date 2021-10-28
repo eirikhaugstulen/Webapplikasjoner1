@@ -81,5 +81,17 @@ namespace Webapplikasjoner1.DAL
                 return null;
             }
         }
+
+        public async Task<Lokasjon> HentEn(int id)
+        {
+            Lokasjoner lokasjon = await _db.Lokasjonene.FindAsync(id);
+
+            var hentetLokasjon = new Lokasjon()
+            {
+                Id = lokasjon.Id,
+                Stedsnavn = lokasjon.StedsNavn,
+            };
+            return hentetLokasjon;
+        }
     }
 }

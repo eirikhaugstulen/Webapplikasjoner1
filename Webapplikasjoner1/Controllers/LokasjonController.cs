@@ -72,5 +72,22 @@ namespace Webapplikasjoner1.Controllers
             List<Lokasjon> alleLokasjoner = await _db.HentAlle();
             return Ok(alleLokasjoner);
         }
+
+        public async Task<ActionResult> HentEn(int id)
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("loggetInn")))
+            {
+                return Unauthorized();
+            }
+
+            Lokasjon lokasjon = await _db.HentEn(id);
+            
+            if (lokasjon == null)
+            {
+                _logger.LogInformation("Fant ikke lokasjon");
+                return NotFound("Fant ikke lokasjonen");
+            }
+            return Ok("Fant lokasjonen");
+        }
     }
 }

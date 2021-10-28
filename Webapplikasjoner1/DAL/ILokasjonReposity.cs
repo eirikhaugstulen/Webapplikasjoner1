@@ -9,5 +9,6 @@ namespace Webapplikasjoner1.DAL
         Task<bool> RegistrerLokasjon(Lokasjon lokasjon);
         Task<bool> SlettLokasjon(int id);
         Task<List<Lokasjon>> HentAlle();
+        Task<Lokasjon> HentEn(int id);
     }
 }
