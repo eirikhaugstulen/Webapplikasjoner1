@@ -75,7 +75,18 @@ namespace Webapplikasjoner1.DAL
 
         public async Task<bool> SlettStrekning(int id)
         {
-            return false;
+            try
+            {
+                Strekninger enStrekning = await _db.Strekningene.FindAsync(id);
+                _db.Strekningene.Remove(enStrekning);
+                await _db.SaveChangesAsync();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
