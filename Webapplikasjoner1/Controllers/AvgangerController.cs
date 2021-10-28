@@ -3,24 +3,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Webapplikasjoner1.DAL;
-using Webapplikasjoner1.Models;
 using Webapplikasjoner1.Validation;
-
-namespace Webapplikasjoner1.Controllers
-{
-    public class AvgangerController
-    {
-        using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Webapplikasjoner1.DAL;
 using Webapplikasjoner1.Models;
-using Webapplikasjoner1.Validation;
-
 namespace Webapplikasjoner1.Controllers
 {
-    [Route("[controller]/[action]")]
+
+    
+
+    [Microsoft.AspNetCore.Components.Route("[controller]/[action]")]
     public class AvgangerController : ControllerBase
     {
         private readonly IAvgangerRepository _db;
@@ -34,7 +25,7 @@ namespace Webapplikasjoner1.Controllers
         
         public async Task<ActionResult> Lagre(Avganger innAvganger)
         {
-            bool valideringOk = Validering.AvgangerValidering(innAvganger);
+            bool valideringOk = Validering.AvgangValidering(innAvganger);
 
             if(valideringOk){
                 
@@ -93,5 +84,4 @@ namespace Webapplikasjoner1.Controllers
     }
 }
         
-    }
-}
+    

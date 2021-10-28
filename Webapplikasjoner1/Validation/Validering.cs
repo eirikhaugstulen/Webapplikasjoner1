@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Webapplikasjoner1.DAL;
 using Webapplikasjoner1.Models;
 
 namespace Webapplikasjoner1.Validation
@@ -45,5 +46,22 @@ namespace Webapplikasjoner1.Validation
             }
             return true;
         }
-        
+        public static bool AvgangValidering(Avganger innAvgang)
+        {
+            Regex reg = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,20}");
+
+
+            bool testDato= reg.IsMatch(innAvgang.Dato);
+            bool testKlokkeslett = reg.IsMatch(innAvgang.Klokkeslett);
+            
+            
+
+            if (!testDato || !testKlokkeslett  || innAvgang.Pris < 0 || innAvgang.Pris > 9999)  
+            {
+                return false;
+            }
+
+            return true;
+        }
+}
 }

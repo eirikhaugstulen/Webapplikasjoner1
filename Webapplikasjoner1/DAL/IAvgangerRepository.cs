@@ -6,7 +6,7 @@ namespace Webapplikasjoner1.DAL
 {
     public interface IAvgangerRepository
     {
-        Task<bool> Lagre(Avganger innAvganger);
+        Task<bool> Lagre(Avganger innAvgang);
       
         Task<List<Avganger>> HentAlle();
 
