@@ -9,6 +9,7 @@ namespace Webapplikasjoner1.DAL
         Task<bool> LagreStrekning(Strekning strekning);
         Task<bool> EndreStrekning(Strekning strekning);
         Task<bool> SlettStrekning(int id);
-        Task<List<Strekning>> HentAlle();
+        Task<List<Strekning>> HentAlleStrekninger();
+        Task<Strekning> HentEn(int id);
     }
 }

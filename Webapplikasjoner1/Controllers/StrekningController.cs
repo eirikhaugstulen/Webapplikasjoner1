@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -72,11 +73,24 @@ namespace Webapplikasjoner1.Controllers
             return Ok("Strekning slettet");
         }
 
-        public async Task<ActionResult> HentAlle()
+        public async Task<ActionResult> HentAlleStrekninger()
         {
-            List<Strekning> alleStrekninger = await _db.HentAlle();
+            List<Strekning> alleStrekninger = await _db.HentAlleStrekninger();
 
             return Ok(alleStrekninger);
+        }
+
+        public async Task<ActionResult> HentEnStrekning(int id)
+        {
+            Strekning enStrekning = await _db.HentEn(id);
+
+            if (enStrekning == null)
+            {
+                _log.LogInformation("Fant ikke strekningen");
+                return NotFound("Fant ikke strekningen");
+            }
+
+            return Ok(enStrekning);
         }
         
     }

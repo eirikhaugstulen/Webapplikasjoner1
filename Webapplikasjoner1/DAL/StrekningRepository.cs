@@ -92,7 +92,7 @@ namespace Webapplikasjoner1.DAL
             }
         }
 
-        public async Task<List<Strekning>> HentAlle()
+        public async Task<List<Strekning>> HentAlleStrekninger()
         { 
             try
             {
@@ -109,6 +109,20 @@ namespace Webapplikasjoner1.DAL
             {
                 return null;
             }
+        }
+
+        public async Task<Strekning> HentEn(int id)
+        {
+            Strekninger enStrekning = await _db.Strekningene.FindAsync(id);
+
+            var hentetStrekning = new Strekning()
+            {
+                Id = enStrekning.Id,
+                FraSted = enStrekning.FraSted.Id,
+                TilSted = enStrekning.TilSted.Id,
+            }; 
+            
+            return hentetStrekning;
         }
     }
 }
