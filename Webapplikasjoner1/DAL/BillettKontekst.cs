@@ -15,30 +15,37 @@ namespace Webapplikasjoner1.DAL
         public int Id { get; set; }  
         public string Fornavn { get; set; }
         public string Etternavn { get; set; }
-        public string Dato { get; set; }
-        public string Klokkeslett { get; set; }
         public bool Retur { get; set; }
         public string ReturDato { get; set; }
         public string Type { get; set; }
-        public int Pris { get; set; }
+        public int TotalPris { get; set; }
         public int Antall { get; set; } 
         public virtual Strekninger FraSted { get; set; }
         public virtual Strekninger TilSted { get; set; }
     }
 
     public class Strekninger {
+        // Legg til, endre(endrer kun på lokasjon pekere)- ikke prioritet og Slett
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         public virtual Lokasjoner FraSted { get; set; }
         public virtual Lokasjoner TilSted { get; set; }
-        public int Studentpris { get; set; }
-        public int HonnørPris { get; set; }
-        public int OrdinærPris { get; set; }
-        public int BarnPris { get; set; }
+    }
+
+    public class Avganger
+    { // Legg til, endre(dato, klokkeslett, pris, pekere til Strekninger) og Slett
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int Id { get; set; }
+        public string Dato { get; set; }
+        public string Klokkeslett { get; set; }
+        public int Pris { get; set; }
+        public virtual Strekninger Strekning { get; set; }
+
     }
     public class Lokasjoner
-    {
+    { // Legg til og Slett
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
