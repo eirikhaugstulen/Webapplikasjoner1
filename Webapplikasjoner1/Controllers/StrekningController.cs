@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Webapplikasjoner1.DAL;
 using ILogger = Serilog.ILogger;
 
 namespace Webapplikasjoner1.Controllers
