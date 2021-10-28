@@ -18,7 +18,40 @@ namespace Webapplikasjoner1.DAL
 
         public async Task<bool> LagreStrekning(Strekning innStrekning)
         {
-            return false;
+            try
+            {
+                var nyStrekningRad = new Strekninger();
+                nyStrekningRad.Id = innStrekning.Id;
+                var sjekkFraSted = await _db.Strekningene.FindAsync(innStrekning.FraSted);
+                if (sjekkFraSted == null)
+                {
+                    _log.LogInformation("Fant ikke lokasjon i database");
+                    return false;
+                }
+                else
+                {
+                    nyStrekningRad.FraSted = sjekkFraSted.FraSted;
+                }
+
+                var sjekkTilSted = await _db.Strekningene.FindAsync(innStrekning.TilSted);
+                if (sjekkTilSted == null)
+                {
+                    _log.LogInformation("Fant ikke lokasjon i database");
+                    return false;
+                }
+                else
+                {
+                    nyStrekningRad.TilSted = sjekkFraSted.TilSted;
+                }
+
+                _db.Strekningene.Add(nyStrekningRad);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public async Task<bool> EndreStrekning(Strekning innStrekning)
