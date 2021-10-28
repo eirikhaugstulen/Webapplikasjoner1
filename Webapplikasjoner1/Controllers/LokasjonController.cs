@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Webapplikasjoner1.DAL;
@@ -22,6 +23,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> RegistrerLokasjon(Lokasjon lokasjon)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("loggetInn")))
+            {
+                return Unauthorized();
+            }
+            
             bool ok = Validation.Validering.gyldigStedsnavn(lokasjon.Stedsnavn);
 
             if (ok)
@@ -40,6 +46,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> SlettLokasjon(int id)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("loggetInn")))
+            {
+                return Unauthorized();
+            }
+            
             bool returOK = await _db.SlettLokasjon(id);
 
             if (!returOK)
@@ -53,6 +64,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> HentAlle()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("loggetInn")))
+            {
+                return Unauthorized();
+            }
+            
             List<Lokasjon> alleLokasjoner = await _db.HentAlle();
             return Ok(alleLokasjoner);
         }
