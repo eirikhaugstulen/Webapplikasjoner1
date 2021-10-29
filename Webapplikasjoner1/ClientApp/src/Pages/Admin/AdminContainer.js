@@ -6,6 +6,7 @@ import { Lokasjoner } from './LokasjonerAdmin';
 import axios from "axios";
 import {Spinner} from "reactstrap";
 import {AdminHome} from "./AdminHome";
+import {LoggInnAdmin} from "./LoggInnAdmin";
 
 
 export const AdminContainer = () => {
@@ -92,6 +93,11 @@ export const AdminContainer = () => {
                             refetch={refetch}
                         />
                     )}
+                />
+
+                <Route
+                    path={`${match.url}/logginn`}
+                    component={LoggInnAdmin}
                 />
                 
                 <Route 
