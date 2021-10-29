@@ -8,7 +8,7 @@ using Webapplikasjoner1.Models;
 
 namespace Webapplikasjoner1.DAL
 {
-    public class LokasjonRepository : ILokasjonReposity
+    public class LokasjonRepository : ILokasjonRepository
     {
         private readonly BillettKontekst _db;
         private ILogger<LokasjonRepository> _log;

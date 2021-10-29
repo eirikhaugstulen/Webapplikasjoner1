@@ -12,11 +12,11 @@ namespace Webapplikasjoner1.Controllers
     
     public class LokasjonController : ControllerBase
     {
-        private readonly ILokasjonReposity _db;
+        private readonly ILokasjonRepository _db;
         private ILogger<LokasjonController> _logger;
         private const string _loggetInn = "loggetInn";
 
-        public LokasjonController(ILokasjonReposity db, ILogger<LokasjonController> logger)
+        public LokasjonController(ILokasjonRepository db, ILogger<LokasjonController> logger)
         {
             _db = db;
             _logger = logger;

@@ -4,7 +4,7 @@ using Webapplikasjoner1.Models;
 
 namespace Webapplikasjoner1.DAL
 {
-    public interface ILokasjonReposity
+    public interface ILokasjonRepository
     {
         Task<bool> RegistrerLokasjon(Lokasjon lokasjon);
         Task<bool> SlettLokasjon(int id);
