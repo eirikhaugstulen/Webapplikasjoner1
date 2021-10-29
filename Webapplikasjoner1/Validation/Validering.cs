@@ -33,7 +33,6 @@ namespace Webapplikasjoner1.Validation
             {
                 return false;
             }
-
             return true;
         }
 
@@ -54,12 +53,20 @@ namespace Webapplikasjoner1.Validation
         {
             Regex reg = new Regex(@"^[a-zA-ZæøåÆØÅ. \-]{2,20}$");
             bool gyldig = reg.IsMatch(test);
-
             if (!gyldig)
             {
                 return false;
             }
             return true;
         }
-    }
+
+        public static bool StrekningValidering(Strekning innStrekning)
+        {
+            if (innStrekning.Id < 0 || innStrekning.FraSted < 0 || innStrekning.TilSted < 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
 }
