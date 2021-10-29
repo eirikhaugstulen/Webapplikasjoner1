@@ -1,6 +1,7 @@
-﻿import React from "react";
+﻿import React, {useEffect, useState} from "react";
 //Display lokasjoner
-import {Table} from "reactstrap";
+import {Button, Table} from "reactstrap";
+import {ReiseTableRow} from "../../components/ReiseTableRow";
 
 const reiselokasjoner = [
     {
@@ -33,18 +34,25 @@ export const Lokasjoner = () => {
     return(
         <div>
             <Table className={'table border'}>
+                <thead className={'thead-light'}>
                 <tr>
-                    <th>Lokasjoner</th>
-                    <th>Endre</th>
-                    <th>Slett</th>
+                    <td><h4>Lokasjoner</h4></td>
                 </tr>
-                <tr>
-                    {}
-                </tr>
+                </thead>
+                <tbody >
+                {reiselokasjoner.map(lokasjon =>
+                    <tr> <td key={lokasjon.id}>{lokasjon.displayName}</td>
+                    
+                    <td><Button className={'btn btn-danger'}>Slett</Button></td></tr>
+                )}
+                </tbody>
             </Table>
+            <Button className={'btn btn-success'}>Legg til lokasjon</Button>
         </div>
     )
 }
-// Legge til
+//Legge til
+//Slette
 
-// Slette 
+
+
