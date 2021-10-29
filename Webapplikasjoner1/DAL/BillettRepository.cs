@@ -115,7 +115,7 @@ namespace Webapplikasjoner1.DAL
             return hentetBillett;
         }
 
-        /*Brukes ikke nå, men beholder den for Oblig 2*/
+        /*Brukes ikke nå, men beholder den for Oblig 2
         public async Task<bool> Endre (Billett endreBillett)
         {
             try
@@ -138,6 +138,7 @@ namespace Webapplikasjoner1.DAL
                 return false;
             }
         }
+        */
         
         public async Task<bool> Slett(int id)
             {

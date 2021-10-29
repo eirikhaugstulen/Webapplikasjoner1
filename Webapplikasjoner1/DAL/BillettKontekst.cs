@@ -24,7 +24,7 @@ namespace Webapplikasjoner1.DAL
     }
 
     public class Strekninger {
-        // Legg til, endre(endrer kun på lokasjon pekere)- ikke prioritet og Slett
+        // Legg til, endre(endrer kun pï¿½ lokasjon pekere)- ikke prioritet og Slett
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
@@ -48,7 +48,7 @@ namespace Webapplikasjoner1.DAL
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
-        public int StedsNavn { get; set; }
+        public string StedsNavn { get; set; }
     }
     public class Adminer
     {
@@ -70,6 +70,7 @@ namespace Webapplikasjoner1.DAL
         public DbSet<Adminer> Adminene {get; set;}
         public DbSet<Strekninger> Strekningene { get; set; }
         public DbSet<Avganger> Avgangene { get; set; }
+        public DbSet<Lokasjoner> Lokasjonene { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
