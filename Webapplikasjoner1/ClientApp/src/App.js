@@ -5,7 +5,7 @@ import { Home } from './Pages/Home';
 import { Reiser } from "./Pages/Reiser";
 import { Bestilling } from "./Pages/Bestilling/Bestilling";
 import { Kvittering } from "./Pages/Kvittering";
-import { HomeAdmin } from "./Pages/Admin/HomeAdmin";
+import {AdminContainer} from "./Pages/Admin/AdminContainer";
 
 
 export default class App extends Component {
@@ -18,7 +18,7 @@ export default class App extends Component {
             <Route path={'/reiser'} component={Reiser} />
             <Route path={'/bestill'} component={Bestilling} />
             <Route path={'/kvittering'} component={Kvittering} />
-            <Route path={'/admin'} component={HomeAdmin} />
+            <Route path={'/admin'} component={AdminContainer} />
         </Layout>
     );
   }

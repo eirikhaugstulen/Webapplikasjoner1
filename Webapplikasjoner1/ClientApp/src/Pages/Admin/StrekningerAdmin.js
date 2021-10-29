@@ -7,7 +7,7 @@
 // Slett
 // Legg til
 
-export const Strekninger = () => {
+export const Strekninger = ({ apiData, refetch }) => {
 return(
     <div>
         <h1>Strekninger</h1>
