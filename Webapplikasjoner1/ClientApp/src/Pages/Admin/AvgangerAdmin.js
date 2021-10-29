@@ -1,5 +1,8 @@
 ﻿import React from "react";
 import {Button, Row, Table} from "reactstrap";
+import {ArrowLeftIcon} from "@primer/octicons-react";
+import history from "../../history";
+import {BackButton} from "../../components/AdminHome/BackButton";
 // Se ALLE avganger
 
 // Filtrere fraLokasjon, tilLokasjon og Dato'
@@ -36,11 +39,7 @@ export const Avganger = () => {
     return(
         <div>
             <Row className={'p-3'}>
-                <Button
-                    color={'light'}
-                >
-                    Tilbake
-                </Button>
+                <BackButton />
             </Row>
             <Table className={'table border'}>
                 <thead className={'thead-light'}>
