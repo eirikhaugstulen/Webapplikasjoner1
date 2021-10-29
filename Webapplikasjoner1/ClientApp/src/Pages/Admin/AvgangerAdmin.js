@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import {Button, Table} from "reactstrap";
+import {Button, Row, Table} from "reactstrap";
 // Se ALLE avganger
 
 // Filtrere fraLokasjon, tilLokasjon og Dato'
@@ -35,6 +35,13 @@ const avganger = [
 export const Avganger = () => {
     return(
         <div>
+            <Row className={'p-3'}>
+                <Button
+                    color={'light'}
+                >
+                    Tilbake
+                </Button>
+            </Row>
             <Table className={'table border'}>
                 <thead className={'thead-light'}>
                 <tr>
