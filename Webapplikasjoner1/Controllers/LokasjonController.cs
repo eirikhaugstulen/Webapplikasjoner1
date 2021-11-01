@@ -26,7 +26,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             bool ok = Validation.Validering.GyldigStedsnavn(lokasjon.Stedsnavn);
@@ -49,7 +49,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             bool returOK = await _db.SlettLokasjon(id);
@@ -67,7 +67,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             List<Lokasjon> alleLokasjoner = await _db.HentAlle();
@@ -78,7 +78,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
 
             Lokasjon lokasjon = await _db.HentEn(id);
