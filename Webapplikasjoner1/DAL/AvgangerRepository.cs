@@ -43,7 +43,7 @@ namespace Webapplikasjoner1.DAL
                 }
                 else
                 {
-                    nyAvgangRad.Id = sjekkAvgang.Id;
+                    nyAvgangRad.Strekning = sjekkStrekning.Strekning;
                 }
                 _db.Avgangene.Add(nyAvgangRad);
                 await _db.SaveChangesAsync();
