@@ -44,6 +44,7 @@ namespace Webapplikasjoner1.Controllers
                 return Ok(true);
             }
             _log.LogInformation("Feil i inputvalidering");
+            HttpContext.Session.SetString(_loggetInn,"");
             return BadRequest("Feil i inputvalidering på server");
         }
 
