@@ -57,7 +57,6 @@ export const Avganger = () => {
                 )}
                 </tbody>
             </Table>
-            
         </div>
     )
 } 

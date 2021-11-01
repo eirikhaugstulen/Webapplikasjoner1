@@ -39,7 +39,7 @@ export const Lokasjoner = () => {
                     <td><h4>Lokasjoner</h4></td>
                 </tr>
                 </thead>
-                <tbody >
+                <tbody>
                 {reiselokasjoner.map(lokasjon =>
                     <tr> <td key={lokasjon.id}>{lokasjon.displayName}</td>
                     
