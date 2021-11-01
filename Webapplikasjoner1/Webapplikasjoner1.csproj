@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Logs" />
     <None Remove="DAL\NewFile.txt" />
     <Folder Include="ClientApp\src\Media" />
   </ItemGroup>
