@@ -12,8 +12,6 @@ namespace Webapplikasjoner1.DAL
 
         Task<Billett> HentEn(int id);
 
-        Task<bool> Endre(Billett endreBillett);
-
         Task<bool> Slett(int id);
     }
 }

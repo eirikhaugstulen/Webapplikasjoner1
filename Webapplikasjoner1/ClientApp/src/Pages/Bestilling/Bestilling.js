@@ -1,5 +1,7 @@
-import React, {useEffect} from "react";
-import {Button, Col, FormFeedback, FormGroup, Input, Label, Row} from "reactstrap";
+import React from "react";
+import {Button, Col, FormFeedback, FormGroup, Input, Label, Progress, Row} from "reactstrap";
+import {Formik} from "formik";
+import * as Yup from 'yup';
 import {StrekningsVelger} from "./BestillForm/StrekningsVelger";
 import {useBestillingsForm} from "../hooks/useBestillingsForm";
 import history from "../../history";
@@ -34,151 +36,151 @@ const reiselokasjoner = [
 
 export const Bestilling = () => {
     const [
-        { 
-            avgangsstedState, 
+        {
+            avgangsstedState,
             ankomststedState,
             fraDatoState,
             tilDatoState,
             returState,
-            fornavnState,
-            etternavnState,
-            prisState,
-        }, 
-        valid,
+        },
         updateIsTouched,
-        handleSubmit,
-        submitting,
-        isTouched,
     ] = useBestillingsForm();
-    
-    useEffect(() => {
-        if (ankomststedState.ankomststed && avgangsstedState.avgangssted) {
-            reiselokasjoner.find(lokasjon => lokasjon.displayName === ankomststedState.ankomststed)
-        }
-    }, [avgangsstedState, ankomststedState])
-
-    const changeRetur = () => returState.setRetur(!returState.retur);
     
     return (
         <>
             <Row form>
                 <Col md={12}>
-                    <p>Reisedetaljer</p>
-                </Col>
-            </Row>
-            <Row form>
-                <StrekningsVelger
-                    reiselokasjoner={reiselokasjoner}
-                    avgangsstedState={avgangsstedState}
-                    ankomststedState={ankomststedState}
-                    returState={returState}
-                    updateIsTouched={updateIsTouched}
-                    prisState={prisState}
-                />
-            </Row>
-            
-            <Row form>
-                <Col md={12}>
-                    <FormGroup>
-                        <Label>Velg avgang</Label>
-                        <Input
-                            type={'date'}
-                            onChange={e => {
-                                updateIsTouched('fraDato')
-                                fraDatoState.setFraDato(e.target.value)
-                            }}
-                            invalid={isTouched.fraDato && !fraDatoState.valid}
+                    <p>Bestill reise</p>
+                    <Progress multi>
+                        <Progress
+                            animated
+                            bar
+                            color={'info'}
+                            value={30}
                         />
-                        <FormFeedback>Avreise må være fram i tid</FormFeedback>
-                    </FormGroup>
+                    </Progress>
                 </Col>
             </Row>
-            
-            <Row form>
-                <Col md={12}>
-                    <FormGroup check>
-                        <Input type={'checkbox'} onChange={() => changeRetur()} />
-                        <Label>Retur?</Label>
-                    </FormGroup>
-                </Col>
-            </Row>
+            <Formik
+                initialValues={{
+                    fraSted: avgangsstedState.avgangssted,
+                    tilSted: ankomststedState.ankomststed,
+                    avgang: fraDatoState.fraDato,
+                    retur: returState.retur,
+                    returDato: tilDatoState.tilDato,
+                }}
+                validationSchema={Yup.object().shape({
+                    fraSted: Yup.string().required('Påkrevd'),
+                    tilSted: Yup.string().required('Påkrevd'),
+                    avgang: Yup.date().required('Påkrevd'),
+                    retur: Yup.boolean(),
+                    returDato: Yup.date().when('retur', {
+                        is: true,
+                        then: Yup.date().required('Påkrevd'),
+                    }),
+                })}
+                onSubmit={async values => alert(JSON.stringify(values, null, 2))}
+            >
+                {props => {
+                    const {
+                        values,
+                        touched,
+                        errors,
+                        isSubmitting,
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                    } = props;
+                    return (
+                        <>
+                            <Row
+                                form
+                                className={'mt-3'}
+                            >
+                                <StrekningsVelger
+                                    reiselokasjoner={reiselokasjoner}
+                                    handleChange={handleChange}
+                                    values={values}
+                                    handleBlur={handleBlur}
+                                    errors={errors}
+                                    touched={touched}
+                                />
+                            </Row>
 
-            {returState.retur && (
-                <Row form>
-                    <Col md={12}>
-                        <FormGroup>
-                            <Label>Velg returdato</Label>
-                            <Input
-                                type={'date'}
-                                onChange={e => {
-                                    updateIsTouched('tilDato')
-                                    tilDatoState.setTilDato(e.target.value)
-                                }}
-                                invalid={isTouched.tilDato && !tilDatoState.valid}
-                            />
-                            <FormFeedback>Dato kan ikke være før avreise</FormFeedback>
-                        </FormGroup>
-                    </Col>
-                </Row>
-            )}
-            <Row form>
-                <Col md={6}>
-                    <h6>Personlig info</h6>
-                </Col>
-            </Row>
-            <Row form>
-                <Col md={6}>
-                    <FormGroup>
-                        <Input 
-                            type={'text'} 
-                            onChange={(e) => {
-                                updateIsTouched('fornavn')
-                                fornavnState.setFornavn(e.target.value)
-                            }} 
-                            placeholder={'Fornavn'}
-                            invalid={isTouched.fornavn && !fornavnState.valid}
-                        />
-                        <FormFeedback>Vennligst skriv inn et gyldig fornavn</FormFeedback>
-                    </FormGroup>
-                </Col>
-                <Col md={6}>
-                    <FormGroup>
-                        <Input 
-                            type={'text'} 
-                            onChange={(e) => {
-                                updateIsTouched('etternavn')
-                                etternavnState.setEtternavn(e.target.value)
-                            }} 
-                            placeholder={'Etternavn'}
-                            invalid={isTouched.etternavn && !etternavnState.valid}
-                        />
-                        <FormFeedback>Vennligst skriv inn et gyldig etternavn</FormFeedback>
-                    </FormGroup>
-                </Col>
-            </Row>
-            <Row>
-                <Col md={12}>
-                    <h3>Ordredetaljer:</h3>
-                    {(isTouched.avgangssted && isTouched.ankomststed) && <p>Strekning: {avgangsstedState?.avgangssted} - {ankomststedState?.ankomststed}</p>}
-                    <h5>{prisState.pris && (`Pris:  ${prisState.pris},-`)}</h5>
-                </Col>
-            </Row>
-            <div className={'mt-3 d-flex'} style={{gap: '5px'}}>
-                <Button
-                    color={'primary'}
-                    disabled={!valid}
-                    onClick={handleSubmit}
-                >
-                    {submitting ? 'Sender...' : 'Bestill'}
-                </Button>
-                <Button
-                    color={'secondary'}
-                    onClick={() => history.push("/")}
-                    outline
-                >
-                    Avbryt
-                </Button>
-            </div>
+                            <Row form>
+                                <Col md={12}>
+                                    <FormGroup check>
+                                        <Input
+                                            type={'checkbox'}
+                                            id={'retur'}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            invalid={errors.retur && touched.retur}
+                                        />
+                                        <Label>Retur?</Label>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+
+                            <Row form>
+                                <Col md={6}>
+                                    <FormGroup>
+                                        <Label>Velg avgang</Label>
+                                        <Input
+                                            id={'avgang'}
+                                            type={'date'}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            invalid={errors.avgang && touched.avgang}
+                                        />
+                                        <FormFeedback>{errors.avgang}</FormFeedback>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col md={6}>
+                                    <FormGroup>
+                                        <Label>Velg returdato</Label>
+                                        <Input
+                                            type={'date'}
+                                            id={'returDato'}
+                                            onChange={handleChange}
+                                            onBlud={handleBlur}
+                                            disabled={!values.retur}
+                                            invalid={errors.returDato && touched.returDato}
+                                        />
+                                        <FormFeedback>{errors.returDato}</FormFeedback>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            
+                            <Row form>
+                                <Col md={12}>
+                                    <p>Ordinær:</p>
+                                    <p>Barn:</p>
+                                    <p>Student:</p>
+                                    <p>Honnør:</p>
+                                </Col>
+                            </Row>
+                            <div className={'mt-3 d-flex'} style={{gap: '5px'}}>
+                                <Button
+                                    color={'primary'}
+                                    onClick={handleSubmit}
+                                    disabled={isSubmitting}
+                                >
+                                    Bestill
+                                </Button>
+                                <Button
+                                    color={'secondary'}
+                                    onClick={() => history.push("/")}
+                                    outline
+                                >
+                                    Avbryt
+                                </Button>
+                            </div>
+                        </>
+                    )
+                }}
+            </Formik>
         </>
     )
 }

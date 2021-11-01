@@ -23,9 +23,11 @@
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <Content Remove="package-lock.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Logs" />
     <None Remove="DAL\NewFile.txt" />
     <Folder Include="ClientApp\src\Media" />
   </ItemGroup>

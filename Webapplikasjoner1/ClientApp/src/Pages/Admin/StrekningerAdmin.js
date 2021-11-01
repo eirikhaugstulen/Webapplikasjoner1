@@ -1,4 +1,6 @@
 ﻿import React from "react";
+import {BackButton} from "../../components/AdminHome/BackButton";
+import {Row} from "reactstrap";
 // Tabell med aktive strekninger (fra databasen)
 
 // Kolonne fralokasjon og tilLokasjon
@@ -10,7 +12,9 @@
 export const Strekninger = ({ apiData, refetch }) => {
 return(
     <div>
-        <h1>Strekninger</h1>
+        <Row className={'p-3'}>
+            <BackButton />
+        </Row>
     </div>
 )
 } 

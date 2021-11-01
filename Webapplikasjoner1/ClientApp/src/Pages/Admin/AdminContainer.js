@@ -6,6 +6,7 @@ import { Lokasjoner } from './LokasjonerAdmin';
 import axios from "axios";
 import {Spinner} from "reactstrap";
 import {AdminHome} from "./AdminHome";
+import {LoggInnAdmin} from "./LoggInnAdmin";
 
 
 export const AdminContainer = () => {
@@ -16,13 +17,10 @@ export const AdminContainer = () => {
         avganger: {},
     });
     const [loading, setLoading] = useState(true);
-    const error = useRef();
+    const [error, setError] = useState();
     
-    useEffect(() => {
-        fetchApiData();
-    }, [])
     
-    const fetchApiData = () => {
+    const fetchApiData = useCallback(() => {
         axios.get('/Billett/HentEn', {
             params: {
                 id: '1',
@@ -32,8 +30,8 @@ export const AdminContainer = () => {
                 formaterApiData(res.data)
                 setLoading(false);
             })
-            .catch(e => error.current = e);
-    }
+            .catch(e => setError(e));
+    }, [])
     
     const refetch = useCallback(() => fetchApiData(), [fetchApiData]);
     
@@ -43,6 +41,21 @@ export const AdminContainer = () => {
             strekninger : resApiData?.[1],
             avganger : resApiData?.[2],
         });
+    }
+    
+    useEffect(() => {
+        fetchApiData();
+    }, [fetchApiData])
+    
+    if (error) {
+        return (
+            <div className={'d-flex justify-content-center m-5'}>
+                <div className={'text-center'}>
+                    <p className={'text-danger'}>Det har skjedd en feil</p>
+                    {JSON.stringify(error, null, 2)}
+                </div>
+            </div>
+        );
     }
     
     if (loading) {
@@ -92,6 +105,11 @@ export const AdminContainer = () => {
                             refetch={refetch}
                         />
                     )}
+                />
+
+                <Route
+                    path={`${match.url}/logginn`}
+                    component={LoggInnAdmin}
                 />
                 
                 <Route 

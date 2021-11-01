@@ -1,43 +1,20 @@
 import React, {useEffect, useState} from "react";
-import {Col, FormGroup, Input, Label} from "reactstrap";
+import {Col, FormFeedback, FormGroup, Input, Label} from "reactstrap";
+import axios from "axios";
 
-export const StrekningsVelger = ({ reiselokasjoner, avgangsstedState, ankomststedState, updateIsTouched, prisState, returState }) => {
-    const [fraReiser, setFraReiser] = useState();
+const fetchAvgangssteder = async (fraStedId) => {
+    await new Promise(r => setTimeout(r, 1000))
+    return axios.get(`/Billett/HentAlle?${fraStedId}`);
+}
+
+export const StrekningsVelger = ({reiselokasjoner, handleChange, values, handleBlur, errors, touched}) => {
     const [outputAnkomststed, setOutputankomststed] = useState();
     
-    const changeAvgangsstedHandler = (e) => {
-        updateIsTouched('avgangssted');
-        avgangsstedState.setAvgangssted(e.target.value);
-        setOutputankomststed(reiselokasjoner
-            .filter(destinasjon => destinasjon.displayName.toString() !== e.target.value)
-        );
-    }
-    
-    const changeAnkomsstedHandler = e => {
-        updateIsTouched('ankomststed');
-        ankomststedState.setAnkomssted(e.target.value);
-    }
-
     useEffect(() => {
-        setFraReiser(reiselokasjoner);
-    }, [reiselokasjoner])
-    
-    useEffect(() => {
-        const { avgangssted, valid: avgangsstedValid } = avgangsstedState;
-        const { ankomststed, valid: ankomststedValid }  = ankomststedState;
-        if ((avgangssted && avgangsstedValid) && (ankomststed && ankomststedValid)) {
-            if (avgangssted !== ankomststed) {
-                const indexOfAvgang = reiselokasjoner.findIndex(lokasjon => lokasjon.displayName === avgangssted);
-                const indexOfAnkomst = reiselokasjoner.findIndex(lokasjon => lokasjon.displayName === ankomststed);
-                const difference = Math.abs(indexOfAvgang - indexOfAnkomst);
-                let pris = (difference*50)-1;
-                if (returState.retur) {
-                    pris = pris*2
-                }
-                prisState.setPris(pris);
-            }
-        }
-    }, [avgangsstedState, ankomststedState, prisState, returState, reiselokasjoner])
+        fetchAvgangssteder()
+            .then(res => setOutputankomststed(reiselokasjoner))
+            .catch(e => console.log(e))
+    }, [values.fraSted])
     
     return (
         <>
@@ -47,17 +24,19 @@ export const StrekningsVelger = ({ reiselokasjoner, avgangsstedState, ankomstste
                     <Input 
                         type={'select'}
                         id={'fraSted'}
-                        value={avgangsstedState.avgangssted}
-                        onChange={e => changeAvgangsstedHandler(e)}
+                        value={values.fraSted}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        invalid={errors.fraSted && touched.fraSted}
                     >
                         <option
                             disabled
-                            value={'default'}
+                            value={''}
                         >
                             Velg sted
                         </option>
     
-                        {fraReiser?.map(avgang => (
+                        {reiselokasjoner?.map(avgang => (
                             <option
                                 key={avgang.id}
                                 value={avgang.displayName}
@@ -66,6 +45,7 @@ export const StrekningsVelger = ({ reiselokasjoner, avgangsstedState, ankomstste
                             </option>
                         ))}
                     </Input>
+                    <FormFeedback>{errors.fraSted}</FormFeedback>
                 </FormGroup>
             </Col>
 
@@ -75,13 +55,15 @@ export const StrekningsVelger = ({ reiselokasjoner, avgangsstedState, ankomstste
                     <Input 
                         type={'select'} 
                         id={'tilSted'} 
-                        value={ankomststedState.ankomststed}
-                        disabled={avgangsstedState.avgangssted === 'default'}
-                        onChange={e => changeAnkomsstedHandler(e)}
+                        value={values.tilSted}
+                        disabled={values.fraSted === 'default'}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        invalid={errors.tilSted && touched.tilSted}
                     >
                         <option
                             disabled
-                            value={'default'}
+                            value={''}
                         >
                             Velg sted
                         </option>
@@ -95,6 +77,7 @@ export const StrekningsVelger = ({ reiselokasjoner, avgangsstedState, ankomstste
                             </option>
                         ))}
                     </Input>
+                    <FormFeedback>{errors.tilSted}</FormFeedback>
                 </FormGroup>
             </Col>
         </>
