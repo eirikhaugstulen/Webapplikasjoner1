@@ -17,14 +17,14 @@ namespace Webapplikasjoner1.DAL
 
             var lokasjon = new Lokasjoner()
             {
-                Id = 1,
-                StedsNavn = "Oslo",
+            
+                Stedsnavn = "Oslo",
             };
             
             var lokasjon2 = new Lokasjoner()
             {
-                Id = 2,
-                StedsNavn = "Bergen",
+              
+                Stedsnavn = "Bergen",
             };
 
             db.Lokasjonene.Add(lokasjon);
@@ -32,16 +32,35 @@ namespace Webapplikasjoner1.DAL
 
             var strekning = new Strekninger()
             {
+                Id = 0,
+                FraSted = lokasjon,
+                TilSted = lokasjon2,
+            };
+            
+            var strekning1 = new Strekninger()
+            {
                 Id = 1,
                 FraSted = lokasjon,
                 TilSted = lokasjon2,
             };
+            
+            var strekning2 = new Strekninger()
+            {
+                Id = 2,
+                FraSted = lokasjon,
+                TilSted = lokasjon2,
+            };
+
+
 
             db.Strekningene.Add(strekning);
+            db.Strekningene.Add(strekning1);
+            db.Strekningene.Add(strekning2);
+
 
             var avgang = new Avganger()
             {
-                Id = 1,
+                Id = 0,
                 Dato = "10-12-2021",
                 Klokkeslett = "23:59",
                 Pris = 100,
@@ -52,11 +71,11 @@ namespace Webapplikasjoner1.DAL
 
             var billett = new Billetter()
             {
-                Id = 1,
+                Id = 0,
                 Fornavn = "Per",
                 Etternavn = "Person",
-                Retur = false,
-                ReturDato = null,
+                Retur = true,
+                ReturDato = avgang,
                 Type = "Student",
                 Antall = 1,
                 Avgang = avgang,

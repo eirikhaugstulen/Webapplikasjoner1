@@ -8,9 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Webapplikasjoner1.DAL
 {
-
-
-    public class Billetter
+        public class Billetter
     {
         public int Id { get; set; }
         public string Fornavn { get; set; }
@@ -47,8 +45,7 @@ namespace Webapplikasjoner1.DAL
     { // Legg til og Slett
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; }
-        public string StedsNavn { get; set; }
+        public string Stedsnavn { get; set; }
     }
     public class Adminer
     {
@@ -75,6 +72,7 @@ namespace Webapplikasjoner1.DAL
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
+            
         }
     }
 }

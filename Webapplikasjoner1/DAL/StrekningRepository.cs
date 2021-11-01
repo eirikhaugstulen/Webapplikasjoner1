@@ -26,8 +26,8 @@ namespace Webapplikasjoner1.DAL
             try
             {
                 var nyStrekningRad = new Strekninger();
-                nyStrekningRad.Id = innStrekning.Id;
-                var sjekkFraSted = await _db.Strekningene.FindAsync(innStrekning.FraSted);
+                
+                var sjekkFraSted = await _db.Lokasjonene.FindAsync(innStrekning.FraSted);
                 if (sjekkFraSted == null)
                 {
                     _log.LogInformation("Fant ikke lokasjon i database");
@@ -35,10 +35,10 @@ namespace Webapplikasjoner1.DAL
                 }
                 else
                 {
-                    nyStrekningRad.FraSted = sjekkFraSted.FraSted;
+                    nyStrekningRad.FraSted = sjekkFraSted;
                 }
 
-                var sjekkTilSted = await _db.Strekningene.FindAsync(innStrekning.TilSted);
+                var sjekkTilSted = await _db.Lokasjonene.FindAsync(innStrekning.TilSted);
                 if (sjekkTilSted == null)
                 {
                     _log.LogInformation("Fant ikke lokasjon i database");
@@ -46,7 +46,7 @@ namespace Webapplikasjoner1.DAL
                 }
                 else
                 {
-                    nyStrekningRad.TilSted = sjekkFraSted.TilSted;
+                    nyStrekningRad.TilSted = sjekkTilSted;
                 }
 
                 _db.Strekningene.Add(nyStrekningRad);
@@ -64,8 +64,7 @@ namespace Webapplikasjoner1.DAL
             try
             {
                 var endreStrekning = await _db.Strekningene.FindAsync(innStrekning.Id);
-                endreStrekning.FraSted.Id = innStrekning.FraSted;
-                endreStrekning.TilSted.Id = innStrekning.TilSted;
+               
                 await _db.SaveChangesAsync();
             }
             catch (Exception e)
@@ -99,8 +98,7 @@ namespace Webapplikasjoner1.DAL
                 List<Strekning> alleStrekninger = await _db.Strekningene.Select(s => new Strekning
                 {
                     Id = s.Id,
-                    FraSted = s.FraSted.Id,
-                    TilSted = s.TilSted.Id,
+                    
                     
                 }).ToListAsync();
                 return alleStrekninger;
@@ -118,8 +116,7 @@ namespace Webapplikasjoner1.DAL
             var hentetStrekning = new Strekning()
             {
                 Id = enStrekning.Id,
-                FraSted = enStrekning.FraSted.Id,
-                TilSted = enStrekning.TilSted.Id,
+                
             }; 
             
             return hentetStrekning;

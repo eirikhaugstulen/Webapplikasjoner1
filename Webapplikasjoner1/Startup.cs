@@ -27,8 +27,13 @@ namespace Webapplikasjoner1
             services.AddControllers();
             services.AddDbContext<BillettKontekst>(options => 
                                         options.UseSqlite("Data source=Billetter.db"));
+            
             services.AddScoped<IBillettRepository,  BillettRepository>();
-
+            services.AddScoped<ILokasjonRepository, LokasjonRepository>();
+            services.AddScoped<IStrekningRepository, StrekningRepository>();
+            services.AddScoped<IAvgangerRepository, AvgangerRepository>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
+            
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

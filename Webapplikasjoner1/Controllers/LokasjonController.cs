@@ -24,10 +24,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> RegistrerLokasjon(Lokasjon lokasjon)
         {
+            /*
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized("Ikke logget inn");
-            }
+            }*/
             
             bool ok = Validation.Validering.GyldigStedsnavn(lokasjon.Stedsnavn);
 
@@ -47,10 +48,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> SlettLokasjon(int id)
         {
+            /*
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized("Ikke logget inn");
-            }
+            }*/
             
             bool returOK = await _db.SlettLokasjon(id);
 
@@ -65,21 +67,22 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> HentAlle()
         {
+            /*
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized("Ikke logget inn");
-            }
+            }*/
             
             List<Lokasjon> alleLokasjoner = await _db.HentAlle();
             return Ok(alleLokasjoner);
         }
 
         public async Task<ActionResult> HentEn(int id)
-        {
+        {/*
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized("Ikke logget inn");
-            }
+            }*/
 
             Lokasjon lokasjon = await _db.HentEn(id);
             
@@ -88,7 +91,7 @@ namespace Webapplikasjoner1.Controllers
                 _logger.LogInformation("Fant ikke lokasjon");
                 return NotFound("Fant ikke lokasjonen");
             }
-            return Ok("Fant lokasjonen");
+            return Ok(lokasjon);
         }
     }
 }

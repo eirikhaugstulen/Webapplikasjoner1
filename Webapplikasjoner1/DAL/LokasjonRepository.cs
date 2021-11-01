@@ -26,25 +26,17 @@ namespace Webapplikasjoner1.DAL
             try
             {
                 var nyLokasjonRad = new Lokasjoner();
-                nyLokasjonRad.Id = lokasjon.Id;
-                var sjekkStedsNavn = await _db.Lokasjonene.FindAsync(lokasjon.Stedsnavn);
-
-                if (sjekkStedsNavn != null)
-                {
-                    _log.LogInformation("Fant stedsnavn i database, legger derfor ikke til ny lokasjon");
-                    return false;
-                }
-                else
-                {
-                    nyLokasjonRad.StedsNavn = lokasjon.Stedsnavn;
-                }
+               
+                nyLokasjonRad.Stedsnavn = lokasjon.Stedsnavn;
+                
                 _db.Lokasjonene.Add(nyLokasjonRad);
                 await _db.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch(Exception e)
             {
                 _log.LogInformation("Kunne ikke registrere ny lokasjon");
+                _log.LogInformation(e.Message);
                 return false;
             }
         }
@@ -70,8 +62,8 @@ namespace Webapplikasjoner1.DAL
             {
                 List<Lokasjon> alleLokasjoner = await _db.Lokasjonene.Select(l => new Lokasjon()
                 {
-                    Id = l.Id,
-                    Stedsnavn = l.StedsNavn,
+                    
+                    Stedsnavn = l.Stedsnavn,
                 }).ToListAsync();
                 return alleLokasjoner;
             }
@@ -88,8 +80,8 @@ namespace Webapplikasjoner1.DAL
 
             var hentetLokasjon = new Lokasjon()
             {
-                Id = lokasjon.Id,
-                Stedsnavn = lokasjon.StedsNavn,
+               
+                Stedsnavn = lokasjon.Stedsnavn,
             };
             return hentetLokasjon;
         }
