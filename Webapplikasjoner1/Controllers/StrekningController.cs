@@ -27,7 +27,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             if (!Validering.StrekningValidering(innStrekning))
@@ -51,7 +51,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             if (!Validering.StrekningValidering(innStrekning))
@@ -74,7 +74,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             bool returOk = await _db.SlettStrekning(id);
@@ -92,7 +92,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             List<Strekning> alleStrekninger = await _db.HentAlleStrekninger();
@@ -104,7 +104,7 @@ namespace Webapplikasjoner1.Controllers
         { 
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             Strekning enStrekning = await _db.HentEn(id);
