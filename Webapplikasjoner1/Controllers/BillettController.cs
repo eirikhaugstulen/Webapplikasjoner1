@@ -60,26 +60,6 @@ namespace Webapplikasjoner1.Controllers
             return Ok(enBillett);
         }
 
-        /*Brukes ikke nå, men beholder den for Oblig 2*/
-        public async Task<ActionResult> Endre(Billett endreBillett)
-        {
-            bool validering = Validering.BillettValidering(endreBillett);
-            
-            if (validering)
-            {
-                bool returOK = await _db.Endre(endreBillett);
-                if (!returOK)
-                {
-                    _log.LogInformation("Billetten ble ikke endret");
-                    return BadRequest("Billettten ble ikke endret");
-                }
-                return Ok("Billett ble endret");  
-            }
-            
-            _log.LogInformation("Feil i inputvalidering");
-            return BadRequest("Feil i inputvalidering");
-        }
-
         public async Task<ActionResult> Slett(int id)
         {
             bool returOk = await _db.Slett(id);
