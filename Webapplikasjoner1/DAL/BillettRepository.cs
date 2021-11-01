@@ -78,6 +78,7 @@ namespace Webapplikasjoner1.DAL
                     Etternavn = b.Etternavn,
                     Retur = b.Retur,
                     ReturDato = b.ReturDato.Id,
+
                     Avgang = b.Avgang.Id,
                     Pris = b.TotalPris,
                     Type = b.Type,
