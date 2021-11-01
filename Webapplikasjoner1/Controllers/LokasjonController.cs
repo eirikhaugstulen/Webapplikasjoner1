@@ -29,7 +29,7 @@ namespace Webapplikasjoner1.Controllers
                 return Unauthorized();
             }
             
-            bool ok = Validation.Validering.gyldigStedsnavn(lokasjon.Stedsnavn);
+            bool ok = Validation.Validering.GyldigStedsnavn(lokasjon.Stedsnavn);
 
             if (ok)
             {

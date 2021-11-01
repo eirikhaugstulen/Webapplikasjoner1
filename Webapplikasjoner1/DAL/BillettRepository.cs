@@ -116,31 +116,6 @@ namespace Webapplikasjoner1.DAL
             return hentetBillett;
         }
 
-        /*Brukes ikke nå, men beholder den for Oblig 2
-        public async Task<bool> Endre (Billett endreBillett)
-        {
-            try
-            {
-                Billett enBillett = await _db.Billetter.FindAsync(endreBillett.Id);
-                enBillett.Fornavn = endreBillett.Fornavn;
-                enBillett.Etternavn = endreBillett.Etternavn;
-                enBillett.TilSted = endreBillett.TilSted;
-                enBillett.FraSted = endreBillett.FraSted;
-                enBillett.Dato = endreBillett.Dato;
-                enBillett.Retur = endreBillett.Retur;
-                enBillett.ReturDato = endreBillett.ReturDato;
-                enBillett.Pris = endreBillett.Pris;
-                await _db.SaveChangesAsync();
-                
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        */
-        
         public async Task<bool> Slett(int id)
             {
                 try

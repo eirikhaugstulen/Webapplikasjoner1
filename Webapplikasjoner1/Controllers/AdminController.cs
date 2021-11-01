@@ -27,8 +27,8 @@ namespace Webapplikasjoner1.Controllers
         //Legg inn ting her
         public async Task<ActionResult> LoggInn(Admin admin)
         {
-            bool validerBrukernavn = Validering.gyldigBrukernavn(admin.Brukernavn);
-            bool validerPassord = Validering.gyldigPassord(admin.Passord);
+            bool validerBrukernavn = Validering.GyldigBrukernavn(admin.Brukernavn);
+            bool validerPassord = Validering.GyldigPassord(admin.Passord);
 
             if (validerBrukernavn && validerPassord)
             {
@@ -55,8 +55,8 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> OpprettAdmin(Admin admin)
         {
-            bool validerBrukernavn = Validering.gyldigBrukernavn(admin.Brukernavn);
-            bool validerPassord = Validering.gyldigPassord(admin.Passord);
+            bool validerBrukernavn = Validering.GyldigBrukernavn(admin.Brukernavn);
+            bool validerPassord = Validering.GyldigPassord(admin.Passord);
 
             if (validerBrukernavn && validerPassord)
             {
