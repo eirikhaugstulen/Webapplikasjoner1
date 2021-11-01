@@ -43,7 +43,7 @@ namespace Webapplikasjoner1
             {
                 app.UseDeveloperExceptionPage();
                 loggerFactory.AddFile("Logs/Billettlog.txt");
-            
+                DBInit.Initialize(app);
             }
             else
             {
