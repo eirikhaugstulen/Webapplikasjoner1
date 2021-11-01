@@ -34,11 +34,11 @@ namespace Webapplikasjoner1.DAL
                 nyAvgangRad.Strekning = innAvgang.Strekning;
             
                 
-                var sjekkAvgang = await _db.Avgangene.FindAsync(innAvgang.Id);
+                var sjekkStrekning = await _db.Avgangene.FindAsync(innAvgang.Strekning);
                 
-                if (sjekkAvgang == null)
+                if (sjekkStrekning == null)
                 {
-                    _log.LogInformation("Fant ikke Avgang i database");
+                    _log.LogInformation("Fant ikke Strekning i database");
                     return false;
                 }
                 else
@@ -64,7 +64,8 @@ namespace Webapplikasjoner1.DAL
                     Id = b.Id,
                     Dato = b.Dato,
                     Klokkeslett = b.Klokkeslett,
-                    Pris = b.Pris
+                    Pris = b.Pris,
+                    Strekning = b.Strekning
 
                 }).ToListAsync();
                 
@@ -84,7 +85,8 @@ namespace Webapplikasjoner1.DAL
                 Id = enAvgang.Id,
                 Dato = enAvgang.Dato,
                 Klokkeslett = enAvgang.Klokkeslett,
-                Pris = enAvgang.Pris
+                Pris = enAvgang.Pris,
+                Strekning = enAvgang.Strekning
             };
             return hentetAvgang;
         }

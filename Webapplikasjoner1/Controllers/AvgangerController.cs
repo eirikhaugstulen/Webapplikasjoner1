@@ -14,10 +14,10 @@ namespace Webapplikasjoner1.Controllers
     public class AvgangerController : ControllerBase
     {
         private readonly IAvgangerRepository _db;
-        private ILogger<global::Webapplikasjoner1.Controllers.AvgangerController> _log;
+        private ILogger<AvgangerController> _log;
         private const string _loggetInn = "loggetInn";
 
-        public AvgangerController(IAvgangerRepository db ,ILogger<global::Webapplikasjoner1.Controllers.AvgangerController> log)
+        public AvgangerController(IAvgangerRepository db ,ILogger<AvgangerController> log)
         {
             _db = db;
             _log = log;
