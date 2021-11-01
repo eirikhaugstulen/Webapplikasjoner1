@@ -1,7 +1,6 @@
 ﻿import React, {useEffect, useState} from "react";
 //Display lokasjoner
 import {Button, Col, Row, Table} from "reactstrap";
-import {ReiseTableRow} from "../../components/ReiseTableRow";
 import {BackButton} from "../../components/AdminHome/BackButton";
 import {LeggTilLokasjon} from "../../components/AdminHome/LeggTil/LeggTilLokasjon";
 

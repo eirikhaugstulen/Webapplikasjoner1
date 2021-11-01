@@ -17,6 +17,7 @@ export const NavigationButton = ({ tittel, tekst, page }) => (
                 {page && (
                     <Button 
                         onClick={() => pushToPage(page)}
+                        outline
                     >
                         Administrer
                     </Button>

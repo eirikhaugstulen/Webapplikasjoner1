@@ -29,7 +29,7 @@ export const LeggTilLokasjon = () => (
             return (
                 <form onSubmit={handleSubmit}>
                     <FormGroup>
-                        <label>Lokasjon</label>
+                        <label>Legg til lokasjon</label>
                         <Input 
                             id={'lokasjon'}
                             type={'text'}

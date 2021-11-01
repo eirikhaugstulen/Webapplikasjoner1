@@ -45,7 +45,8 @@ export const Avganger = () => {
                 <thead className={'thead-light'}>
                 <tr>
                     <td><h4>Avganger</h4></td>
-                    <td><Button>Filtrer</Button></td>
+                    <td />
+                    <td className={'text-right'}><Button>Filtrer</Button></td>
                 </tr>
                 <tr className={'table-bordered font-weight-bold'}>
                     <td>Avreisested</td>

@@ -4,8 +4,8 @@ import history from "../../history";
 import qs from 'qs';
 
 export const useBestillingsForm = () => {
-    const [avgangssted, setAvgangssted] = useState('default');
-    const [ankomststed, setAnkomssted] = useState('default')
+    const [avgangssted, setAvgangssted] = useState('');
+    const [ankomststed, setAnkomssted] = useState('')
     const [fraDato, setFraDato] = useState();
     const [tilDato, setTilDato] = useState();
     const [retur, setRetur] = useState(false);
