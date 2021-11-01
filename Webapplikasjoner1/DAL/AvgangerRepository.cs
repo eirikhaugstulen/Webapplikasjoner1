@@ -21,7 +21,7 @@ namespace Webapplikasjoner1.DAL
     }
 
 
-        public async Task<bool> Lagre(Avganger innAvgang)
+        public async Task<bool> Lagre(Avgang innAvgang)
         {
             try
             {
@@ -31,10 +31,9 @@ namespace Webapplikasjoner1.DAL
                 nyAvgangRad.Dato = innAvgang.Dato;
                 nyAvgangRad.Klokkeslett = innAvgang.Klokkeslett;
                 nyAvgangRad.Pris = innAvgang.Pris;
-                nyAvgangRad.Strekning = innAvgang.Strekning;
-            
-                
-                var sjekkStrekning = await _db.Avgangene.FindAsync(innAvgang.Strekning);
+
+
+                var sjekkStrekning = await _db.Strekningene.FindAsync(innAvgang.Strekning);
                 
                 if (sjekkStrekning == null)
                 {
@@ -43,7 +42,7 @@ namespace Webapplikasjoner1.DAL
                 }
                 else
                 {
-                    nyAvgangRad.Strekning = sjekkStrekning.Strekning;
+                    nyAvgangRad.Strekning = sjekkStrekning;
                 }
                 _db.Avgangene.Add(nyAvgangRad);
                 await _db.SaveChangesAsync();
@@ -91,7 +90,7 @@ namespace Webapplikasjoner1.DAL
             return hentetAvgang;
         }
         
-        public async Task<bool> Endre (Avganger endreAvgang)
+        public async Task<bool> Endre (Avgang endreAvgang)
         {
             try
             {
@@ -100,7 +99,13 @@ namespace Webapplikasjoner1.DAL
                 enAvgang.Dato = endreAvgang.Dato;
                 enAvgang.Pris = endreAvgang.Pris;
                 enAvgang.Klokkeslett = endreAvgang.Klokkeslett;
-                enAvgang.Strekning = endreAvgang.Strekning;
+                var endreStrekning = await _db.Strekningene.FindAsync(endreAvgang.Id);
+                if (endreStrekning == null)
+                {
+                    _log.LogInformation("Fant ikke strekningen");
+                    return false;
+                }
+                enAvgang.Strekning = endreStrekning;
                 await _db.SaveChangesAsync();
                 
                 return true;

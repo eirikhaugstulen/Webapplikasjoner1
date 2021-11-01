@@ -23,7 +23,7 @@ namespace Webapplikasjoner1.Controllers
             _log = log;
         }
         
-        public async Task<ActionResult> Lagre(Avganger innAvganger)
+        public async Task<ActionResult> Lagre(Avgang innAvganger)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
@@ -74,7 +74,7 @@ namespace Webapplikasjoner1.Controllers
             return Ok(enAvgang);
         }
         
-        public async Task<ActionResult> Endre(Avganger endreAvganger)
+        public async Task<ActionResult> Endre(Avgang endreAvganger)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
