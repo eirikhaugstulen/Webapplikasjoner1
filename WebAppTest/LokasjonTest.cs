@@ -111,5 +111,57 @@ namespace WebAppTest
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Lokasjonen ble ikke lagret", resultat.Value);
         }
+
+        [Fact]
+        public async Task SlettLokasjonIkkeLoggetInn()
+        {
+            // Arrange
+            mockRep.Setup(l => l.SlettLokasjon(It.IsAny<int>())).ReturnsAsync(true);
+            var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            lokController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
+            // Act
+            var resultat = await lokController.SlettLokasjon(It.IsAny<int>()) as UnauthorizedObjectResult;
+            
+            // Assert
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("Ikke logget inn", resultat.Value);
+        }
+
+        [Fact]
+        public async Task SlettLokasjonLoggetInnOK()
+        {
+            mockRep.Setup(l => l.SlettLokasjon(It.IsAny<int>())).ReturnsAsync(true);
+            var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            lokController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
+            // Act
+            var resultat = await lokController.SlettLokasjon(It.IsAny<int>()) as OkObjectResult;
+            
+            // Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal("Lokasjonen ble slettet", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task SlettLokasjonFeilIDb()
+        {
+            mockRep.Setup(l => l.SlettLokasjon(It.IsAny<int>())).ReturnsAsync(false);
+            var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            lokController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
+            // Act
+            var resultat = await lokController.SlettLokasjon(It.IsAny<int>()) as NotFoundObjectResult;
+            
+            // Assert
+            Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
+            Assert.Equal("Lokasjonen ble ikke slettet", resultat.Value);
+        }
     }
 }
