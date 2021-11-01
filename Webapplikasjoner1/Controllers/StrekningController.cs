@@ -32,8 +32,8 @@ namespace Webapplikasjoner1.Controllers
             
             if (!Validering.StrekningValidering(innStrekning))
             {
-                _log.LogInformation("Feil i validering av strekning");
-                return BadRequest("Feil i validering av strekning");
+                _log.LogInformation("Feil i inputvalidering av strekning på server");
+                return BadRequest("Feil i inputvalidering av strekning på server");
             }
             
             bool returOk = await _db.LagreStrekning(innStrekning);
