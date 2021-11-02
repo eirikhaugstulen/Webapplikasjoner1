@@ -98,7 +98,7 @@ namespace Webapplikasjoner1.Controllers
                 return Unauthorized();
             }
             
-            List<Strekning> alleStrekninger = await _db.HentAlleStrekninger();
+            List<Strekninger> alleStrekninger = await _db.HentAlleStrekninger();
 
             return Ok(alleStrekninger);
         }
@@ -110,7 +110,7 @@ namespace Webapplikasjoner1.Controllers
                 return Unauthorized();
             }
             
-            Strekning enStrekning = await _db.HentEn(id);
+            Strekninger enStrekning = await _db.HentEn(id);
 
             if (enStrekning == null)
             {

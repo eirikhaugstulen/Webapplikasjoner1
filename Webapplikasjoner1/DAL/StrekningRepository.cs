@@ -73,21 +73,16 @@ namespace Webapplikasjoner1.DAL
                         _log.LogInformation("Fant ikke lokasjon i database");
                         return false;
                     }
-                   
-                        
                     
-                
-                
-                
                     var sjekkTilSted =   _db.Lokasjonene.Find(innStrekning.TilSted);
                     if (sjekkTilSted == null)
                     {
                         _log.LogInformation("Fant ikke lokasjon i database");
                         return false;
                     }
-                    
-                    endreStrekning.FraSted.StedsNummer = innStrekning.FraSted;
-                    endreStrekning.FraSted.StedsNummer = innStrekning.TilSted;
+
+                    endreStrekning.FraSted = sjekkFraSted;
+                    endreStrekning.TilSted = sjekkTilSted;
                     
                 
                 await _db.SaveChangesAsync();
@@ -117,15 +112,15 @@ namespace Webapplikasjoner1.DAL
             }
         }
 
-        public async Task<List<Strekning>> HentAlleStrekninger()
+        public async Task<List<Strekninger>> HentAlleStrekninger()
         { 
             try
             {
-                List<Strekning> alleStrekninger = await _db.Strekningene.Select(s => new Strekning
+                List<Strekninger> alleStrekninger = await _db.Strekningene.Select(s => new Strekninger()
                 {
                     StrekningNummer = s.StrekningNummer,
-                    FraSted = s.FraSted.StedsNummer,
-                    TilSted = s.TilSted.StedsNummer,
+                    FraSted = s.FraSted,
+                    TilSted = s.TilSted,
                     
                 }).ToListAsync();
                 return alleStrekninger;
@@ -136,15 +131,15 @@ namespace Webapplikasjoner1.DAL
             }
         }
 
-        public async Task<Strekning> HentEn(string id)
+        public async Task<Strekninger> HentEn(string id)
         {
             Strekninger enStrekning = await _db.Strekningene.FindAsync(id);
 
-            var hentetStrekning = new Strekning()
+            var hentetStrekning = new Strekninger()
             {
                 StrekningNummer = enStrekning.StrekningNummer,
-                FraSted = enStrekning.FraSted.StedsNummer,
-                TilSted = enStrekning.TilSted.StedsNummer,
+                FraSted = enStrekning.FraSted,
+                TilSted = enStrekning.TilSted,
             }; 
             
             return hentetStrekning;
