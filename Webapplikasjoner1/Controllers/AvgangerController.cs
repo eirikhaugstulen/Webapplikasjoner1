@@ -57,7 +57,7 @@ namespace Webapplikasjoner1.Controllers
             List<Avganger> alleAvgangene = await _db.HentAlle();
             return Ok(alleAvgangene);
         }
-        public async Task<ActionResult> HentEn(int id)
+        public async Task<ActionResult> HentEn(string id)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
@@ -100,7 +100,7 @@ namespace Webapplikasjoner1.Controllers
             return BadRequest("Feil i inputvalidering");
         }
 
-        public async Task<ActionResult> Slett(int id)
+        public async Task<ActionResult> Slet(string id)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {

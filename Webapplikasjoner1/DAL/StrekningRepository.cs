@@ -26,7 +26,8 @@ namespace Webapplikasjoner1.DAL
             try
             {
                 var nyStrekningRad = new Strekninger();
-                
+
+                nyStrekningRad.StrekningNummer = innStrekning.StrekningNummer;
                 var sjekkFraSted = await _db.Lokasjonene.FindAsync(innStrekning.FraSted);
                 if (sjekkFraSted == null)
                 {
@@ -63,19 +64,24 @@ namespace Webapplikasjoner1.DAL
         {
             try
             {
-                var endreStrekning = await _db.Strekningene.FindAsync(innStrekning.Id);
-               
+                var endreStrekning = await _db.Strekningene.FindAsync(innStrekning.StrekningNummer);
+                var endreFraSted =  await _db.Lokasjonene.FindAsync(endreStrekning.FraSted.StedsNummer);
+                var endreTilSted = await _db.Lokasjonene.FindAsync(endreStrekning.TilSted.StedsNummer);
+                endreStrekning.FraSted = endreFraSted;
+                endreStrekning.TilSted = endreTilSted;
+                
                 await _db.SaveChangesAsync();
             }
             catch (Exception e)
             {
                 _log.LogInformation(e.Message);
+                return false;
             }
 
             return true;
         }
 
-        public async Task<bool> SlettStrekning(int id)
+        public async Task<bool> SlettStrekning(string id)
         {
             try
             {
@@ -97,8 +103,9 @@ namespace Webapplikasjoner1.DAL
             {
                 List<Strekning> alleStrekninger = await _db.Strekningene.Select(s => new Strekning
                 {
-                    Id = s.Id,
-                    
+                    StrekningNummer = s.StrekningNummer,
+                    FraSted = s.FraSted.StedsNummer,
+                    TilSted = s.TilSted.StedsNummer,
                     
                 }).ToListAsync();
                 return alleStrekninger;
@@ -109,14 +116,15 @@ namespace Webapplikasjoner1.DAL
             }
         }
 
-        public async Task<Strekning> HentEn(int id)
+        public async Task<Strekning> HentEn(string id)
         {
             Strekninger enStrekning = await _db.Strekningene.FindAsync(id);
 
             var hentetStrekning = new Strekning()
             {
-                Id = enStrekning.Id,
-                
+                StrekningNummer = enStrekning.StrekningNummer,
+                FraSted = enStrekning.FraSted.StedsNummer,
+                TilSted = enStrekning.TilSted.StedsNummer,
             }; 
             
             return hentetStrekning;

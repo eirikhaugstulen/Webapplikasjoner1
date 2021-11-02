@@ -61,7 +61,7 @@ namespace Webapplikasjoner1.Validation
 
         public static bool StrekningValidering(Strekning innStrekning)
         {
-            if (innStrekning.Id < 0 || innStrekning.FraSted < 0 || innStrekning.TilSted < 0)
+            if (innStrekning.StrekningNummer ==null || innStrekning.TilSted == null || innStrekning.FraSted == null)
             {
                 return false;
             }

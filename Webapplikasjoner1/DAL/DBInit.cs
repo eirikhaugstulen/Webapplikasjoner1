@@ -17,13 +17,13 @@ namespace Webapplikasjoner1.DAL
 
             var lokasjon = new Lokasjoner()
             {
-            
+                StedsNummer = "1",
                 Stedsnavn = "Oslo",
             };
             
             var lokasjon2 = new Lokasjoner()
             {
-              
+                StedsNummer = "2",
                 Stedsnavn = "Bergen",
             };
 
@@ -32,21 +32,21 @@ namespace Webapplikasjoner1.DAL
 
             var strekning = new Strekninger()
             {
-                Id = 0,
+                StrekningNummer = "12",
                 FraSted = lokasjon,
                 TilSted = lokasjon2,
             };
             
             var strekning1 = new Strekninger()
             {
-                Id = 1,
+                StrekningNummer = "123",
                 FraSted = lokasjon,
                 TilSted = lokasjon2,
             };
             
             var strekning2 = new Strekninger()
             {
-                Id = 2,
+                StrekningNummer = "1234",
                 FraSted = lokasjon,
                 TilSted = lokasjon2,
             };
@@ -60,7 +60,7 @@ namespace Webapplikasjoner1.DAL
 
             var avgang = new Avganger()
             {
-                Id = 0,
+                AvgangNummer = "1",
                 Dato = "10-12-2021",
                 Klokkeslett = "23:59",
                 Pris = 100,
@@ -75,7 +75,7 @@ namespace Webapplikasjoner1.DAL
                 Fornavn = "Per",
                 Etternavn = "Person",
                 Retur = true,
-                ReturDato = avgang,
+                OrdreNummer = "1",
                 Type = "Student",
                 Antall = 1,
                 Avgang = avgang,

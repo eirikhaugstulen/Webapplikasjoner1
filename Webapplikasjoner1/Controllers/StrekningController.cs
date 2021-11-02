@@ -71,7 +71,7 @@ namespace Webapplikasjoner1.Controllers
             return Ok("Strekning endret");
         }
 
-        public async Task<ActionResult> SlettStrekning(int id)
+        public async Task<ActionResult> SlettStrekning(string id)
         {
             /*
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
@@ -103,7 +103,7 @@ namespace Webapplikasjoner1.Controllers
             return Ok(alleStrekninger);
         }
 
-        public async Task<ActionResult> HentEnStrekning(int id)
+        public async Task<ActionResult> HentEnStrekning(string id)
         { 
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {

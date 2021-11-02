@@ -26,7 +26,8 @@ namespace Webapplikasjoner1.DAL
             try
             {
                 var nyLokasjonRad = new Lokasjoner();
-               
+                
+                nyLokasjonRad.StedsNummer = lokasjon.StedsNummer;
                 nyLokasjonRad.Stedsnavn = lokasjon.Stedsnavn;
                 
                 _db.Lokasjonene.Add(nyLokasjonRad);
@@ -41,7 +42,7 @@ namespace Webapplikasjoner1.DAL
             }
         }
         
-        public async Task<bool> SlettLokasjon(int id)
+        public async Task<bool> SlettLokasjon(string id)
         {
             try
             {
@@ -62,7 +63,7 @@ namespace Webapplikasjoner1.DAL
             {
                 List<Lokasjon> alleLokasjoner = await _db.Lokasjonene.Select(l => new Lokasjon()
                 {
-                    
+                    StedsNummer = l.StedsNummer,
                     Stedsnavn = l.Stedsnavn,
                 }).ToListAsync();
                 return alleLokasjoner;
@@ -74,13 +75,13 @@ namespace Webapplikasjoner1.DAL
             }
         }
 
-        public async Task<Lokasjon> HentEn(int id)
+        public async Task<Lokasjon> HentEn(string id)
         {
             Lokasjoner lokasjon = await _db.Lokasjonene.FindAsync(id);
 
             var hentetLokasjon = new Lokasjon()
             {
-               
+               StedsNummer = lokasjon.StedsNummer,
                 Stedsnavn = lokasjon.Stedsnavn,
             };
             return hentetLokasjon;

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Webapplikasjoner1.DAL;
 using Webapplikasjoner1.Models;
 
 namespace Webapplikasjoner1.DAL
@@ -33,24 +34,7 @@ namespace Webapplikasjoner1.DAL
                 nyBillettRad.Type = innBillett.Type;
                 nyBillettRad.TotalPris = innBillett.Pris;
                 nyBillettRad.Antall = innBillett.Antall;
-
-                
-                    var sjekkReturDato = await _db.Avgangene.FindAsync(innBillett.ReturDato);
-                    if (nyBillettRad.Retur == true)
-                    {
-                        if (sjekkReturDato == null)
-                        {
-                            _log.LogInformation("Fant ikke Avgang i database");
-                            return false;
-                        }
-                        else
-                        {
-                            nyBillettRad.ReturDato = sjekkReturDato;
-                        } }
-                    else
-                    {
-                        nyBillettRad.ReturDato = null;
-                    }
+                nyBillettRad.OrdreNummer = innBillett.OrdreNummer;
                 
                 var sjekkAvgang = await _db.Avgangene.FindAsync(innBillett.Avgang);
                 if (sjekkAvgang == null)
@@ -82,9 +66,9 @@ namespace Webapplikasjoner1.DAL
                     Fornavn = b.Fornavn,
                     Etternavn = b.Etternavn,
                     Retur = b.Retur,
-                    ReturDato = b.ReturDato.Id,
+                    OrdreNummer = b.OrdreNummer,
 
-                    Avgang = b.Avgang.Id,
+                    Avgang = b.Avgang.AvgangNummer,
                     Pris = b.TotalPris,
                     Type = b.Type,
                     Antall =b.Antall,
@@ -106,16 +90,15 @@ namespace Webapplikasjoner1.DAL
         {
             Billetter enBillett = await _db.Billettene.FindAsync(id);
 
-            if (enBillett.Retur)
-            {
+          
                  var hentetBillett = new Billett()
                 {
                     Id = enBillett.Id,
                     Fornavn = enBillett.Fornavn,
                     Etternavn = enBillett.Etternavn,
                     Retur = enBillett.Retur,
-                    ReturDato = enBillett.ReturDato.Id,
-                    Avgang = enBillett.Avgang.Id,
+                    OrdreNummer = enBillett.OrdreNummer,
+                    Avgang = enBillett.Avgang.AvgangNummer,
                     Pris = enBillett.TotalPris,
                     Type = enBillett.Type,
                     Antall = enBillett.Antall,
@@ -124,25 +107,7 @@ namespace Webapplikasjoner1.DAL
                 };
                  return hentetBillett;
             }
-            else
-            {
-                var hentetBillett = new Billett()
-                {
-                    Id = enBillett.Id,
-                    Fornavn = enBillett.Fornavn,
-                    Etternavn = enBillett.Etternavn,
-                    Retur = enBillett.Retur,
-                    Avgang = enBillett.Avgang.Id,
-                    Pris = enBillett.TotalPris,
-                    Type = enBillett.Type,
-                    Antall = enBillett.Antall,
-                    Dato = enBillett.Avgang.Dato,
-                    Klokkeslett = enBillett.Avgang.Klokkeslett,
-                };
-                return hentetBillett;
-            }
-        }
-
+        
         public async Task<bool> Slett(int id)
             {
                 try
