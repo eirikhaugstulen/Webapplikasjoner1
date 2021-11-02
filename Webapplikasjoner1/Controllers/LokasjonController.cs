@@ -24,11 +24,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> RegistrerLokasjon(Lokasjon lokasjon)
         {
-            /*
+            
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized("Ikke logget inn");
-            }*/
+            }
             
             bool ok = Validation.Validering.GyldigStedsnavn(lokasjon.Stedsnavn);
 

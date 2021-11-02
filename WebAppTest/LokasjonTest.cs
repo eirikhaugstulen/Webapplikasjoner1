@@ -46,7 +46,7 @@ namespace WebAppTest
             // Arrange
             Lokasjon lokasjon = new Lokasjon()
             {
-                Id = 1,
+                StedsNummer = "1",
                 Stedsnavn = "Fredrikstad",
             };
             mockRep.Setup(l => l.RegistrerLokasjon(It.IsAny<Lokasjon>())).ReturnsAsync(true);
@@ -69,7 +69,7 @@ namespace WebAppTest
             // Arrange 
             Lokasjon lokasjon = new Lokasjon()
             {
-                Id = 1,
+                StedsNummer = "1",
                 Stedsnavn = "E", // Ugyldig stedsnavn
             };
 
@@ -94,7 +94,7 @@ namespace WebAppTest
             // Arrange
             Lokasjon lokasjon = new Lokasjon()
             {
-                Id = 1,
+                StedsNummer = "1",
                 Stedsnavn = "Fredrikstad",
             };
             
@@ -116,14 +116,14 @@ namespace WebAppTest
         public async Task SlettLokasjonIkkeLoggetInn()
         {
             // Arrange
-            mockRep.Setup(l => l.SlettLokasjon(It.IsAny<int>())).ReturnsAsync(true);
+            mockRep.Setup(l => l.SlettLokasjon(It.IsAny<string>())).ReturnsAsync(true);
             var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
             mockSession[_loggetInn] = _ikkeLoggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
             
             // Act
-            var resultat = await lokController.SlettLokasjon(It.IsAny<int>()) as UnauthorizedObjectResult;
+            var resultat = await lokController.SlettLokasjon(It.IsAny<string>()) as UnauthorizedObjectResult;
             
             // Assert
             Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
@@ -133,14 +133,14 @@ namespace WebAppTest
         [Fact]
         public async Task SlettLokasjonLoggetInnOK()
         {
-            mockRep.Setup(l => l.SlettLokasjon(It.IsAny<int>())).ReturnsAsync(true);
+            mockRep.Setup(l => l.SlettLokasjon(It.IsAny<string>())).ReturnsAsync(true);
             var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
             
             // Act
-            var resultat = await lokController.SlettLokasjon(It.IsAny<int>()) as OkObjectResult;
+            var resultat = await lokController.SlettLokasjon(It.IsAny<string>()) as OkObjectResult;
             
             // Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
@@ -150,14 +150,14 @@ namespace WebAppTest
         [Fact]
         public async Task SlettLokasjonFeilIDb()
         {
-            mockRep.Setup(l => l.SlettLokasjon(It.IsAny<int>())).ReturnsAsync(false);
+            mockRep.Setup(l => l.SlettLokasjon(It.IsAny<string>())).ReturnsAsync(false);
             var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
             
             // Act
-            var resultat = await lokController.SlettLokasjon(It.IsAny<int>()) as NotFoundObjectResult;
+            var resultat = await lokController.SlettLokasjon(It.IsAny<string>()) as NotFoundObjectResult;
             
             // Assert
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
