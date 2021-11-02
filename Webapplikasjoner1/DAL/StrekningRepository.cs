@@ -135,13 +135,18 @@ namespace Webapplikasjoner1.DAL
         {
             Strekninger enStrekning = await _db.Strekningene.FindAsync(id);
 
+            if (enStrekning == null) //Returnerer null som gir en NotFound error i controlleren
+            {
+                return null;
+            }
+            
             var hentetStrekning = new Strekninger()
             {
                 StrekningNummer = enStrekning.StrekningNummer,
                 FraSted = enStrekning.FraSted,
                 TilSted = enStrekning.TilSted,
-            }; 
-            
+            };
+
             return hentetStrekning;
         }
     }

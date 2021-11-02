@@ -78,6 +78,11 @@ namespace Webapplikasjoner1.DAL
         public async Task<Lokasjon> HentEn(string id)
         {
             Lokasjoner lokasjon = await _db.Lokasjonene.FindAsync(id);
+            
+            if (lokasjon == null)//Returnerer null som gir en NotFound error i controlleren
+            {
+                return null;
+            }
 
             var hentetLokasjon = new Lokasjon()
             {

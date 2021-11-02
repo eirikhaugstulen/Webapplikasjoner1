@@ -79,10 +79,11 @@ namespace Webapplikasjoner1.DAL
         {
             Avganger enAvgang = await _db.Avgangene.FindAsync(id);
 
-            if (enAvgang == null)
+            if (enAvgang == null) //Returnerer null som gir en NotFound error i controlleren
             {
                 return null;
             }
+            
             var hentetAvgang = new Avganger()
             {
                 AvgangNummer = enAvgang.AvgangNummer,
