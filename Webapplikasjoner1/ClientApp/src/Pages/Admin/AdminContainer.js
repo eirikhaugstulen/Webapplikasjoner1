@@ -7,41 +7,38 @@ import axios from "axios";
 import {Spinner} from "reactstrap";
 import {AdminHome} from "./AdminHome";
 import {LoggInnAdmin} from "./LoggInnAdmin";
-
+import history from "../../history";
 
 export const AdminContainer = () => {
     const match = useRouteMatch();
     const [apiData, setApiData] = useState({
-        lokasjoner: {}, 
-        strekninger: {},
-        avganger: {},
+        lokasjoner: [], 
+        strekninger: [],
+        avganger: [],
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState();
     
-    
     const fetchApiData = useCallback(() => {
-        axios.get('/Billett/HentEn', {
-            params: {
-                id: '1',
-            }
-        })
-            .then(res => {
-                formaterApiData(res.data)
+        const apiKall = [];
+        apiKall.push(axios.get('/Lokasjon/HentAlle'));
+        apiKall.push(axios.get('/Strekning/HentAlleStrekninger'));
+            
+            Promise.all(apiKall).then(res => {
+                setApiData(prevState => ({
+                    lokasjoner: res[0].data,
+                    strekninger: res[1].data,
+                }));
                 setLoading(false);
             })
-            .catch(e => setError(e));
+            .catch(e => {
+                if (e?.response?.status === 401) {
+                    history.push('/admin/logginn')
+                }
+            });
     }, [])
     
     const refetch = useCallback(() => fetchApiData(), [fetchApiData]);
-    
-    const formaterApiData = (resApiData) => {
-        setApiData({
-            lokasjoner : resApiData?.[0],
-            strekninger : resApiData?.[1],
-            avganger : resApiData?.[2],
-        });
-    }
     
     useEffect(() => {
         fetchApiData();
@@ -80,7 +77,7 @@ export const AdminContainer = () => {
                 <Route 
                     path={`${match.url}/lokasjoner`}
                     render={() => (
-                        <Lokasjoner
+                        <Lokasjoner 
                             apiData={apiData}
                             refetch={refetch}
                         />

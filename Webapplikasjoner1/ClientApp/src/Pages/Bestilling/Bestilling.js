@@ -45,7 +45,10 @@ export const Bestilling = () => {
         },
         updateIsTouched,
     ] = useBestillingsForm();
-    
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0)
+
     return (
         <>
             <Row form>
@@ -68,16 +71,23 @@ export const Bestilling = () => {
                     avgang: fraDatoState.fraDato,
                     retur: returState.retur,
                     returDato: tilDatoState.tilDato,
+                    klokkeslett: '',
                 }}
                 validationSchema={Yup.object().shape({
                     fraSted: Yup.string().required('Påkrevd'),
                     tilSted: Yup.string().required('Påkrevd'),
-                    avgang: Yup.date().required('Påkrevd'),
+                    avgang: Yup.date().required('Avgangsdato er påkrevd').min(today, 'Avgang kan ikke være tilbake i tid'),
                     retur: Yup.boolean(),
-                    returDato: Yup.date().when('retur', {
-                        is: true,
-                        then: Yup.date().required('Påkrevd'),
-                    }),
+                    returDato: Yup.date().when(['retur', 'avgang'], (retur, avgang, schema) => {
+                            if (retur && avgang) {
+                                return schema.required('Returdato er påkrevd').min(new Date(avgang), 'Returdato må være fram i tid')
+                            }
+                            if (retur) {
+                                return schema.required('Returdato er påkrevd')
+                            }
+                        }
+                    ),
+                    klokkeslett: Yup.string(),
                 })}
                 onSubmit={async values => alert(JSON.stringify(values, null, 2))}
             >
@@ -144,7 +154,7 @@ export const Bestilling = () => {
                                             type={'date'}
                                             id={'returDato'}
                                             onChange={handleChange}
-                                            onBlud={handleBlur}
+                                            onBlur={handleBlur}
                                             disabled={!values.retur}
                                             invalid={errors.returDato && touched.returDato}
                                         />
@@ -152,22 +162,30 @@ export const Bestilling = () => {
                                     </FormGroup>
                                 </Col>
                             </Row>
-                            
+
                             <Row form>
-                                <Col md={12}>
-                                    <p>Ordinær:</p>
-                                    <p>Barn:</p>
-                                    <p>Student:</p>
-                                    <p>Honnør:</p>
+                                <Col md={6}>
+                                    <FormGroup>
+                                        <Label>Avgang før</Label>
+                                        <Input
+                                            type={'time'}
+                                            id={'klokkeslett'}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            invalid={errors.klokkeslett && touched.klokkeslett}
+                                        />
+                                        <FormFeedback>{errors.klokkeslett}</FormFeedback>
+                                    </FormGroup>
                                 </Col>
                             </Row>
+
                             <div className={'mt-3 d-flex'} style={{gap: '5px'}}>
                                 <Button
                                     color={'primary'}
                                     onClick={handleSubmit}
                                     disabled={isSubmitting}
                                 >
-                                    Bestill
+                                    Søk
                                 </Button>
                                 <Button
                                     color={'secondary'}
