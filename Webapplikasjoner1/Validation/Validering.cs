@@ -15,7 +15,7 @@ namespace Webapplikasjoner1.Validation
             bool testEtternavn = regEtternavn.IsMatch(innBillett.Etternavn);
             bool testType = reg.IsMatch(innBillett.Type);
 
-            if (!testType || !testFornavn || !testEtternavn || innBillett.Pris < 0 || 
+            if (!testType || !testFornavn || !testEtternavn || innBillett.TotalPris <= 0 || 
                 innBillett.Antall<0)
             {
                 return false;

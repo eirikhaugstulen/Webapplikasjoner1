@@ -26,13 +26,12 @@ namespace Webapplikasjoner1.DAL
             try
             {
                 var nyBillettRad = new Billetter();
-                nyBillettRad.Id = innBillett.Id;
-             
+
                 nyBillettRad.Fornavn = innBillett.Fornavn;
                 nyBillettRad.Etternavn = innBillett.Etternavn;
                 nyBillettRad.Retur = innBillett.Retur;
                 nyBillettRad.Type = innBillett.Type;
-                nyBillettRad.TotalPris = innBillett.Pris;
+                nyBillettRad.TotalPris = innBillett.TotalPris;
                 nyBillettRad.Antall = innBillett.Antall;
                 nyBillettRad.OrdreNummer = innBillett.OrdreNummer;
                 
@@ -56,11 +55,11 @@ namespace Webapplikasjoner1.DAL
             }
         }
         
-        public async Task<List<Billett>> HentAlle()
+        public async Task<List<Billetter>> HentAlle()
         {
             try
             {
-                List<Billett> alleBillettene = await _db.Billettene.Select(b => new Billett
+                List<Billetter> alleBillettene = await _db.Billettene.Select(b => new Billetter
                 {
                     Id = b.Id,
                     Fornavn = b.Fornavn,
@@ -68,12 +67,11 @@ namespace Webapplikasjoner1.DAL
                     Retur = b.Retur,
                     OrdreNummer = b.OrdreNummer,
 
-                    Avgang = b.Avgang.AvgangNummer,
-                    Pris = b.TotalPris,
+                    Avgang = b.Avgang,
+                    TotalPris = b.TotalPris,
                     Type = b.Type,
                     Antall =b.Antall,
-                    Dato =b.Avgang.Dato,
-                    Klokkeslett =b.Avgang.Klokkeslett,
+                    
 
                 }).ToListAsync();
                 
@@ -86,24 +84,23 @@ namespace Webapplikasjoner1.DAL
         }
 
 
-        public async Task<Billett> HentEn(int id)
+        public async Task<Billetter> HentEn(int id)
         {
             Billetter enBillett = await _db.Billettene.FindAsync(id);
 
           
-                 var hentetBillett = new Billett()
+                 var hentetBillett = new Billetter()
                 {
                     Id = enBillett.Id,
                     Fornavn = enBillett.Fornavn,
                     Etternavn = enBillett.Etternavn,
                     Retur = enBillett.Retur,
                     OrdreNummer = enBillett.OrdreNummer,
-                    Avgang = enBillett.Avgang.AvgangNummer,
-                    Pris = enBillett.TotalPris,
+                    Avgang = enBillett.Avgang,
+                    TotalPris = enBillett.TotalPris,
+                    
                     Type = enBillett.Type,
                     Antall = enBillett.Antall,
-                    Dato = enBillett.Avgang.Dato,
-                    Klokkeslett = enBillett.Avgang.Klokkeslett,
                 };
                  return hentetBillett;
             }

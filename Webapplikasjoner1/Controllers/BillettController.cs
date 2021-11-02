@@ -14,42 +14,46 @@ namespace Webapplikasjoner1.Controllers
         private readonly IBillettRepository _db;
         private ILogger<BillettController> _log;
 
-        public BillettController(IBillettRepository db ,ILogger<BillettController> log)
+        public BillettController(IBillettRepository db, ILogger<BillettController> log)
         {
             _db = db;
             _log = log;
         }
-        
+
         public async Task<ActionResult> Lagre(Billett innBillett)
         {
             bool valideringOk = Validering.BillettValidering(innBillett);
 
-            if(valideringOk){
-                
-                bool returOk = await _db.Lagre(innBillett);
-                
-                if (!returOk )
-                {
-                    _log.LogInformation("Billetten ble ikke lagret");
-                    return BadRequest("Billettten ble ikke lagret");
-                }
-                return Ok("Billett lagret");
+            if (!valideringOk)
+            {
+                _log.LogInformation("Feil i inputvalidering");
+                return BadRequest("Feil i inputvalidering");
             }
-            
-            _log.LogInformation("Feil i inputvalidering");
-            return BadRequest("Feil i inputvalidering");
+
+            bool returOk = await _db.Lagre(innBillett);
+
+            if (!returOk)
+            {
+                _log.LogInformation("Billetten ble ikke lagret");
+                return BadRequest("Billettten ble ikke lagret");
+            }
+
+            return Ok("Billett lagret");
         }
+
+    
+
         
         public async Task<ActionResult> HentAlle()
         {
-            List<Billett> alleBilletter = await _db.HentAlle();  
+            List<Billetter> alleBilletter = await _db.HentAlle();  
 
             return Ok(alleBilletter);
         }
 
         public async Task<ActionResult> HentEn(int id)
         {
-            Billett enBillett = await _db.HentEn(id);
+            Billetter enBillett = await _db.HentEn(id);
             
             if(enBillett == null)
             {
