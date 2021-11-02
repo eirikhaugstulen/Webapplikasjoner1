@@ -88,6 +88,10 @@ namespace Webapplikasjoner1.DAL
         {
             Billetter enBillett = await _db.Billettene.FindAsync(id);
 
+            if (enBillett == null) //Returnerer null som gir en NotFound error i controlleren
+            {
+                return null;
+            }
           
                  var hentetBillett = new Billetter()
                 {
