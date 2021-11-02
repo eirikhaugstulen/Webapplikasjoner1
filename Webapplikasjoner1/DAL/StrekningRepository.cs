@@ -65,10 +65,30 @@ namespace Webapplikasjoner1.DAL
             try
             {
                 var endreStrekning = await _db.Strekningene.FindAsync(innStrekning.StrekningNummer);
-                var endreFraSted =  await _db.Lokasjonene.FindAsync(endreStrekning.FraSted.StedsNummer);
-                var endreTilSted = await _db.Lokasjonene.FindAsync(endreStrekning.TilSted.StedsNummer);
-                endreStrekning.FraSted = endreFraSted;
-                endreStrekning.TilSted = endreTilSted;
+
+                
+                    var sjekkFraSted =   _db.Lokasjonene.Find(innStrekning.FraSted);
+                    if (sjekkFraSted == null)
+                    {
+                        _log.LogInformation("Fant ikke lokasjon i database");
+                        return false;
+                    }
+                   
+                        
+                    
+                
+                
+                
+                    var sjekkTilSted =   _db.Lokasjonene.Find(innStrekning.TilSted);
+                    if (sjekkTilSted == null)
+                    {
+                        _log.LogInformation("Fant ikke lokasjon i database");
+                        return false;
+                    }
+                    
+                    endreStrekning.FraSted.StedsNummer = innStrekning.FraSted;
+                    endreStrekning.FraSted.StedsNummer = innStrekning.TilSted;
+                    
                 
                 await _db.SaveChangesAsync();
             }

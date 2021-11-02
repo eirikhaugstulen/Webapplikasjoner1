@@ -25,11 +25,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> LagreStrekning(Strekning innStrekning)
         {
-            /*
+            
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized();
-            }*/
+            }
             
             if (!Validering.StrekningValidering(innStrekning))
             {
@@ -73,11 +73,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> SlettStrekning(string id)
         {
-            /*
+            
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized();
-            }*/
+            }
             
             bool returOk = await _db.SlettStrekning(id);
             
@@ -92,11 +92,11 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> HentAlleStrekninger()
         {
-            /*
+            
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized();
-            }*/
+            }
             
             List<Strekning> alleStrekninger = await _db.HentAlleStrekninger();
 

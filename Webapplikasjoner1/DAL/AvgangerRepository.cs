@@ -27,7 +27,6 @@ namespace Webapplikasjoner1.DAL
             {
                 var nyAvgangRad= new Avganger();
                 nyAvgangRad.AvgangNummer = innAvgang.AvgangNummer;
-             
                 nyAvgangRad.Dato = innAvgang.Dato;
                 nyAvgangRad.Klokkeslett = innAvgang.Klokkeslett;
                 nyAvgangRad.Pris = innAvgang.Pris;

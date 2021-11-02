@@ -8,6 +8,6 @@ namespace Webapplikasjoner1.Models
         public string Dato { get; set; }
         public string Klokkeslett { get; set; }
         public int Pris { get; set; }
-        public int Strekning { get; set; }
+        public string Strekning { get; set; }
     }
 }
