@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +78,11 @@ namespace Webapplikasjoner1.DAL
         public async Task<Avganger> HentEn(string id)
         {
             Avganger enAvgang = await _db.Avgangene.FindAsync(id);
-            
+
+            if (enAvgang == null)
+            {
+                return null;
+            }
             var hentetAvgang = new Avganger()
             {
                 AvgangNummer = enAvgang.AvgangNummer,
@@ -96,9 +101,10 @@ namespace Webapplikasjoner1.DAL
                 Avganger enAvgang = await _db.Avgangene.FindAsync(endreAvgang.AvgangNummer);
                 enAvgang.AvgangNummer = endreAvgang.AvgangNummer;
                 enAvgang.Dato = endreAvgang.Dato;
-                enAvgang.Pris = endreAvgang.Pris;
                 enAvgang.Klokkeslett = endreAvgang.Klokkeslett;
-                var endreStrekning = await _db.Strekningene.FindAsync(endreAvgang.AvgangNummer);
+                enAvgang.Pris = endreAvgang.Pris;
+                
+                var endreStrekning = await _db.Strekningene.FindAsync(endreAvgang.Strekning);
                 if (endreStrekning == null)
                 {
                     _log.LogInformation("Fant ikke strekningen");
@@ -122,11 +128,12 @@ namespace Webapplikasjoner1.DAL
                     Avganger enAvgang = await _db.Avgangene.FindAsync(id);
                     _db.Avgangene.Remove(enAvgang);
                     await _db.SaveChangesAsync();
-                    
-                    return true;  
+
+                    return true;
                 }
-                catch
+                catch (Exception e)
                 {
+                    _log.LogInformation(e.Message);
                     return false;
                 }
             }

@@ -100,7 +100,7 @@ namespace Webapplikasjoner1.Controllers
             return BadRequest("Feil i inputvalidering");
         }
 
-        public async Task<ActionResult> Slet(string id)
+        public async Task<ActionResult> Slett(string id)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
