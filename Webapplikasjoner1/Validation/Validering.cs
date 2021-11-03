@@ -59,6 +59,15 @@ namespace Webapplikasjoner1.Validation
             return true;
         }
 
+        public static bool GyldigStedsNummer(string test)
+        {
+            if (test != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public static bool StrekningValidering(Strekning innStrekning)
         {
             if (innStrekning.StrekningNummer ==null || innStrekning.TilSted == null || innStrekning.FraSted == null)

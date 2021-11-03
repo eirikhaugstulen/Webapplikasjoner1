@@ -65,7 +65,7 @@ namespace WebAppTest
         }
 
         [Fact]
-        public async Task RegistrerLokasjonFeilInput()
+        public async Task RegistrerLokasjonFeilInputStedsnavn()
         {
             // Arrange 
             Lokasjon lokasjon = new Lokasjon()
@@ -77,6 +77,31 @@ namespace WebAppTest
             mockRep.Setup(l => l.RegistrerLokasjon(It.IsAny<Lokasjon>())).ReturnsAsync(true);
             var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
             lokController.ModelState.AddModelError("Stedsnavn","Feil i inputvalidering");
+            
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            lokController.ControllerContext.HttpContext = mockHttpContext.Object;
+            // Act
+            var resultat = await lokController.Registrer(lokasjon) as BadRequestObjectResult;
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.BadRequest,resultat.StatusCode);
+            Assert.Equal("Feil i inputvalidering", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task RegistrerLokasjonFeilInputStedsnummer()
+        {
+            // Arrange 
+            Lokasjon lokasjon = new Lokasjon()
+            {
+                StedsNummer = null, // Ugyldig stedsnummer
+                Stedsnavn = "Bergen", 
+            };
+
+            mockRep.Setup(l => l.RegistrerLokasjon(It.IsAny<Lokasjon>())).ReturnsAsync(true);
+            var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
+            lokController.ModelState.AddModelError("StedsNummer","Feil i inputvalidering");
             
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
