@@ -251,7 +251,7 @@ namespace WebAppTest
 
             var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
 
-            strekningController.ModelState.AddModelError("FraSted", "Feil i inputvalidering av strekning på server");
+            strekningController.ModelState.AddModelError("TilSted", "Feil i inputvalidering av strekning på server");
 
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
