@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using Xunit;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -162,6 +163,36 @@ namespace WebAppTest
             // Assert
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
             Assert.Equal("Lokasjonen ble ikke slettet", resultat.Value);
+        }
+
+        [Fact]
+        public async Task HentAlleLokasjonerOk()
+        {
+            // Arrange
+            List<Lokasjon> alleLokasjoner = new List<Lokasjon>();
+            Lokasjon lokasjon = new Lokasjon()
+            {
+                StedsNummer = "1",
+                Stedsnavn = "Fredrikstad",
+            };
+            
+            Lokasjon lokasjon2 = new Lokasjon()
+            {
+                StedsNummer = "2",
+                Stedsnavn = "Bergen",
+            };
+            
+            alleLokasjoner.Add(lokasjon);
+            alleLokasjoner.Add(lokasjon2);
+            
+            mockRep.Setup(l => l.HentAlle()).ReturnsAsync(alleLokasjoner);
+            var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
+
+            // Act
+            var resultat = await lokController.HentAlle() as OkObjectResult;
+
+            // Assert
+            Assert.Equal<List<Lokasjon>>((List<Lokasjon>)resultat.Value,alleLokasjoner);
         }
     }
 }
