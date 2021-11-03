@@ -20,7 +20,7 @@ namespace WebAppTest
         
 
         private readonly Mock<IAdminRepository> mockRep = new Mock<IAdminRepository>();
-        private readonly Mock<ILogger<AdminController>> mockLog = new Mock<ILogger<AdminController>>();
+        private readonly Mock<ILogger<AdminsController>> mockLog = new Mock<ILogger<AdminsController>>();
 
         private readonly Mock<HttpContext> mockHttpContext = new Mock<HttpContext>();
         private readonly MockHttpSession mockSession = new MockHttpSession();
@@ -35,7 +35,7 @@ namespace WebAppTest
             };
             mockRep.Setup(a => a.LoggInn(admin)).ReturnsAsync(true);
 
-            var adminController = new AdminController(mockRep.Object, mockLog.Object);
+            var adminController = new AdminsController(mockRep.Object, mockLog.Object);
 
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
@@ -59,7 +59,7 @@ namespace WebAppTest
             mockRep.Setup(a => a.LoggInn(admin)).ReturnsAsync(false);
             
             
-            var adminController = new AdminController(mockRep.Object, mockLog.Object);
+            var adminController = new AdminsController(mockRep.Object, mockLog.Object);
 
             mockSession[_loggetInn] = _ikkeLoggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
@@ -84,7 +84,7 @@ namespace WebAppTest
             
             mockRep.Setup(k => k.LoggInn(admin)).ReturnsAsync(true);
 
-            var adminController = new AdminController(mockRep.Object, mockLog.Object);
+            var adminController = new AdminsController(mockRep.Object, mockLog.Object);
 
             adminController.ModelState.AddModelError("Brukernavn", "Feil i inputvalidering på server");
 
@@ -111,7 +111,7 @@ namespace WebAppTest
             
             mockRep.Setup(k => k.LoggInn(admin)).ReturnsAsync(true);
 
-            var adminController = new AdminController(mockRep.Object, mockLog.Object);
+            var adminController = new AdminsController(mockRep.Object, mockLog.Object);
 
             adminController.ModelState.AddModelError("Brukernavn", "Feil i inputvalidering på server");
 
@@ -139,7 +139,7 @@ namespace WebAppTest
             
             mockRep.Setup(k => k.LoggInn(admin)).ReturnsAsync(true);
 
-            var adminController = new AdminController(mockRep.Object, mockLog.Object);
+            var adminController = new AdminsController(mockRep.Object, mockLog.Object);
 
             adminController.ModelState.AddModelError("Brukernavn", "Feil i inputvalidering på server");
 
@@ -159,7 +159,7 @@ namespace WebAppTest
         [Fact]
         public void LoggUt()
         {
-            var adminController = new AdminController(mockRep.Object, mockLog.Object);
+            var adminController = new AdminsController(mockRep.Object, mockLog.Object);
             
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             mockSession[_loggetInn] = _loggetInn;

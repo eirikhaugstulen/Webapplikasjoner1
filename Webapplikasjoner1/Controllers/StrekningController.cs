@@ -23,7 +23,7 @@ namespace Webapplikasjoner1.Controllers
             _log = log;
         }
 
-        public async Task<ActionResult> LagreStrekning(Strekning innStrekning)
+        public async Task<ActionResult> Lagre(Strekning innStrekning)
         {
             
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
@@ -48,7 +48,7 @@ namespace Webapplikasjoner1.Controllers
             return Ok("Strekning lagret");
         }
 
-        public async Task<ActionResult> EndreStrekning(Strekning innStrekning)
+        public async Task<ActionResult> Endre(Strekning innStrekning)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
@@ -71,7 +71,7 @@ namespace Webapplikasjoner1.Controllers
             return Ok("Strekning endret");
         }
 
-        public async Task<ActionResult> SlettStrekning(string id)
+        public async Task<ActionResult> Slett(string id)
         {
             
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
@@ -90,26 +90,16 @@ namespace Webapplikasjoner1.Controllers
             return Ok("Strekning slettet");
         }
 
-        public async Task<ActionResult> HentAlleStrekninger()
+        public async Task<ActionResult> HentAlle()
         {
-            
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
-            {
-                return Unauthorized();
-            }
-            
             List<Strekninger> alleStrekninger = await _db.HentAlleStrekninger();
 
             return Ok(alleStrekninger);
         }
 
-        public async Task<ActionResult> HentEnStrekning(string id)
-        { 
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
-            {
-                return Unauthorized();
-            }
-            
+        public async Task<ActionResult> HentEn(string id)
+        {
+
             Strekninger enStrekning = await _db.HentEn(id);
 
             if (enStrekning == null)
