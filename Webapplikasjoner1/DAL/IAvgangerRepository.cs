@@ -10,10 +10,10 @@ namespace Webapplikasjoner1.DAL
         Task<bool> Lagre(Avgang innAvgang);
       
         Task<List<Avganger>> HentAlle();
-        Task<Avganger> HentEn(int id);
+        Task<Avganger> HentEn(string id);
 
         Task<bool> Endre(Avgang endreAvgang);
 
-        Task<bool> Slett(int id);
+        Task<bool> Slett(string id);
     }
 }

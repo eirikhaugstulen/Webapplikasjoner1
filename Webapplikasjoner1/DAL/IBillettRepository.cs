@@ -8,9 +8,9 @@ namespace Webapplikasjoner1.DAL
     {
         Task<bool> Lagre(Billett innBillett);
       
-        Task<List<Billett>> HentAlle();
+        Task<List<Billetter>> HentAlle();
 
-        Task<Billett> HentEn(int id);
+        Task<Billetter> HentEn(int id);
 
         Task<bool> Slett(int id);
     }

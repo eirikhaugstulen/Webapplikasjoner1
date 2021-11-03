@@ -25,6 +25,7 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> LagreStrekning(Strekning innStrekning)
         {
+            
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized();
@@ -70,8 +71,9 @@ namespace Webapplikasjoner1.Controllers
             return Ok("Strekning endret");
         }
 
-        public async Task<ActionResult> SlettStrekning(int id)
+        public async Task<ActionResult> SlettStrekning(string id)
         {
+            
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized();
@@ -90,24 +92,25 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> HentAlleStrekninger()
         {
+            
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized();
             }
             
-            List<Strekning> alleStrekninger = await _db.HentAlleStrekninger();
+            List<Strekninger> alleStrekninger = await _db.HentAlleStrekninger();
 
             return Ok(alleStrekninger);
         }
 
-        public async Task<ActionResult> HentEnStrekning(int id)
+        public async Task<ActionResult> HentEnStrekning(string id)
         { 
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
                 return Unauthorized();
             }
             
-            Strekning enStrekning = await _db.HentEn(id);
+            Strekninger enStrekning = await _db.HentEn(id);
 
             if (enStrekning == null)
             {

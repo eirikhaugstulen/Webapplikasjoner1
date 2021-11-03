@@ -31,7 +31,7 @@ namespace WebAppTest
             Admin admin = new Admin()
             {
                 Brukernavn = "adminbruker",
-                Passord = "Test1234",
+                Passord = "Test12345",
             };
             mockRep.Setup(a => a.LoggInn(admin)).ReturnsAsync(true);
 
