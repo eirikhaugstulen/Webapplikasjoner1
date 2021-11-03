@@ -192,6 +192,7 @@ namespace WebAppTest
             var resultat = await lokController.HentAlle() as OkObjectResult;
 
             // Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
             Assert.Equal<List<Lokasjon>>((List<Lokasjon>)resultat.Value,alleLokasjoner);
         }
 
@@ -212,6 +213,7 @@ namespace WebAppTest
             var resultat = await lokController.HentEn(It.IsAny<string>()) as OkObjectResult;
 
             // Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
             Assert.Equal<Lokasjon>(lokasjon, (Lokasjon)resultat.Value);
         }
 
@@ -226,6 +228,7 @@ namespace WebAppTest
             var resultat = await lokController.HentEn(It.IsAny<string>()) as NotFoundObjectResult;
 
             // Assert
+            Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
             Assert.Equal("Fant ikke lokasjonen", resultat.Value);
         }
     }
