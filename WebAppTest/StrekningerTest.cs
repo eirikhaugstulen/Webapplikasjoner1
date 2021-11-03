@@ -354,7 +354,45 @@ namespace WebAppTest
         [Fact]
         public async Task HentAlleOk()
         {
+            var lokasjon1 = new Lokasjoner
+            {
+                StedsNummer = "1",
+                Stedsnavn = "Oslo"
+            };
+            var lokasjon2 = new Lokasjoner
+            {
+                StedsNummer = "2",
+                Stedsnavn = "Bergen"
+            };
+            
+            
+            var strekning1 = new Strekninger
+            {
+                StrekningNummer = "1",
+                FraSted = lokasjon1,
+                TilSted = lokasjon2,
+            };
+            var strekning2 = new Strekninger
+            {
+                StrekningNummer = "2",
+                FraSted = lokasjon2,
+                TilSted = lokasjon1,
+            };
 
+            var strekningListe = new List<Strekninger>();
+            strekningListe.Add(strekning1);
+            strekningListe.Add(strekning2);
+            
+            mockRep.Setup(k => k.HentAlle()).ReturnsAsync(strekningListe);
+
+            var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
+
+            // Act
+            var resultat = await strekningController.HentAlle() as OkObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal(strekningListe, resultat.Value);
 
         }
         
