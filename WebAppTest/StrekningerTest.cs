@@ -31,11 +31,12 @@ namespace WebAppTest
         {
             Strekning strekning = new Strekning()
             {
-                FraSted = 1,
-                TilSted = 2,
+                StrekningNummer = "1",
+                FraSted = "1",
+                TilSted = "2",
             };
             
-            mockRep.Setup(s => s.LagreStrekning(strekning)).ReturnsAsync(true);
+            mockRep.Setup(s => s.Lagre(strekning)).ReturnsAsync(true);
 
             var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
 
@@ -44,7 +45,7 @@ namespace WebAppTest
             strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
             
             // Act
-            var resultat = await strekningController.LagreStrekning(strekning) as OkObjectResult;
+            var resultat = await strekningController.Lagre(strekning) as OkObjectResult;
             
             // Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
@@ -54,7 +55,7 @@ namespace WebAppTest
         [Fact]
         public async Task LagreStrekningIkkeLoggetInn()
         {
-            mockRep.Setup(s => s.LagreStrekning(It.IsAny<Strekning>())).ReturnsAsync(true);
+            mockRep.Setup(s => s.Lagre(It.IsAny<Strekning>())).ReturnsAsync(true);
 
             var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
 
@@ -63,7 +64,7 @@ namespace WebAppTest
             strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             // Act
-            var resultat = await strekningController.LagreStrekning(It.IsAny<Strekning>()) as UnauthorizedObjectResult;
+            var resultat = await strekningController.Lagre(It.IsAny<Strekning>()) as UnauthorizedObjectResult;
 
             // Assert 
             Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
@@ -75,11 +76,12 @@ namespace WebAppTest
         {
             Strekning strekning = new Strekning()
             {
-                FraSted = -3000,
-                TilSted = 2,
+                StrekningNummer = "8",
+                FraSted = null,
+                TilSted = "2",
             };
             
-            mockRep.Setup(s => s.LagreStrekning(strekning)).ReturnsAsync(true);
+            mockRep.Setup(s => s.Lagre(strekning)).ReturnsAsync(true);
 
             var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
 
@@ -90,11 +92,11 @@ namespace WebAppTest
             strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             // Act
-            var resultat = await strekningController.LagreStrekning(strekning) as BadRequestObjectResult;
+            var resultat = await strekningController.Lagre(strekning) as BadRequestObjectResult;
 
             // Assert 
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
-            Assert.Equal("Feil i inputvalidering av strekning på server", resultat.Value);
+            Assert.Equal("Feil i validering av strekning", resultat.Value);
         }
         
         [Fact]
@@ -102,11 +104,12 @@ namespace WebAppTest
         {
             Strekning strekning = new Strekning()
             {
-                FraSted = 2,
-                TilSted = -3000,
+                StrekningNummer = "8",
+                FraSted = "2",
+                TilSted = null,
             };
             
-            mockRep.Setup(s => s.LagreStrekning(strekning)).ReturnsAsync(true);
+            mockRep.Setup(s => s.Lagre(strekning)).ReturnsAsync(true);
 
             var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
 
@@ -117,11 +120,11 @@ namespace WebAppTest
             strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             // Act
-            var resultat = await strekningController.LagreStrekning(strekning) as BadRequestObjectResult;
+            var resultat = await strekningController.Lagre(strekning) as BadRequestObjectResult;
 
             // Assert 
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
-            Assert.Equal("Feil i inputvalidering av strekning på server", resultat.Value);
+            Assert.Equal("Feil i validering av strekning", resultat.Value);
         }
         
         [Fact]
@@ -129,11 +132,12 @@ namespace WebAppTest
         {
             Strekning strekning = new Strekning()
             {
-                FraSted = 2,
-                TilSted = 3,
+                StrekningNummer = "1",
+                FraSted = "2",
+                TilSted = "3",
             };
             
-            mockRep.Setup(k => k.LagreStrekning(strekning)).ReturnsAsync(false);
+            mockRep.Setup(k => k.Lagre(strekning)).ReturnsAsync(false);
 
             var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
             
@@ -143,7 +147,7 @@ namespace WebAppTest
             strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             // Act
-            var resultat = await strekningController.LagreStrekning(strekning) as BadRequestObjectResult;
+            var resultat = await strekningController.Lagre(strekning) as BadRequestObjectResult;
 
             // Assert 
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);

@@ -21,7 +21,7 @@ namespace Webapplikasjoner1.DAL
             _log = log;
         }
 
-        public async Task<bool> LagreStrekning(Strekning innStrekning)
+        public async Task<bool> Lagre(Strekning innStrekning)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Webapplikasjoner1.DAL
             }
         }
 
-        public async Task<bool> EndreStrekning(Strekning innStrekning)
+        public async Task<bool> Endre(Strekning innStrekning)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace Webapplikasjoner1.DAL
             return true;
         }
 
-        public async Task<bool> SlettStrekning(string id)
+        public async Task<bool> Slett(string id)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace Webapplikasjoner1.DAL
             }
         }
 
-        public async Task<List<Strekninger>> HentAlleStrekninger()
+        public async Task<List<Strekninger>> HentAlle()
         { 
             try
             {

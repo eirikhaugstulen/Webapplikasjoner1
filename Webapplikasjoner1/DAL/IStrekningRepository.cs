@@ -6,10 +6,10 @@ namespace Webapplikasjoner1.DAL
 {
     public interface IStrekningRepository
     {
-        Task<bool> LagreStrekning(Strekning strekning);
-        Task<bool> EndreStrekning(Strekning strekning);
-        Task<bool> SlettStrekning(string id);
-        Task<List<Strekninger>> HentAlleStrekninger();
+        Task<bool> Lagre(Strekning strekning);
+        Task<bool> Endre(Strekning strekning);
+        Task<bool> Slett(string id);
+        Task<List<Strekninger>> HentAlle();
         Task<Strekninger> HentEn(string id);
     }
 }

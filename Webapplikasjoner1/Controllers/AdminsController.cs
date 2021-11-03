@@ -37,7 +37,7 @@ namespace Webapplikasjoner1.Controllers
                 {
                     _log.LogInformation("Kunne ikke logge inn admin " + admin.Brukernavn);
                     HttpContext.Session.SetString(_loggetInn,"");
-                    return Unauthorized("Feil");
+                    return Unauthorized(false);
                 }
                 _log.LogInformation("Bruker ble logget inn");
                 HttpContext.Session.SetString(_loggetInn, "loggetInn");
