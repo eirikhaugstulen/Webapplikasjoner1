@@ -158,27 +158,130 @@ namespace WebAppTest
         [Fact]
         public async Task EndreStrekningLoggInnOk()
         {
+            Strekning strekning = new Strekning()
+            {
+                StrekningNummer = "12",
+                FraSted = "1",
+                TilSted = "2",
+            };
+            
+            mockRep.Setup(s => s.Endre((strekning))).ReturnsAsync(true);
 
+            var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
 
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
+            // Act
+            var resultat = await strekningController.Endre(strekning) as OkObjectResult;
+            
+            // Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal("Strekning endret", resultat.Value);
         }
         
         [Fact]
         public async Task EndreStrekningIkkeLoggetInn()
         {
+            mockRep.Setup(s => s.Endre(It.IsAny<Strekning>())).ReturnsAsync(true);
 
+            var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await strekningController.Endre(It.IsAny<Strekning>()) as UnauthorizedObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("Ikke logget inn", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task EndreStrekningValideringFeilFraSted()
+        {
+            Strekning strekning = new Strekning()
+            {
+                StrekningNummer = "8",
+                FraSted = null,
+                TilSted = "2",
+            };
+            
+            mockRep.Setup(s => s.Endre(strekning)).ReturnsAsync(true);
+
+            var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
+
+            strekningController.ModelState.AddModelError("FraSted", "Feil i inputvalidering av strekning på server");
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await strekningController.Endre(strekning) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Feil i validering av strekning", resultat.Value);
 
         }
         
         [Fact]
-        public async Task EndreStrekningValideringFeil()
+        public async Task EndreStrekningValideringFeilTilSted()
         {
+            Strekning strekning = new Strekning()
+            {
+                StrekningNummer = "8",
+                FraSted = "2",
+                TilSted = null,
+            };
+            
+            mockRep.Setup(s => s.Endre(strekning)).ReturnsAsync(true);
 
+            var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
+
+            strekningController.ModelState.AddModelError("FraSted", "Feil i inputvalidering av strekning på server");
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await strekningController.Endre(strekning) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Feil i validering av strekning", resultat.Value);
 
         }
         [Fact]
         public async Task EndreStrekningFeilIDb()
         {
+            Strekning strekning = new Strekning()
+            {
+                StrekningNummer = "1",
+                FraSted = "2",
+                TilSted = "3",
+            };
+            
+            mockRep.Setup(k => k.Endre(strekning)).ReturnsAsync(false);
 
+            var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
+            
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await strekningController.Endre(strekning) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Strekningen ble ikke endret", resultat.Value);
 
         }
         
@@ -207,28 +310,16 @@ namespace WebAppTest
         // Tester for HentAlle Strekninger
         
         [Fact]
-        public async Task HentAlleLoggetInnOk()
+        public async Task HentAlleOk()
         {
 
 
         }
         
-        [Fact]
-        public async Task HentAlleIkkeLoggetInn()
-        {
-
-
-        }
         // Tester for HentEn Strekning
         
         [Fact]
-        public async Task HentEnIkkeLoggetInn()
-        {
-
-
-        }
-        [Fact]
-        public async Task HentEnLoggetInnOk()
+        public async Task HentEnOk()
         {
 
 
