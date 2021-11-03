@@ -50,19 +50,12 @@ namespace Webapplikasjoner1.Controllers
         
         public async Task<ActionResult> HentAlle()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
-            {
-                return Unauthorized();
-            }
             List<Avganger> alleAvgangene = await _db.HentAlle();
             return Ok(alleAvgangene);
         }
         public async Task<ActionResult> HentEn(string id)
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
-            {
-                return Unauthorized();
-            }
+            
             Avganger enAvgang = await _db.HentEn(id);
             
             if(enAvgang == null)

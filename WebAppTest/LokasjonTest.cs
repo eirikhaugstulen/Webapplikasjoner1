@@ -33,7 +33,7 @@ namespace WebAppTest
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
             
             // Act
-            var resultat = await lokController.RegistrerLokasjon(It.IsAny<Lokasjon>()) as UnauthorizedObjectResult;
+            var resultat = await lokController.Registrer(It.IsAny<Lokasjon>()) as UnauthorizedObjectResult;
             
             // Assert
             Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
@@ -56,7 +56,7 @@ namespace WebAppTest
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
             
             // Act
-            var resultat = await lokController.RegistrerLokasjon(lokasjon) as OkObjectResult;
+            var resultat = await lokController.Registrer(lokasjon) as OkObjectResult;
             
             // Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
@@ -81,7 +81,7 @@ namespace WebAppTest
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
             // Act
-            var resultat = await lokController.RegistrerLokasjon(lokasjon) as BadRequestObjectResult;
+            var resultat = await lokController.Registrer(lokasjon) as BadRequestObjectResult;
 
             // Assert
             Assert.Equal((int)HttpStatusCode.BadRequest,resultat.StatusCode);
@@ -105,7 +105,7 @@ namespace WebAppTest
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
             
             // Act
-            var resultat = await lokController.RegistrerLokasjon(lokasjon) as BadRequestObjectResult;
+            var resultat = await lokController.Registrer(lokasjon) as BadRequestObjectResult;
             
             // Assert
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
@@ -123,7 +123,7 @@ namespace WebAppTest
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
             
             // Act
-            var resultat = await lokController.SlettLokasjon(It.IsAny<string>()) as UnauthorizedObjectResult;
+            var resultat = await lokController.Slett(It.IsAny<string>()) as UnauthorizedObjectResult;
             
             // Assert
             Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
@@ -140,7 +140,7 @@ namespace WebAppTest
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
             
             // Act
-            var resultat = await lokController.SlettLokasjon(It.IsAny<string>()) as OkObjectResult;
+            var resultat = await lokController.Slett(It.IsAny<string>()) as OkObjectResult;
             
             // Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
@@ -157,7 +157,7 @@ namespace WebAppTest
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
             
             // Act
-            var resultat = await lokController.SlettLokasjon(It.IsAny<string>()) as NotFoundObjectResult;
+            var resultat = await lokController.Slett(It.IsAny<string>()) as NotFoundObjectResult;
             
             // Assert
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
