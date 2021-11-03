@@ -293,6 +293,35 @@ namespace WebAppTest
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Feil i validering av strekning", resultat.Value);
         }
+        
+        [Fact]
+        public async Task EndreStrekningValideringFeilStrekningNummer()
+        {
+            // Arrange
+            Strekning strekning = new Strekning()
+            {
+                StrekningNummer = null,
+                FraSted = "2",
+                TilSted = "1",
+            };
+            
+            mockRep.Setup(s => s.Endre(strekning)).ReturnsAsync(true);
+
+            var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
+
+            strekningController.ModelState.AddModelError("StrekningNummer", "Feil i inputvalidering av strekning på server");
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await strekningController.Endre(strekning) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Feil i validering av strekning", resultat.Value);
+        }
         [Fact]
         public async Task EndreStrekningFeilIDb()
         {
