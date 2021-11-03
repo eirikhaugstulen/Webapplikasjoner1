@@ -194,5 +194,39 @@ namespace WebAppTest
             // Assert
             Assert.Equal<List<Lokasjon>>((List<Lokasjon>)resultat.Value,alleLokasjoner);
         }
+
+        [Fact]
+        public async Task HentEnLokasjonOk()
+        {
+            // Arrange
+            var lokasjon = new Lokasjon()
+            {
+                StedsNummer = "1",
+                Stedsnavn = "Bergen",
+            };
+
+            mockRep.Setup(l => l.HentEn(It.IsAny<string>())).ReturnsAsync(lokasjon);
+            var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
+            
+            // Act
+            var resultat = await lokController.HentEn(It.IsAny<string>()) as OkObjectResult;
+
+            // Assert
+            Assert.Equal<Lokasjon>(lokasjon, (Lokasjon)resultat.Value);
+        }
+
+        [Fact]
+        public async Task HentEnLokasjonNotFound()
+        {
+            // Arrange
+            mockRep.Setup(l => l.HentEn(It.IsAny<string>())).ReturnsAsync(() => null);
+            var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
+            
+            // Act
+            var resultat = await lokController.HentEn(It.IsAny<string>()) as NotFoundObjectResult;
+
+            // Assert
+            Assert.Equal("Fant ikke lokasjonen", resultat.Value);
+        }
     }
 }
