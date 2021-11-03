@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect, useCallback} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import { Avganger } from './AvgangerAdmin';
 import { Strekninger } from './StrekningerAdmin';
@@ -23,11 +23,13 @@ export const AdminContainer = () => {
         const apiKall = [];
         apiKall.push(axios.get('/Lokasjon/HentAlle'));
         apiKall.push(axios.get('/Strekning/HentAlleStrekninger'));
+        apiKall.push(axios.get('/Avganger/HentAlle'));
             
             Promise.all(apiKall).then(res => {
                 setApiData(prevState => ({
                     lokasjoner: res[0].data,
                     strekninger: res[1].data,
+                    avganger: res[2].data,
                 }));
                 setLoading(false);
             })

@@ -1,70 +1,86 @@
-﻿import React from "react";
-import {Button, Row, Table} from "reactstrap";
-import {ArrowLeftIcon} from "@primer/octicons-react";
-import history from "../../history";
+﻿import React, {useMemo} from "react";
+import {Button, Col, Row, Table} from "reactstrap";
 import {BackButton} from "../../components/AdminHome/BackButton";
+import {useLocationQuery} from "../hooks/useLocationQuery";
+import {AvgangsVelger} from "../../components/AvgangsVelger";
 // Se ALLE avganger
 
 // Filtrere fraLokasjon, tilLokasjon og Dato'
 
-const avganger = [
-    {
-        id: 1,
-        fraLokasjon: 'Oslo',
-        tilLokasjon: 'Bergen',
-        dato: '01.12.21'
-    },
-    {
-        id: 2,
-        fraLokasjon: 'Trondheim',
-        tilLokasjon: 'Stavanger',
-        dato: '04.11.21'
-    },
-    {
-        id: 3,
-        fraLokasjon: 'Oslo',
-        tilLokasjon: 'Bergen',
-        dato: '02.11.21'
-    },
-    {
-        id: 4,
-        fraLokasjon: 'Ålesund',
-        tilLokasjon: 'Trondheim',
-        dato: '22.10.21'
-    },
-    
-]
+export const Avganger = ({ apiData, refetch }) => {
+    const { strekning } = useLocationQuery();
 
-export const Avganger = () => {
+    const outputAvganger =
+        useMemo(
+            () => apiData?.avganger?.filter(
+                avgang => avgang.strekning.strekningNummer === strekning), [strekning])
+
     return(
         <div>
             <Row className={'p-3'}>
                 <BackButton />
             </Row>
-            <Table className={'table border'}>
-                <thead className={'thead-light'}>
-                <tr>
-                    <td><h4>Avganger</h4></td>
-                    <td />
-                    <td className={'text-right'}><Button>Filtrer</Button></td>
-                </tr>
-                <tr className={'table-bordered font-weight-bold'}>
-                    <td>Avreisested</td>
-                    <td>Ankomststed</td>
-                    <td>Dato</td>
-                </tr>
-                </thead>
-                <tbody className={'table-bordered'}>
-                {avganger.map(avgang =>
-                <tr>
-                    <td key={avgang.id}>{avgang.fraLokasjon}</td>
-                    <td>{avgang.tilLokasjon}</td>
-                    <td>{avgang.dato}</td>
-                </tr>
-                )}
-                </tbody>
-            </Table>
+            <Row>
+                <Col>
+                    <h4>Avganger</h4>
+                </Col>
+            </Row>
+            <Row>
+                <Col md={6}>
+                    <AvgangsVelger 
+                        strekninger={apiData?.strekninger}
+                        strekning={strekning}
+                    />
+                </Col>
+            </Row>
+            <Row>
+                <Col md={12}>
+                    {outputAvganger?.length > 0 ? <Table className={'table border'}>
+                        <thead className={'thead-light'}>
+                            <tr className={'table-bordered font-weight-bold'}>
+                                <td>Avreisested</td>
+                                <td>Ankomststed</td>
+                                <td>Dato</td>
+                                <td>Klokkeslett</td>
+                                <td>Grunnpris</td>
+                                <td>Slett</td>
+                            </tr>
+                        </thead>
+                        <tbody className={'table-bordered'}>
+                        {outputAvganger?.map(avgang => (
+                            <tr key={avgang.avgangNummer}>
+                                <td>{avgang.strekning.fraSted.stedsnavn}</td>
+                                <td>{avgang.strekning.tilSted.stedsnavn}</td>
+                                <td>{avgang.dato}</td>
+                                <td>{avgang.klokkeslett}</td>
+                                <td>{avgang.pris},-</td>
+                                <td>
+                                    <Button
+                                        outline
+                                        color={'danger'}
+                                    >
+                                        Slett
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </Table> : (
+                        <p>Ingen aktive avganger</p>
+                    )}
+                </Col>
+            </Row>
             
+            <Row>
+                <Col>
+                    <Button
+                        color={'success'}
+                        disabled={!strekning}
+                    >
+                        Legg til avgang
+                    </Button>
+                </Col>
+            </Row>
         </div>
     )
 } 
