@@ -29,6 +29,7 @@ namespace WebAppTest
         [Fact]
         public async Task LagreStrekningLoggInnOk()
         {
+            // Arrange
             Strekning strekning = new Strekning()
             {
                 StrekningNummer = "1",
@@ -55,6 +56,7 @@ namespace WebAppTest
         [Fact]
         public async Task LagreStrekningIkkeLoggetInn()
         {
+            // Arrange
             mockRep.Setup(s => s.Lagre(It.IsAny<Strekning>())).ReturnsAsync(true);
 
             var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
@@ -74,6 +76,7 @@ namespace WebAppTest
         [Fact]
         public async Task LagreStrekningValideringFeilFraSted()
         {
+            // Arrange
             Strekning strekning = new Strekning()
             {
                 StrekningNummer = "8",
@@ -102,6 +105,7 @@ namespace WebAppTest
         [Fact]
         public async Task LagreStrekningValideringFeilTilSted()
         {
+            // Arrange
             Strekning strekning = new Strekning()
             {
                 StrekningNummer = "8",
@@ -130,6 +134,7 @@ namespace WebAppTest
         [Fact]
         public async Task LagreStrekningFeilIDb()
         {
+            // Arrange
             Strekning strekning = new Strekning()
             {
                 StrekningNummer = "1",
@@ -158,6 +163,7 @@ namespace WebAppTest
         [Fact]
         public async Task EndreStrekningLoggInnOk()
         {
+            // Arrange
             Strekning strekning = new Strekning()
             {
                 StrekningNummer = "12",
@@ -184,6 +190,7 @@ namespace WebAppTest
         [Fact]
         public async Task EndreStrekningIkkeLoggetInn()
         {
+            // Arrange
             mockRep.Setup(s => s.Endre(It.IsAny<Strekning>())).ReturnsAsync(true);
 
             var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
@@ -203,6 +210,7 @@ namespace WebAppTest
         [Fact]
         public async Task EndreStrekningValideringFeilFraSted()
         {
+            // Arrange
             Strekning strekning = new Strekning()
             {
                 StrekningNummer = "8",
@@ -226,12 +234,12 @@ namespace WebAppTest
             // Assert 
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Feil i validering av strekning", resultat.Value);
-
         }
         
         [Fact]
         public async Task EndreStrekningValideringFeilTilSted()
         {
+            // Arrange
             Strekning strekning = new Strekning()
             {
                 StrekningNummer = "8",
@@ -255,11 +263,11 @@ namespace WebAppTest
             // Assert 
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Feil i validering av strekning", resultat.Value);
-
         }
         [Fact]
         public async Task EndreStrekningFeilIDb()
         {
+            // Arrange
             Strekning strekning = new Strekning()
             {
                 StrekningNummer = "1",
@@ -282,14 +290,13 @@ namespace WebAppTest
             // Assert 
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Strekningen ble ikke endret", resultat.Value);
-
         }
         
         // Tester for Slett Strekning
         [Fact]
         public async Task SlettStrekningLoggInnOk()
         {
-            
+            // Arrange
             mockRep.Setup(s => s.Slett(It.IsAny<string>())).ReturnsAsync(true);
 
             var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
@@ -304,12 +311,12 @@ namespace WebAppTest
             // Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
             Assert.Equal("Strekning slettet", resultat.Value);
-
         } 
         
         [Fact]
         public async Task SlettStrekningIkkeLoggetInn()
         {
+            // Arrange
             mockRep.Setup(s => s.Slett(It.IsAny<string>())).ReturnsAsync(true);
 
             var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
@@ -324,13 +331,12 @@ namespace WebAppTest
             // Assert 
             Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
             Assert.Equal("Ikke logget inn", resultat.Value);
-
-
         } 
         
         [Fact]
         public async Task SlettStrekningFeilIDB()
         {
+            // Arrange
             mockRep.Setup(k => k.Slett(It.IsAny<string>())).ReturnsAsync(false);
 
             var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
@@ -346,7 +352,6 @@ namespace WebAppTest
             // Assert 
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
             Assert.Equal("Strekningen ble ikke slettet", resultat.Value);
-
         }
         
         // Tester for HentAlle Strekninger
@@ -354,6 +359,7 @@ namespace WebAppTest
         [Fact]
         public async Task HentAlleOk()
         {
+            // Arrange
             var lokasjon1 = new Lokasjoner
             {
                 StedsNummer = "1",
@@ -393,7 +399,6 @@ namespace WebAppTest
             // Assert 
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
             Assert.Equal(strekningListe, resultat.Value);
-
         }
         
         // Tester for HentEn Strekning
@@ -401,14 +406,54 @@ namespace WebAppTest
         [Fact]
         public async Task HentEnOk()
         {
+            // Arrange
+            var lokasjon1 = new Lokasjoner
+            {
+                StedsNummer = "1",
+                Stedsnavn = "Oslo"
+            };
+            var lokasjon2 = new Lokasjoner
+            {
+                StedsNummer = "2",
+                Stedsnavn = "Bergen"
+            };
+            
+            
+            var strekning = new Strekninger
+            {
+                StrekningNummer = "1",
+                FraSted = lokasjon1,
+                TilSted = lokasjon2,
+            };
+            
+            mockRep.Setup(s => s.HentEn(It.IsAny<string>())).ReturnsAsync(strekning);
 
+            var kundeController = new StrekningController(mockRep.Object, mockLog.Object);
+            
 
+            // Act
+            var resultat = await kundeController.HentEn(It.IsAny<string>()) as OkObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal<Strekninger>(strekning,(Strekninger)resultat.Value);
         }
         
         [Fact]
         public async Task HentEnFeilIDB()
         {
+            // Arrange
+            mockRep.Setup(s => s.HentEn(It.IsAny<string>())).ReturnsAsync(()=>null);
 
+            var kundeController = new StrekningController(mockRep.Object, mockLog.Object);
+            
+
+            // Act
+            var resultat = await kundeController.HentEn(It.IsAny<string>()) as NotFoundObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
+            Assert.Equal("Fant ikke strekningen",resultat.Value);
 
         }
        
