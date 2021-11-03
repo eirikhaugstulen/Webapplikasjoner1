@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -26,8 +27,7 @@ namespace Webapplikasjoner1.DAL
             try
             {
                 var nyAvgangRad= new Avganger();
-                nyAvgangRad.Id = innAvgang.Id;
-             
+                nyAvgangRad.AvgangNummer = innAvgang.AvgangNummer;
                 nyAvgangRad.Dato = innAvgang.Dato;
                 nyAvgangRad.Klokkeslett = innAvgang.Klokkeslett;
                 nyAvgangRad.Pris = innAvgang.Pris;
@@ -60,7 +60,7 @@ namespace Webapplikasjoner1.DAL
             {
                 List<Avganger> alleAvgangene = await _db.Avgangene.Select(b => new Avganger
                 {
-                    Id = b.Id,
+                    AvgangNummer = b.AvgangNummer,
                     Dato = b.Dato,
                     Klokkeslett = b.Klokkeslett,
                     Pris = b.Pris,
@@ -75,13 +75,18 @@ namespace Webapplikasjoner1.DAL
                 return null;
             }
         }
-        public async Task<Avganger> HentEn(int id)
+        public async Task<Avganger> HentEn(string id)
         {
             Avganger enAvgang = await _db.Avgangene.FindAsync(id);
+
+            if (enAvgang == null) //Returnerer null som gir en NotFound error i controlleren
+            {
+                return null;
+            }
             
             var hentetAvgang = new Avganger()
             {
-                Id = enAvgang.Id,
+                AvgangNummer = enAvgang.AvgangNummer,
                 Dato = enAvgang.Dato,
                 Klokkeslett = enAvgang.Klokkeslett,
                 Pris = enAvgang.Pris,
@@ -94,12 +99,13 @@ namespace Webapplikasjoner1.DAL
         {
             try
             {
-                Avganger enAvgang = await _db.Avgangene.FindAsync(endreAvgang.Id);
-                enAvgang.Id = endreAvgang.Id;
+                Avganger enAvgang = await _db.Avgangene.FindAsync(endreAvgang.AvgangNummer);
+                enAvgang.AvgangNummer = endreAvgang.AvgangNummer;
                 enAvgang.Dato = endreAvgang.Dato;
-                enAvgang.Pris = endreAvgang.Pris;
                 enAvgang.Klokkeslett = endreAvgang.Klokkeslett;
-                var endreStrekning = await _db.Strekningene.FindAsync(endreAvgang.Id);
+                enAvgang.Pris = endreAvgang.Pris;
+                
+                var endreStrekning = await _db.Strekningene.FindAsync(endreAvgang.Strekning);
                 if (endreStrekning == null)
                 {
                     _log.LogInformation("Fant ikke strekningen");
@@ -116,18 +122,19 @@ namespace Webapplikasjoner1.DAL
             }
         }
         
-        public async Task<bool> Slett(int id)
+        public async Task<bool> Slett(string id)
             {
                 try
                 {
                     Avganger enAvgang = await _db.Avgangene.FindAsync(id);
                     _db.Avgangene.Remove(enAvgang);
                     await _db.SaveChangesAsync();
-                    
-                    return true;  
+
+                    return true;
                 }
-                catch
+                catch (Exception e)
                 {
+                    _log.LogInformation(e.Message);
                     return false;
                 }
             }

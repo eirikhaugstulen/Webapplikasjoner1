@@ -8,9 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Webapplikasjoner1.DAL
 {
-
-
-    public class Billetter
+        public class Billetter
     {
         public int Id { get; set; }
         public string Fornavn { get; set; }
@@ -20,14 +18,14 @@ namespace Webapplikasjoner1.DAL
         public int TotalPris { get; set; }
         public int Antall { get; set; }
         public virtual Avganger Avgang {get;set;}
-        public virtual Avganger ReturDato { get;set; }
+        public string OrdreNummer { get; set; }
     }
 
     public class Strekninger {
         // Legg til, endre(endrer kun p� lokasjon pekere)- ikke prioritet og Slett
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; }
+        public string StrekningNummer { get; set; }
         public virtual Lokasjoner FraSted { get; set; }
         public virtual Lokasjoner TilSted { get; set; }
     }
@@ -36,7 +34,7 @@ namespace Webapplikasjoner1.DAL
     { // Legg til, endre(dato, klokkeslett, pris, pekere til Strekninger) og Slett
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; }
+        public string AvgangNummer { get; set; }
         public string Dato { get; set; }
         public string Klokkeslett { get; set; }
         public int Pris { get; set; }
@@ -47,8 +45,8 @@ namespace Webapplikasjoner1.DAL
     { // Legg til og Slett
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; }
-        public string StedsNavn { get; set; }
+        public string StedsNummer { get; set; }
+        public string Stedsnavn { get; set; }
     }
     public class Adminer
     {
@@ -75,6 +73,7 @@ namespace Webapplikasjoner1.DAL
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
+            
         }
     }
 }
