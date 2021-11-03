@@ -66,10 +66,10 @@ namespace WebAppTest
             adminController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             // Act
-            var resultat = await adminController.LoggInn(admin) as OkObjectResult;
+            var resultat = await adminController.LoggInn(admin) as UnauthorizedObjectResult;
 
             // Assert 
-            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
             Assert.False((bool)resultat.Value);
         }
         
