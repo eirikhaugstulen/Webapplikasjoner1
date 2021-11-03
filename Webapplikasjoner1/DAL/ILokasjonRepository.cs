@@ -7,8 +7,8 @@ namespace Webapplikasjoner1.DAL
     public interface ILokasjonRepository
     {
         Task<bool> RegistrerLokasjon(Lokasjon lokasjon);
-        Task<bool> SlettLokasjon(int id);
+        Task<bool> SlettLokasjon(string id);
         Task<List<Lokasjon>> HentAlle();
-        Task<Lokasjon> HentEn(int id);
+        Task<Lokasjon> HentEn(string id);
     }
 }

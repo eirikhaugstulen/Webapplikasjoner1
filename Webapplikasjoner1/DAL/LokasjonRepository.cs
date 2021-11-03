@@ -26,30 +26,23 @@ namespace Webapplikasjoner1.DAL
             try
             {
                 var nyLokasjonRad = new Lokasjoner();
-                nyLokasjonRad.Id = lokasjon.Id;
-                var sjekkStedsNavn = await _db.Lokasjonene.FindAsync(lokasjon.Stedsnavn);
-
-                if (sjekkStedsNavn != null)
-                {
-                    _log.LogInformation("Fant stedsnavn i database, legger derfor ikke til ny lokasjon");
-                    return false;
-                }
-                else
-                {
-                    nyLokasjonRad.StedsNavn = lokasjon.Stedsnavn;
-                }
+                
+                nyLokasjonRad.StedsNummer = lokasjon.StedsNummer;
+                nyLokasjonRad.Stedsnavn = lokasjon.Stedsnavn;
+                
                 _db.Lokasjonene.Add(nyLokasjonRad);
                 await _db.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch(Exception e)
             {
                 _log.LogInformation("Kunne ikke registrere ny lokasjon");
+                _log.LogInformation(e.Message);
                 return false;
             }
         }
         
-        public async Task<bool> SlettLokasjon(int id)
+        public async Task<bool> SlettLokasjon(string id)
         {
             try
             {
@@ -70,8 +63,8 @@ namespace Webapplikasjoner1.DAL
             {
                 List<Lokasjon> alleLokasjoner = await _db.Lokasjonene.Select(l => new Lokasjon()
                 {
-                    Id = l.Id,
-                    Stedsnavn = l.StedsNavn,
+                    StedsNummer = l.StedsNummer,
+                    Stedsnavn = l.Stedsnavn,
                 }).ToListAsync();
                 return alleLokasjoner;
             }
@@ -82,14 +75,19 @@ namespace Webapplikasjoner1.DAL
             }
         }
 
-        public async Task<Lokasjon> HentEn(int id)
+        public async Task<Lokasjon> HentEn(string id)
         {
             Lokasjoner lokasjon = await _db.Lokasjonene.FindAsync(id);
+            
+            if (lokasjon == null)//Returnerer null som gir en NotFound error i controlleren
+            {
+                return null;
+            }
 
             var hentetLokasjon = new Lokasjon()
             {
-                Id = lokasjon.Id,
-                Stedsnavn = lokasjon.StedsNavn,
+               StedsNummer = lokasjon.StedsNummer,
+                Stedsnavn = lokasjon.Stedsnavn,
             };
             return hentetLokasjon;
         }

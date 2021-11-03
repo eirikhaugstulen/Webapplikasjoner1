@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Webapplikasjoner1.DAL;
 using Webapplikasjoner1.Models;
 
 namespace Webapplikasjoner1.DAL
@@ -25,28 +26,15 @@ namespace Webapplikasjoner1.DAL
             try
             {
                 var nyBillettRad = new Billetter();
-                nyBillettRad.Id = innBillett.Id;
-             
+
                 nyBillettRad.Fornavn = innBillett.Fornavn;
                 nyBillettRad.Etternavn = innBillett.Etternavn;
                 nyBillettRad.Retur = innBillett.Retur;
                 nyBillettRad.Type = innBillett.Type;
-                nyBillettRad.TotalPris = innBillett.Pris;
+                nyBillettRad.TotalPris = innBillett.TotalPris;
                 nyBillettRad.Antall = innBillett.Antall;
-
-                if (nyBillettRad.Retur == true)
-                {
-                    var sjekkReturDato = await _db.Avgangene.FindAsync(innBillett.ReturDato);
-                    if (sjekkReturDato == null)
-                    {
-                        _log.LogInformation("Fant ikke Avgang i database");
-                        return false;
-                    }
-                    else
-                    {
-                        nyBillettRad.ReturDato = sjekkReturDato;
-                    }
-                }
+                nyBillettRad.OrdreNummer = innBillett.OrdreNummer;
+                
                 var sjekkAvgang = await _db.Avgangene.FindAsync(innBillett.Avgang);
                 if (sjekkAvgang == null)
                 {
@@ -67,24 +55,23 @@ namespace Webapplikasjoner1.DAL
             }
         }
         
-        public async Task<List<Billett>> HentAlle()
+        public async Task<List<Billetter>> HentAlle()
         {
             try
             {
-                List<Billett> alleBillettene = await _db.Billettene.Select(b => new Billett
+                List<Billetter> alleBillettene = await _db.Billettene.Select(b => new Billetter
                 {
                     Id = b.Id,
                     Fornavn = b.Fornavn,
                     Etternavn = b.Etternavn,
                     Retur = b.Retur,
-                    ReturDato = b.ReturDato.Id,
+                    OrdreNummer = b.OrdreNummer,
 
-                    Avgang = b.Avgang.Id,
-                    Pris = b.TotalPris,
+                    Avgang = b.Avgang,
+                    TotalPris = b.TotalPris,
                     Type = b.Type,
                     Antall =b.Antall,
-                    Dato =b.Avgang.Dato,
-                    Klokkeslett =b.Avgang.Klokkeslett,
+                    
 
                 }).ToListAsync();
                 
@@ -97,25 +84,31 @@ namespace Webapplikasjoner1.DAL
         }
 
 
-        public async Task<Billett> HentEn(int id)
+        public async Task<Billetter> HentEn(int id)
         {
             Billetter enBillett = await _db.Billettene.FindAsync(id);
-            
-                var hentetBillett = new Billett()
+
+            if (enBillett == null) //Returnerer null som gir en NotFound error i controlleren
+            {
+                return null;
+            }
+          
+                 var hentetBillett = new Billetter()
                 {
                     Id = enBillett.Id,
                     Fornavn = enBillett.Fornavn,
                     Etternavn = enBillett.Etternavn,
                     Retur = enBillett.Retur,
-                    ReturDato = enBillett.ReturDato.Id,
-                    Avgang = enBillett.Avgang.Id,
-                    Pris = enBillett.TotalPris,
+                    OrdreNummer = enBillett.OrdreNummer,
+                    Avgang = enBillett.Avgang,
+                    TotalPris = enBillett.TotalPris,
+                    
                     Type = enBillett.Type,
                     Antall = enBillett.Antall,
                 };
-            return hentetBillett;
-        }
-
+                 return hentetBillett;
+            }
+        
         public async Task<bool> Slett(int id)
             {
                 try

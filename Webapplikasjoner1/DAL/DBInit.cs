@@ -17,14 +17,14 @@ namespace Webapplikasjoner1.DAL
 
             var lokasjon = new Lokasjoner()
             {
-                Id = 1,
-                StedsNavn = "Oslo",
+                StedsNummer = "1",
+                Stedsnavn = "Oslo",
             };
             
             var lokasjon2 = new Lokasjoner()
             {
-                Id = 2,
-                StedsNavn = "Bergen",
+                StedsNummer = "2",
+                Stedsnavn = "Bergen",
             };
 
             db.Lokasjonene.Add(lokasjon);
@@ -32,16 +32,35 @@ namespace Webapplikasjoner1.DAL
 
             var strekning = new Strekninger()
             {
-                Id = 1,
+                StrekningNummer = "12",
+                FraSted = lokasjon,
+                TilSted = lokasjon2,
+            };
+            
+            var strekning1 = new Strekninger()
+            {
+                StrekningNummer = "123",
+                FraSted = lokasjon,
+                TilSted = lokasjon2,
+            };
+            
+            var strekning2 = new Strekninger()
+            {
+                StrekningNummer = "1234",
                 FraSted = lokasjon,
                 TilSted = lokasjon2,
             };
 
+
+
             db.Strekningene.Add(strekning);
+            db.Strekningene.Add(strekning1);
+            db.Strekningene.Add(strekning2);
+
 
             var avgang = new Avganger()
             {
-                Id = 1,
+                AvgangNummer = "1",
                 Dato = "10-12-2021",
                 Klokkeslett = "23:59",
                 Pris = 100,
@@ -52,11 +71,11 @@ namespace Webapplikasjoner1.DAL
 
             var billett = new Billetter()
             {
-                Id = 1,
+                Id = 0,
                 Fornavn = "Per",
                 Etternavn = "Person",
-                Retur = false,
-                ReturDato = null,
+                Retur = true,
+                OrdreNummer = "1",
                 Type = "Student",
                 Antall = 1,
                 Avgang = avgang,
