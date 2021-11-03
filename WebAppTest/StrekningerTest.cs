@@ -289,13 +289,41 @@ namespace WebAppTest
         [Fact]
         public async Task SlettStrekningLoggInnOk()
         {
+            
+            mockRep.Setup(s => s.Slett(It.IsAny<string>())).ReturnsAsync(true);
 
+            var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
+            // Act
+            var resultat = await strekningController.Slett(It.IsAny<string>()) as OkObjectResult;
+            
+            // Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal("Strekning slettet", resultat.Value);
 
         } 
         
         [Fact]
         public async Task SlettStrekningIkkeLoggetInn()
         {
+            mockRep.Setup(s => s.Slett(It.IsAny<string>())).ReturnsAsync(true);
+
+            var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await strekningController.Slett(It.IsAny<string>()) as UnauthorizedObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("Ikke logget inn", resultat.Value);
 
 
         } 
@@ -303,7 +331,21 @@ namespace WebAppTest
         [Fact]
         public async Task SlettStrekningFeilIDB()
         {
+            mockRep.Setup(k => k.Slett(It.IsAny<string>())).ReturnsAsync(false);
 
+            var strekningController = new StrekningController(mockRep.Object, mockLog.Object);
+            
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            strekningController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await strekningController.Slett(It.IsAny<string>()) as NotFoundObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
+            Assert.Equal("Strekningen ble ikke slettet", resultat.Value);
 
         }
         
