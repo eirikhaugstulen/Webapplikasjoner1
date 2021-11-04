@@ -61,31 +61,5 @@ namespace Webapplikasjoner1.DAL
                 return false;
             }
         }
-
-        public async Task<bool> OpprettAdmin(Admin admin)
-        {
-            byte[] salt = LagSalt();
-            byte[] hash = LagHash(admin.Passord, salt);
-
-            Adminer nyAdmin = new Adminer
-            {
-                Brukernavn = admin.Brukernavn,
-                Passord = hash,
-                Salt = salt,
-            };
-            try
-            {
-                _db.Adminene.Add(nyAdmin);
-                await _db.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception e)
-            {
-                _logger.LogInformation(e.Message);
-                return false;
-            }
-        }
-
-        
     }
-       }
+}

@@ -25,9 +25,11 @@ namespace WebAppTest
         private readonly Mock<HttpContext> mockHttpContext = new Mock<HttpContext>();
         private readonly MockHttpSession mockSession = new MockHttpSession();
         
+        // Tester for Logg inn
         [Fact]
         public async Task LoggInnOk()
         {
+            // Arrange
             Admin admin = new Admin()
             {
                 Brukernavn = "adminbruker",
@@ -50,7 +52,7 @@ namespace WebAppTest
         [Fact]
         public async Task LoggInnFeilPassordEllerBruker()
         {
-            
+            // Arrange
             Admin admin = new Admin()
             {
                 Brukernavn = "Adminbruker",
@@ -66,16 +68,17 @@ namespace WebAppTest
             adminController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             // Act
-            var resultat = await adminController.LoggInn(admin) as OkObjectResult;
+            var resultat = await adminController.LoggInn(admin) as UnauthorizedObjectResult;
 
             // Assert 
-            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
             Assert.False((bool)resultat.Value);
         }
         
         [Fact]
         public async Task LoggInnInputFeilPassord()
         {
+            // Arrange
             Admin admin = new Admin()
             {
                 Brukernavn = "Adminbruker",
@@ -103,6 +106,7 @@ namespace WebAppTest
         [Fact]
         public async Task LoggInnInputFeilBrukernavn()
         {
+            // Arrange
             Admin admin = new Admin()
             {
                 Brukernavn = "f",
@@ -131,6 +135,7 @@ namespace WebAppTest
         [Fact]
         public async Task LoggInnInputFeilPassordOgBrukernavn()
         {
+            // Arrange
             Admin admin = new Admin()
             {
                 Brukernavn = "feil",
@@ -155,10 +160,11 @@ namespace WebAppTest
             Assert.Equal("Feil i inputvalidering på server", resultat.Value);
         }
 
-
+        // Tester for logg ut 
         [Fact]
         public void LoggUt()
         {
+            // Arrange
             var adminController = new AdminsController(mockRep.Object, mockLog.Object);
             
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
@@ -167,6 +173,41 @@ namespace WebAppTest
          
             // Act
             adminController.LoggUt();
+
+            // Assert
+            Assert.Equal(_ikkeLoggetInn,mockSession[_loggetInn]);
+        }
+        
+        // Tester for sjekk logget inn
+        [Fact]
+        public void SjekkLoggetInnLoggetInn()
+        {
+            // Arrange
+            var adminController = new AdminsController(mockRep.Object, mockLog.Object);
+            
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            mockSession[_loggetInn] = _loggetInn;
+            adminController.ControllerContext.HttpContext = mockHttpContext.Object;
+         
+            // Act
+            adminController.SjekkLoggetInn();
+
+            // Assert
+            Assert.Equal(_loggetInn,mockSession[_loggetInn]);
+        }
+        
+        [Fact]
+        public void SjekkLoggetInnIkkeLoggetInn()
+        {
+            // Arrange
+            var adminController = new AdminsController(mockRep.Object, mockLog.Object);
+            
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            adminController.ControllerContext.HttpContext = mockHttpContext.Object;
+         
+            // Act
+            adminController.SjekkLoggetInn();
 
             // Assert
             Assert.Equal(_ikkeLoggetInn,mockSession[_loggetInn]);

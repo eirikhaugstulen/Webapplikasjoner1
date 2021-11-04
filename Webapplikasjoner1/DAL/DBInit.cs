@@ -69,17 +69,25 @@ namespace Webapplikasjoner1.DAL
 
             db.Avgangene.Add(avgang);
 
+            var kunde = new Kunder()
+            {
+                KundeId = "aaaaa",
+                Adresse = "Skedsmovollen 51",
+                Epost = "none@gmail.com",
+                Fornavn = "per",
+                Etternavn = "hansen",
+                Telefonnummer = "12345678",
+            };
             var billett = new Billetter()
             {
                 Id = 0,
-                Fornavn = "Per",
-                Etternavn = "Person",
                 Retur = true,
                 OrdreNummer = "1",
                 Type = "Student",
                 Antall = 1,
                 Avgang = avgang,
                 TotalPris = 100,
+                KundeId = kunde,
             };
 
             db.Billettene.Add(billett);

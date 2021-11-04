@@ -34,6 +34,7 @@ namespace Webapplikasjoner1
             services.AddScoped<IStrekningRepository, StrekningRepository>();
             services.AddScoped<IAvgangerRepository, AvgangerRepository>();
             services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<IKundeRepository,KundeRepository>();
             
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
