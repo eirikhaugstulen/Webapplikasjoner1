@@ -26,8 +26,8 @@ namespace Webapplikasjoner1.Controllers
         {
             if (!Validering.KundeValidering(kunde))
             {
-                _logger.LogInformation("Feil i inputvalidering");
-                return BadRequest("Feil i inputvalidering");
+                _logger.LogInformation("Feil i validering av kunde");
+                return BadRequest("Feil i validering av kunde");
             }
             
             bool returOK = await _db.Lagre(kunde);
