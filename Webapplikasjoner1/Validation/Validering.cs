@@ -11,11 +11,9 @@ namespace Webapplikasjoner1.Validation
             Regex reg = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,20}");
             Regex regEtternavn = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,50}");
             
-            bool testFornavn = reg.IsMatch(innBillett.Fornavn);
-            bool testEtternavn = regEtternavn.IsMatch(innBillett.Etternavn);
             bool testType = reg.IsMatch(innBillett.Type);
 
-            if (!testType || !testFornavn || !testEtternavn || innBillett.TotalPris <= 0 || 
+            if ( innBillett.TotalPris <= 0 || 
                 innBillett.Antall<0)
             {
                 return false;

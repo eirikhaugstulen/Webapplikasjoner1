@@ -49,6 +49,7 @@ namespace Webapplikasjoner1.DAL
                 if (sjekkKunde == null)
                 {
                     _log.LogInformation("Fant ikke kunde i database");
+                    return false;
                 }
                 else
                 {
