@@ -8,17 +8,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Webapplikasjoner1.DAL
 {
+
+    // Lagre , Slett
+    public class Kunder
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public string KundeId { get; set; }
+        public string Fornavn { get; set; }
+        public string Etternavn { get; set; }
+        public string Adresse { get; set; }
+        public string Telefonnummer { get; set; }
+        public string Epost { get; set; }
+    }
         public class Billetter
     {
         public int Id { get; set; }
-        public string Fornavn { get; set; }
-        public string Etternavn { get; set; }
         public bool Retur { get; set; }
         public string Type { get; set; }
         public int TotalPris { get; set; }
         public int Antall { get; set; }
         public virtual Avganger Avgang {get;set;}
         public string OrdreNummer { get; set; }
+        public virtual Kunder KundeId { get; set; }
     }
 
     public class Strekninger {
@@ -69,6 +81,7 @@ namespace Webapplikasjoner1.DAL
         public DbSet<Strekninger> Strekningene { get; set; }
         public DbSet<Avganger> Avgangene { get; set; }
         public DbSet<Lokasjoner> Lokasjonene { get; set; }
+        public DbSet<Kunder> Kundene { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

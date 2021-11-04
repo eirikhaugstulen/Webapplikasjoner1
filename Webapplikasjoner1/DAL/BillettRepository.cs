@@ -27,8 +27,7 @@ namespace Webapplikasjoner1.DAL
             {
                 var nyBillettRad = new Billetter();
 
-                nyBillettRad.Fornavn = innBillett.Fornavn;
-                nyBillettRad.Etternavn = innBillett.Etternavn;
+                
                 nyBillettRad.Retur = innBillett.Retur;
                 nyBillettRad.Type = innBillett.Type;
                 nyBillettRad.TotalPris = innBillett.TotalPris;
@@ -45,6 +44,18 @@ namespace Webapplikasjoner1.DAL
                 {
                     nyBillettRad.Avgang = sjekkAvgang;
                 }
+
+                var sjekkKunde = await _db.Kundene.FindAsync(innBillett.KundeId);
+                if (sjekkKunde == null)
+                {
+                    _log.LogInformation("Fant ikke kunde i database");
+                    return false;
+                }
+                else
+                {
+                    nyBillettRad.KundeId = sjekkKunde;
+                }
+
                 _db.Billettene.Add(nyBillettRad);
                 await _db.SaveChangesAsync();
                 return true;
@@ -62,15 +73,13 @@ namespace Webapplikasjoner1.DAL
                 List<Billetter> alleBillettene = await _db.Billettene.Select(b => new Billetter
                 {
                     Id = b.Id,
-                    Fornavn = b.Fornavn,
-                    Etternavn = b.Etternavn,
                     Retur = b.Retur,
                     OrdreNummer = b.OrdreNummer,
-
                     Avgang = b.Avgang,
                     TotalPris = b.TotalPris,
                     Type = b.Type,
                     Antall =b.Antall,
+                    KundeId = b.KundeId,
                     
 
                 }).ToListAsync();
@@ -93,18 +102,16 @@ namespace Webapplikasjoner1.DAL
                 return null;
             }
           
-                 var hentetBillett = new Billetter()
+            var hentetBillett = new Billetter()
                 {
                     Id = enBillett.Id,
-                    Fornavn = enBillett.Fornavn,
-                    Etternavn = enBillett.Etternavn,
                     Retur = enBillett.Retur,
                     OrdreNummer = enBillett.OrdreNummer,
                     Avgang = enBillett.Avgang,
                     TotalPris = enBillett.TotalPris,
-                    
                     Type = enBillett.Type,
                     Antall = enBillett.Antall,
+                    KundeId = enBillett.KundeId,
                 };
                  return hentetBillett;
             }
