@@ -1,0 +1,278 @@
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Webapplikasjoner1.Controllers;
+using Webapplikasjoner1.DAL;
+using Webapplikasjoner1.Models;
+using Xunit;
+
+namespace WebAppTest
+{
+    public class AvgangerTest
+    {
+        private const string _loggetInn = "loggetInn";
+        private const string _ikkeLoggetInn = "";
+        
+
+        private readonly Mock<IAvgangerRepository> mockRep = new Mock<IAvgangerRepository>();
+        private readonly Mock<ILogger<AvgangerController>> mockLog = new Mock<ILogger<AvgangerController>>();
+
+        private readonly Mock<HttpContext> mockHttpContext = new Mock<HttpContext>();
+        private readonly MockHttpSession mockSession = new MockHttpSession();
+        
+        //Tester lagreAvgang
+        
+        [Fact]
+        public async Task LagreAvgangLoggInnOk()
+        {
+            Avgang avgang= new Avgang()
+            {  
+                AvgangNummer = "1",
+                Dato = "10-12-2021",
+                Klokkeslett = "23:59",
+                Pris = 100,
+                Strekning = "12"
+            };
+            
+            mockRep.Setup(a => a.Lagre(avgang)).ReturnsAsync(true);
+
+            var avgangerController = new AvgangerController(mockRep.Object,mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangerController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
+            // Act
+            var resultat = await avgangerController.Lagre(avgang) as OkObjectResult;
+            
+            // Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal("Avgangen lagret", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task LagreAvgangIkkeLoggetInn()
+        {
+            
+            // Arrange
+            mockRep.Setup(a => a.Lagre(It.IsAny<Avgang>())).ReturnsAsync(true);
+            var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangerController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
+            // Act
+            var resultat = await avgangerController.Lagre(It.IsAny<Avgang>()) as UnauthorizedObjectResult;
+            
+            // Assert
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("Ikke logget inn", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task LagreAvgangFeilInput1()
+        {
+            // Arrange 
+            Avgang avgang= new Avgang()
+            {  
+                AvgangNummer = "1",
+                Dato = "10-12-2021",
+                Klokkeslett = null,
+                Pris = 100,
+                Strekning = "12"
+            };
+
+            mockRep.Setup(a => a.Lagre(avgang)).ReturnsAsync(true);
+            var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
+            avgangerController.ModelState.AddModelError("Klokkeslett","Feil i inputvalidering");
+            
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangerController.ControllerContext.HttpContext = mockHttpContext.Object;
+            // Act
+            var resultat = await avgangerController.Lagre(avgang) as BadRequestObjectResult;
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.BadRequest,resultat.StatusCode);
+            Assert.Equal("Feil i inputvalidering", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task LagreAvgangFeilInput2()
+        {
+            // Arrange 
+            Avgang avgang= new Avgang()
+            {  
+                AvgangNummer = "1",
+                Dato = null,
+                Klokkeslett = "23:59",
+                Pris = 100,
+                Strekning = "12"
+            };
+
+            mockRep.Setup(a => a.Lagre(avgang)).ReturnsAsync(true);
+            var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
+            avgangerController.ModelState.AddModelError("Dato","Feil i inputvalidering");
+            
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangerController.ControllerContext.HttpContext = mockHttpContext.Object;
+            // Act
+            var resultat = await avgangerController.Lagre(avgang) as BadRequestObjectResult;
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.BadRequest,resultat.StatusCode);
+            Assert.Equal("Feil i inputvalidering", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task LagreAvgangFeilInput3()
+        {
+            // Arrange 
+            Avgang avgang= new Avgang()
+            {  
+                AvgangNummer = "1",
+                Dato = "10-12-2021",
+                Klokkeslett = "23:59",
+                Pris = -2000,
+                Strekning = "12"
+            };
+
+            mockRep.Setup(a => a.Lagre(avgang)).ReturnsAsync(true);
+            var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
+            avgangerController.ModelState.AddModelError("Pris","Feil i inputvalidering");
+            
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangerController.ControllerContext.HttpContext = mockHttpContext.Object;
+            // Act
+            var resultat = await avgangerController.Lagre(avgang) as BadRequestObjectResult;
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.BadRequest,resultat.StatusCode);
+            Assert.Equal("Feil i inputvalidering", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task LagreAvgangFeilInput4()
+        {
+            // Arrange 
+            Avgang avgang= new Avgang()
+            {  
+                AvgangNummer = "1",
+                Dato = "10-12-2021",
+                Klokkeslett = "23:59",
+                Pris = 100,
+                Strekning = "12"
+            };
+
+            mockRep.Setup(a => a.Lagre(avgang)).ReturnsAsync(true);
+            var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
+            avgangerController.ModelState.AddModelError("Strekning","Feil i inputvalidering");
+            
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangerController.ControllerContext.HttpContext = mockHttpContext.Object;
+            // Act
+            var resultat = await avgangerController.Lagre(avgang) as BadRequestObjectResult;
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.BadRequest,resultat.StatusCode);
+            Assert.Equal("Feil i inputvalidering", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task SlettAvgangIkkeLoggetInn()
+        {
+            // Arrange
+            mockRep.Setup(a => a.Slett(It.IsAny<string>())).ReturnsAsync(true);
+            var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangerController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
+            // Act
+            var resultat = await avgangerController.Slett(It.IsAny<string>()) as UnauthorizedObjectResult;
+            
+            // Assert
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("Ikke logget inn", resultat.Value);
+        }
+
+        [Fact]
+        public async Task SlettAvgangLoggetInnOK()
+        {
+            mockRep.Setup(l => l.Slett(It.IsAny<string>())).ReturnsAsync(true);
+            var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangerController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
+            // Act
+            var resultat = await avgangerController.Slett(It.IsAny<string>()) as OkObjectResult;
+            
+            // Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal("Avgang slettet", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task SlettAvgangFeilIDb()
+        {
+            mockRep.Setup(a => a.Slett(It.IsAny<string>())).ReturnsAsync(false);
+            var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangerController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
+            // Act
+            var resultat = await avgangerController.Slett(It.IsAny<string>()) as NotFoundObjectResult;
+            
+            // Assert
+            Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
+            Assert.Equal("Avgangen ble ikke slettet", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task HentAlleAvgangerOk()
+        {
+            // Arrange
+            List<Avganger> alleAvganger = new List<Avganger>();
+            
+            Avgang avgang= new Avgang()
+            {  
+                AvgangNummer = "1",
+                Dato = "10-12-2021",
+                Klokkeslett = "23:59",
+                Pris = 100,
+                Strekning = "12"
+            };
+            
+            Avgang avgang2= new Avgang()
+            {  
+                AvgangNummer = "2",
+                Dato = "11-12-2021",
+                Klokkeslett = "23:40",
+                Pris = 100,
+                Strekning = "123"
+            };
+            
+            alleAvganger.Add(avgang);
+            alleAvganger.Add(avgang2);
+            
+            mockRep.Setup(a => a.HentAlle()).ReturnsAsync(alleAvganger);
+            var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
+
+            // Act
+            var resultat = await avgangerController.HentAlle() as OkObjectResult;
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal<List<Avganger>>((List<Avganger>)resultat.Value,alleAvganger);
+        }
+    }
+}
