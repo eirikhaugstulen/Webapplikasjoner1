@@ -167,7 +167,7 @@ namespace WebAppTest
                 Dato = "10-12-2021",
                 Klokkeslett = "23:59",
                 Pris = 100,
-                Strekning = "12"
+                Strekning = null
             };
 
             mockRep.Setup(a => a.Lagre(avgang)).ReturnsAsync(true);
@@ -263,29 +263,56 @@ namespace WebAppTest
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
             Assert.Equal("Avgangen ble ikke slettet", resultat.Value);
         }
-     /*   
+     
         [Fact]
         public async Task HentAlleAvgangerOk()
         {
             // Arrange
             List<Avganger> alleAvganger = new List<Avganger>();
+
             
-            Avgang avgang= new Avgang()
+            var lokasjon = new Lokasjoner()
+            {
+                StedsNummer = "1",
+                Stedsnavn = "Oslo",
+            };
+            
+            var lokasjon2 = new Lokasjoner()
+            {
+                StedsNummer = "2",
+                Stedsnavn = "Bergen",
+            };
+            
+            var strekning = new Strekninger()
+            {
+                StrekningNummer = "12",
+                FraSted = lokasjon,
+                TilSted = lokasjon2,
+            };
+            
+            var strekning1 = new Strekninger()
+            {
+                StrekningNummer = "123",
+                FraSted = lokasjon,
+                TilSted = lokasjon2,
+            };
+
+            Avganger avgang= new Avganger()
             {  
                 AvgangNummer = "1",
                 Dato = "10-12-2021",
                 Klokkeslett = "23:59",
                 Pris = 100,
-                Strekning = "12"
+                Strekning= strekning
             };
             
-            Avgang avgang2= new Avgang()
+            Avganger avgang2= new Avganger()
             {  
                 AvgangNummer = "2",
                 Dato = "11-12-2021",
                 Klokkeslett = "23:40",
                 Pris = 100,
-                Strekning = "123"
+                Strekning = strekning1
             };
             
             alleAvganger.Add(avgang);
@@ -301,7 +328,7 @@ namespace WebAppTest
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
             Assert.Equal<List<Avganger>>((List<Avganger>)resultat.Value,alleAvganger);
         }
-   */     
+        
         [Fact]
         public async Task HentEnAvgangOk()
         {
@@ -419,6 +446,7 @@ namespace WebAppTest
             Assert.Equal("Feil i inputvalidering", resultat.Value);
         }
         
+        [Fact]
         public async Task EndreAvgangFeilInput2()
         {
             // Arrange
@@ -467,6 +495,37 @@ namespace WebAppTest
             var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
 
             avgangerController.ModelState.AddModelError("Pris", "Feil i inputvalidering");
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            avgangerController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await avgangerController.Endre(avgang) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Feil i inputvalidering", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task EndreAvgangFeilInput4()
+        {
+            // Arrange
+            Avgang avgang= new Avgang()
+            {  
+                AvgangNummer = "1",
+                Dato = "10-12-2021",
+                Klokkeslett = "23:59",
+                Pris = 100,
+                Strekning = null
+            };
+            
+            mockRep.Setup(s => s.Endre(avgang)).ReturnsAsync(true);
+
+            var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
+
+            avgangerController.ModelState.AddModelError("Strekning", "Feil i inputvalidering");
 
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
