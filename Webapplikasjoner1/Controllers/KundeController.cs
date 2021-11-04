@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Webapplikasjoner1.DAL;
 using Webapplikasjoner1.Models;
+using Webapplikasjoner1.Validation;
 
 namespace Webapplikasjoner1.Controllers
 {
@@ -23,6 +24,12 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> Lagre(Kunde kunde)
         {
+            if (!Validering.KundeValidering(kunde))
+            {
+                _logger.LogInformation("Feil i inputvalidering");
+                return BadRequest("Feil i inputvalidering");
+            }
+            
             bool returOK = await _db.Lagre(kunde);
             if (!returOK )
             {

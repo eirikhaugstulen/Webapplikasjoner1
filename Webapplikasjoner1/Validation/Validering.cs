@@ -14,12 +14,35 @@ namespace Webapplikasjoner1.Validation
             bool testType = reg.IsMatch(innBillett.Type);
 
             if ( innBillett.TotalPris <= 0 || 
-                innBillett.Antall<0)
+                innBillett.Antall<0 || !testType)
             {
                 return false;
             }
 
             return true;
+        }
+
+        public static bool KundeValidering(Kunde innKunde)
+        {
+            Regex reg = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,20}");
+            Regex regEtternavn = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,50}");
+            Regex regAdresse = new Regex(@"[0-9a-zA-ZæøåÆØÅ. \-]{2,50}");
+            Regex regEpost = new Regex(@"^([\w.-]+)@([\w-]+)((.(\w){2,3})+)$");
+            Regex regTelefon = new Regex(@"^((0047)?|(\+47)?)[1-9]\d{7}$");
+
+            bool testFornavn = reg.IsMatch(innKunde.Fornavn);
+            bool testEtternavn = regEtternavn.IsMatch(innKunde.Etternavn);
+            bool testAdresse = regAdresse.IsMatch(innKunde.Adresse);
+            bool testEpost = regEpost.IsMatch(innKunde.Epost);
+            bool testTelefon = regTelefon.IsMatch(innKunde.Telefonnummer);
+
+            if (!testAdresse || !testFornavn || !testEtternavn || !testEpost || !testTelefon)
+            {
+                return false;
+            }
+
+            return true;
+
         }
 
         public static bool GyldigBrukernavn(string test)
