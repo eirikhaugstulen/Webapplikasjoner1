@@ -21,15 +21,28 @@ namespace Webapplikasjoner1.Controllers
             _logger = logger;
         }
 
-        public async Task<ActionResult> Lagre(Lokasjon lokasjon)
+        public async Task<ActionResult> Lagre(Kunde kunde)
         {
-            return Ok();
+            bool returOK = await _db.Lagre(kunde);
+            if (!returOK )
+            {
+                _logger.LogInformation("Kunde ble ikke lagret");
+                return BadRequest("Kunde ble ikke lagret");
+            }
+            return Ok("Kunde lagret");
         }
 
         public async Task<ActionResult> Slett(string id)
         {
+            bool returOK = await _db.Slett(id);
 
-            return Ok();
+            if (!returOK)
+            {
+                _logger.LogInformation("Kunde ble ikke slettet");
+                return NotFound("Kunde ble ikke slettet");
+            }
+
+            return Ok("Kunde ble slettet");
         }
 
     }
