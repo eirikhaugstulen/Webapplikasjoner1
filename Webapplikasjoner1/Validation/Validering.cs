@@ -28,6 +28,7 @@ namespace Webapplikasjoner1.Validation
             Regex regEtternavn = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,50}");
             Regex regAdresse = new Regex(@"[0-9a-zA-ZæøåÆØÅ. \-]{2,50}");
             Regex regEpost = new Regex(@"^([\w.-]+)@([\w-]+)((.(\w){2,3})+)$");
+            // Regexen under er hentet fra https://www.epinova.no/folg-med/blogg/2020/regex-huskeliste-for-norske-formater-i-episerver-forms/ den 04.11.21
             Regex regTelefon = new Regex(@"^((0047)?|(\+47)?)[1-9]\d{7}$");
 
             bool testFornavn = reg.IsMatch(innKunde.Fornavn);
