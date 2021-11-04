@@ -5,7 +5,7 @@ namespace Webapplikasjoner1.DAL
 {
     public interface IKundeRepository
     {
-        Task<bool> Lagre(Lokasjon lokasjon);
+        Task<bool> Lagre(Kunde kunde);
         Task<bool> Slett(string id);
     }
 }

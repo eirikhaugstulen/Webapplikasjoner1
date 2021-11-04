@@ -47,8 +47,8 @@ namespace Webapplikasjoner1.DAL
         {
             try
             {
-                Lokasjoner lokasjon = await _db.Lokasjonene.FindAsync(id);
-                _db.Lokasjonene.Remove(lokasjon);
+                Kunder kunde = await _db.Kundene.FindAsync(id);
+                _db.Kundene.Remove(kunde);
                 await _db.SaveChangesAsync();
                 return true;  
             }
