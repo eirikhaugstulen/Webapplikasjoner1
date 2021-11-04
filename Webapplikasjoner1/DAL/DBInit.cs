@@ -17,13 +17,13 @@ namespace Webapplikasjoner1.DAL
 
             var lokasjon = new Lokasjoner()
             {
-                StedsNummer = "Neger",
+                StedsNummer = "1",
                 Stedsnavn = "Oslo",
             };
             
             var lokasjon2 = new Lokasjoner()
             {
-                StedsNummer = "Eirik",
+                StedsNummer = "2",
                 Stedsnavn = "Bergen",
             };
 
@@ -32,7 +32,7 @@ namespace Webapplikasjoner1.DAL
 
             var strekning = new Strekninger()
             {
-                StrekningNummer = "Elias",
+                StrekningNummer = "12",
                 FraSted = lokasjon,
                 TilSted = lokasjon2,
             };
