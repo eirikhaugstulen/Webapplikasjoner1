@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using Xunit;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,7 @@ namespace WebAppTest
         private readonly Mock<HttpContext> mockHttpContext = new Mock<HttpContext>();
         private readonly MockHttpSession mockSession = new MockHttpSession();
 
+        // Tester for registrer lokasjon
         [Fact]
         public async Task RegistrerLokasjonIkkeLoggetInn()
         {
@@ -64,7 +66,7 @@ namespace WebAppTest
         }
 
         [Fact]
-        public async Task RegistrerLokasjonFeilInput()
+        public async Task RegistrerLokasjonFeilInputStedsnavn()
         {
             // Arrange 
             Lokasjon lokasjon = new Lokasjon()
@@ -80,6 +82,33 @@ namespace WebAppTest
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
+            // Act
+            var resultat = await lokController.Registrer(lokasjon) as BadRequestObjectResult;
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.BadRequest,resultat.StatusCode);
+            Assert.Equal("Feil i inputvalidering", resultat.Value);
+        }
+        
+        [Fact]
+        public async Task RegistrerLokasjonFeilInputStedsnummer()
+        {
+            // Arrange 
+            Lokasjon lokasjon = new Lokasjon()
+            {
+                StedsNummer = null, // Ugyldig stedsnummer
+                Stedsnavn = "Bergen", 
+            };
+
+            mockRep.Setup(l => l.RegistrerLokasjon(It.IsAny<Lokasjon>())).ReturnsAsync(true);
+            var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
+            lokController.ModelState.AddModelError("StedsNummer","Feil i inputvalidering");
+            
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            lokController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
             // Act
             var resultat = await lokController.Registrer(lokasjon) as BadRequestObjectResult;
 
@@ -112,6 +141,7 @@ namespace WebAppTest
             Assert.Equal("Lokasjonen ble ikke lagret", resultat.Value);
         }
 
+        // Tester for slett lokasjon
         [Fact]
         public async Task SlettLokasjonIkkeLoggetInn()
         {
@@ -133,6 +163,7 @@ namespace WebAppTest
         [Fact]
         public async Task SlettLokasjonLoggetInnOK()
         {
+            // Arrange
             mockRep.Setup(l => l.SlettLokasjon(It.IsAny<string>())).ReturnsAsync(true);
             var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
             mockSession[_loggetInn] = _loggetInn;
@@ -150,6 +181,7 @@ namespace WebAppTest
         [Fact]
         public async Task SlettLokasjonFeilIDb()
         {
+            // Arrange
             mockRep.Setup(l => l.SlettLokasjon(It.IsAny<string>())).ReturnsAsync(false);
             var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
             mockSession[_loggetInn] = _loggetInn;
@@ -162,6 +194,75 @@ namespace WebAppTest
             // Assert
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
             Assert.Equal("Lokasjonen ble ikke slettet", resultat.Value);
+        }
+
+        // Tester for hent alle lokasjoner
+        [Fact]
+        public async Task HentAlleLokasjonerOk()
+        {
+            // Arrange
+            List<Lokasjon> alleLokasjoner = new List<Lokasjon>();
+            Lokasjon lokasjon = new Lokasjon()
+            {
+                StedsNummer = "1",
+                Stedsnavn = "Fredrikstad",
+            };
+            
+            Lokasjon lokasjon2 = new Lokasjon()
+            {
+                StedsNummer = "2",
+                Stedsnavn = "Bergen",
+            };
+            
+            alleLokasjoner.Add(lokasjon);
+            alleLokasjoner.Add(lokasjon2);
+            
+            mockRep.Setup(l => l.HentAlle()).ReturnsAsync(alleLokasjoner);
+            var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
+
+            // Act
+            var resultat = await lokController.HentAlle() as OkObjectResult;
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal<List<Lokasjon>>((List<Lokasjon>)resultat.Value,alleLokasjoner);
+        }
+
+        // Tester for hent en lokasjon
+        [Fact]
+        public async Task HentEnLokasjonOk()
+        {
+            // Arrange
+            var lokasjon = new Lokasjon()
+            {
+                StedsNummer = "1",
+                Stedsnavn = "Bergen",
+            };
+
+            mockRep.Setup(l => l.HentEn(It.IsAny<string>())).ReturnsAsync(lokasjon);
+            var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
+            
+            // Act
+            var resultat = await lokController.HentEn(It.IsAny<string>()) as OkObjectResult;
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
+            Assert.Equal<Lokasjon>(lokasjon, (Lokasjon)resultat.Value);
+        }
+
+        [Fact]
+        public async Task HentEnLokasjonNotFound()
+        {
+            // Arrange
+            mockRep.Setup(l => l.HentEn(It.IsAny<string>())).ReturnsAsync(() => null);
+            var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
+            
+            // Act
+            var resultat = await lokController.HentEn(It.IsAny<string>()) as NotFoundObjectResult;
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
+            Assert.Equal("Fant ikke lokasjonen", resultat.Value);
         }
     }
 }

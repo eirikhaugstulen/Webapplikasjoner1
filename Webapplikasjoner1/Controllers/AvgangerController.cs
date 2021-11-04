@@ -27,7 +27,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
 
             bool valideringOk = Validering.AvgangValidering(innAvganger);
@@ -71,7 +71,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             bool validering = Validering.AvgangValidering(endreAvganger);
@@ -97,7 +97,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             bool returOk = await _db.Slett(id);

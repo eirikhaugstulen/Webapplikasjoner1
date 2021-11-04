@@ -11,17 +11,39 @@ namespace Webapplikasjoner1.Validation
             Regex reg = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,20}");
             Regex regEtternavn = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,50}");
             
-            bool testFornavn = reg.IsMatch(innBillett.Fornavn);
-            bool testEtternavn = regEtternavn.IsMatch(innBillett.Etternavn);
             bool testType = reg.IsMatch(innBillett.Type);
 
-            if (!testType || !testFornavn || !testEtternavn || innBillett.TotalPris <= 0 || 
-                innBillett.Antall<0)
+            if ( innBillett.TotalPris <= 0 || 
+                innBillett.Antall<0 || !testType)
             {
                 return false;
             }
 
             return true;
+        }
+
+        public static bool KundeValidering(Kunde innKunde)
+        {
+            Regex reg = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,20}");
+            Regex regEtternavn = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,50}");
+            Regex regAdresse = new Regex(@"[0-9a-zA-ZæøåÆØÅ. \-]{2,50}");
+            Regex regEpost = new Regex(@"^([\w.-]+)@([\w-]+)((.(\w){2,3})+)$");
+            // Regexen under er hentet fra https://www.epinova.no/folg-med/blogg/2020/regex-huskeliste-for-norske-formater-i-episerver-forms/ den 04.11.21
+            Regex regTelefon = new Regex(@"^((0047)?|(\+47)?)[1-9]\d{7}$");
+
+            bool testFornavn = reg.IsMatch(innKunde.Fornavn);
+            bool testEtternavn = regEtternavn.IsMatch(innKunde.Etternavn);
+            bool testAdresse = regAdresse.IsMatch(innKunde.Adresse);
+            bool testEpost = regEpost.IsMatch(innKunde.Epost);
+            bool testTelefon = regTelefon.IsMatch(innKunde.Telefonnummer);
+
+            if (!testAdresse || !testFornavn || !testEtternavn || !testEpost || !testTelefon)
+            {
+                return false;
+            }
+
+            return true;
+
         }
 
         public static bool GyldigBrukernavn(string test)
@@ -59,6 +81,15 @@ namespace Webapplikasjoner1.Validation
             return true;
         }
 
+        public static bool GyldigStedsNummer(string test)
+        {
+            if (test != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public static bool StrekningValidering(Strekning innStrekning)
         {
             if (innStrekning.StrekningNummer ==null || innStrekning.TilSted == null || innStrekning.FraSted == null)
@@ -71,7 +102,8 @@ namespace Webapplikasjoner1.Validation
         public static bool AvgangValidering(Avgang innAvgang)
         {
             
-            if  (innAvgang.Pris < 0 || innAvgang.Pris > 9999)  
+            if  (innAvgang.Pris < 0 || innAvgang.Pris > 9999 || innAvgang.Dato == null || innAvgang.Klokkeslett ==null 
+                 || innAvgang.Strekning == null)  
             {
                 return false;
             }

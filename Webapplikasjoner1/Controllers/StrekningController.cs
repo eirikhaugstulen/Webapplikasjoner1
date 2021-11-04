@@ -28,7 +28,7 @@ namespace Webapplikasjoner1.Controllers
             
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             if (!Validering.StrekningValidering(innStrekning))
@@ -37,7 +37,7 @@ namespace Webapplikasjoner1.Controllers
                 return BadRequest("Feil i validering av strekning");
             }
             
-            bool returOk = await _db.LagreStrekning(innStrekning);
+            bool returOk = await _db.Lagre(innStrekning);
 
             if (!returOk)
             {
@@ -52,7 +52,7 @@ namespace Webapplikasjoner1.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
             if (!Validering.StrekningValidering(innStrekning))
@@ -61,7 +61,7 @@ namespace Webapplikasjoner1.Controllers
                 return BadRequest("Feil i validering av strekning");
             }
             
-            bool returOk = await _db.EndreStrekning(innStrekning);
+            bool returOk = await _db.Endre(innStrekning);
             if (!returOk)
             {
                 _log.LogInformation("Strekningen ble ikke endret");
@@ -73,13 +73,12 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> Slett(string id)
         {
-            
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                return Unauthorized();
+                return Unauthorized("Ikke logget inn");
             }
             
-            bool returOk = await _db.SlettStrekning(id);
+            bool returOk = await _db.Slett(id);
             
             if (!returOk)
             {
@@ -92,7 +91,7 @@ namespace Webapplikasjoner1.Controllers
 
         public async Task<ActionResult> HentAlle()
         {
-            List<Strekninger> alleStrekninger = await _db.HentAlleStrekninger();
+            List<Strekninger> alleStrekninger = await _db.HentAlle();
 
             return Ok(alleStrekninger);
         }

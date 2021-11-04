@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Webapplikasjoner1.DAL;
 using Webapplikasjoner1.Models;
@@ -30,9 +31,10 @@ namespace Webapplikasjoner1.Controllers
                 return Unauthorized("Ikke logget inn");
             }
             
-            bool ok = Validation.Validering.GyldigStedsnavn(lokasjon.Stedsnavn);
-
-            if (ok)
+            bool okStedsnavn = Validation.Validering.GyldigStedsnavn(lokasjon.Stedsnavn);
+            bool okGyldigStedsNummer = Validation.Validering.GyldigStedsNummer(lokasjon.StedsNummer);
+            
+            if (okStedsnavn && okGyldigStedsNummer)
             {
                 bool returOK = await _db.RegistrerLokasjon(lokasjon);
                 if (!returOK )
