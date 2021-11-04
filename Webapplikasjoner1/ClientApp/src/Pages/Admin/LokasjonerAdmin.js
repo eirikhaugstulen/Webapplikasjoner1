@@ -1,8 +1,8 @@
 ﻿import React, {useCallback, useEffect, useState} from "react";
 //Display lokasjoner
 import {Button, Col, Row, Table} from "reactstrap";
-import {BackButton} from "../../components/AdminHome/BackButton";
-import {LeggTilLokasjon} from "../../components/AdminHome/LeggTil/LeggTilLokasjon";
+import {BackButton} from "../../components/Admin/BackButton";
+import {LeggTilLokasjon} from "../../components/Admin/LeggTil/LeggTilLokasjon";
 import axios from "axios";
 import {generateStringId} from "../../utils/generateStringId";
 import qs from "qs";

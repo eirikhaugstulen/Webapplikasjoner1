@@ -8,6 +8,7 @@ import {Spinner} from "reactstrap";
 import {AdminHome} from "./AdminHome";
 import {LoggInnAdmin} from "./LoggInnAdmin";
 import history from "../../history";
+import {checkUnauthorized} from "../../utils/checkUnauthorized";
 
 export const AdminContainer = () => {
     const match = useRouteMatch();
@@ -22,21 +23,20 @@ export const AdminContainer = () => {
     const fetchApiData = useCallback(() => {
         const apiKall = [];
         apiKall.push(axios.get('/Lokasjon/HentAlle'));
-        apiKall.push(axios.get('/Strekning/HentAlleStrekninger'));
+        apiKall.push(axios.get('/Strekning/HentAlle'));
         apiKall.push(axios.get('/Avganger/HentAlle'));
             
             Promise.all(apiKall).then(res => {
-                setApiData(prevState => ({
+                setApiData({
                     lokasjoner: res[0].data,
                     strekninger: res[1].data,
                     avganger: res[2].data,
-                }));
+                });
                 setLoading(false);
             })
             .catch(e => {
-                if (e?.response?.status === 401) {
-                    history.push('/admin/logginn')
-                }
+                checkUnauthorized(e);
+                setError(e);
             });
     }, [])
     

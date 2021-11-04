@@ -1,6 +1,6 @@
 ﻿import React, {useMemo} from "react";
 import {Button, Col, Row, Table} from "reactstrap";
-import {BackButton} from "../../components/AdminHome/BackButton";
+import {BackButton} from "../../components/Admin/BackButton";
 import {useLocationQuery} from "../hooks/useLocationQuery";
 import {AvgangsVelger} from "../../components/AvgangsVelger";
 // Se ALLE avganger

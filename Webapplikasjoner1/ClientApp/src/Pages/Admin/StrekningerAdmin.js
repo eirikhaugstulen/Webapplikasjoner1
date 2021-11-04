@@ -1,9 +1,10 @@
 ﻿import React, {useState} from "react";
-import {BackButton} from "../../components/AdminHome/BackButton";
+import {BackButton} from "../../components/Admin/BackButton";
 import {Button, Col, Row, Table} from "reactstrap";
-import {LeggTilStrekning} from "../../components/AdminHome/LeggTil/LeggTilStrekning";
+import {LeggTilStrekning} from "../../components/Admin/LeggTil/LeggTilStrekning";
 import axios from "axios";
 import qs from "qs";
+import {checkUnauthorized} from "../../utils/checkUnauthorized";
 // Tabell med aktive strekninger (fra databasen)
 
 // Kolonne fralokasjon og tilLokasjon
@@ -19,11 +20,14 @@ export const Strekninger = ({ apiData, refetch }) => {
     })
     
     const deleteStrekning = (id) => {
-        axios.post('Strekning/SlettStrekning', qs.stringify({ id }))
+        axios.post('Strekning/Slett', qs.stringify({ id }))
             .then(() => {
                 refetch()
             })
-            .catch(e => console.log(e))
+            .catch(e => {
+                checkUnauthorized(e);
+                console.log(e)
+            })
     }
 return(
     <div>

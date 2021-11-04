@@ -8,20 +8,12 @@ const fetchAvgangssteder = async (fraStedId) => {
 }
 
 export const StrekningsVelger = ({reiselokasjoner, handleChange, values, handleBlur, errors, touched}) => {
-    const [outputAnkomststed, setOutputankomststed] = useState();
-    
-    useEffect(() => {
-        fetchAvgangssteder()
-            .then(res => setOutputankomststed(reiselokasjoner))
-            .catch(e => console.log(e))
-    }, [values.fraSted])
-    
     return (
         <>
             <Col md={6} sm={12}>
                 <FormGroup className={'d-block'}>
                     <Label for={'fraSted'}>Hvor vil du reise fra?</Label>
-                    <Input 
+                    <Input
                         type={'select'}
                         id={'fraSted'}
                         value={values.fraSted}
@@ -35,15 +27,19 @@ export const StrekningsVelger = ({reiselokasjoner, handleChange, values, handleB
                         >
                             Velg sted
                         </option>
-    
-                        {reiselokasjoner?.map(avgang => (
-                            <option
-                                key={avgang.id}
-                                value={avgang.displayName}
-                            >
-                                {avgang.displayName}
-                            </option>
-                        ))}
+
+                        {reiselokasjoner?.map(avgang => {
+                            if (avgang.stedsNummer === values.tilSted) {
+                                return null;
+                            }
+                            return (
+                                <option
+                                    key={avgang.stedsNummer}
+                                    value={avgang.stedsNummer}
+                                >
+                                    {avgang.stedsnavn}
+                                </option>
+                            )})}
                     </Input>
                     <FormFeedback>{errors.fraSted}</FormFeedback>
                 </FormGroup>
@@ -52,9 +48,9 @@ export const StrekningsVelger = ({reiselokasjoner, handleChange, values, handleB
             <Col md={6} sm={12}>
                 <FormGroup className={'d-block'}>
                     <Label for={'tilSted'}>og hvor vil du reise til?</Label>
-                    <Input 
-                        type={'select'} 
-                        id={'tilSted'} 
+                    <Input
+                        type={'select'}
+                        id={'tilSted'}
                         value={values.tilSted}
                         disabled={values.fraSted === 'default'}
                         onChange={handleChange}
@@ -68,14 +64,18 @@ export const StrekningsVelger = ({reiselokasjoner, handleChange, values, handleB
                             Velg sted
                         </option>
 
-                        {outputAnkomststed?.map(ankomst => (
-                            <option
-                                key={ankomst.id}
-                                value={ankomst.displayName}
-                            >
-                                {ankomst.displayName}
-                            </option>
-                        ))}
+                        {reiselokasjoner?.map(ankomst => {
+                            if (ankomst.stedsNummer === values.fraSted) {
+                                return null;
+                            }
+                            return (
+                                <option
+                                    key={ankomst.stedsNummer}
+                                    value={ankomst.stedsNummer}
+                                >
+                                    {ankomst.stedsnavn}
+                                </option>
+                            )})}
                     </Input>
                     <FormFeedback>{errors.tilSted}</FormFeedback>
                 </FormGroup>

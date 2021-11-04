@@ -5,6 +5,8 @@ import {Button, FormFeedback, FormGroup, Input} from "reactstrap";
 import * as Yup from 'yup';
 import qs from "qs";
 import {useGeneratedId} from "../../../Pages/hooks/useGeneratedId";
+import {checkUnauthorized} from "../../../utils/checkUnauthorized";
+import {StatusMessage} from "../StatusMessage";
 
 export const LeggTilLokasjon = ({ refetch }) => {
     const { generatedId, refetchId } = useGeneratedId()
@@ -15,9 +17,13 @@ export const LeggTilLokasjon = ({ refetch }) => {
             }}
             onSubmit={async (values, formikHelpers) => {
                 values.StedsNummer = generatedId;
-                axios.post('/Lokasjon/RegistrerLokasjon', qs.stringify(values))
+                axios.post('/Lokasjon/Registrer', qs.stringify(values))
                     .then(() => refetch())
-                    .catch(e => console.log(e));
+                    .catch(e => {
+                        console.log(e)
+                        checkUnauthorized(e)
+                        formikHelpers.setStatus('Det har skjedd en feil! Se console for mer.');
+                    });
                 formikHelpers.resetForm();
                 refetchId();
             }}
@@ -30,6 +36,7 @@ export const LeggTilLokasjon = ({ refetch }) => {
                     values,
                     touched,
                     errors,
+                    status,
                     isSubmitting,
                     handleChange,
                     handleBlur,
@@ -38,6 +45,7 @@ export const LeggTilLokasjon = ({ refetch }) => {
 
                 return (
                     <form onSubmit={handleSubmit}>
+                        <StatusMessage status={status} />
                         <FormGroup>
                             <label>Legg til lokasjon</label>
                             <Input

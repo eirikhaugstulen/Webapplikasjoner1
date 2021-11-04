@@ -1,5 +1,5 @@
 import React from "react";
-import {NavigationButton} from "../../components/AdminHome/NavigationButton";
+import {NavigationButton} from "../../components/Admin/NavigationButton";
 import {Col} from "reactstrap";
 
 export const AdminHome = () => (

@@ -17,9 +17,12 @@ export const LeggTilStrekning = ({ apiData, refetch }) => {
             }}
             onSubmit={async (values, formikHelpers) => {
                 values.strekningNummer = generatedId;
-                axios.post('/Strekning/LagreStrekning', qs.stringify(values))
+                axios.post('/Strekning/lagre', qs.stringify(values))
                     .then(() => refetch())
-                    .catch(e => console.log(e));
+                    .catch(e => {
+                        console.log(e)
+                        formikHelpers.setStatus('Det har skjedd en feil! Se console for mer.');
+                    });
                 formikHelpers.resetForm();
                 refetchId();
             }}
@@ -33,6 +36,7 @@ export const LeggTilStrekning = ({ apiData, refetch }) => {
                     values,
                     touched,
                     errors,
+                    status,
                     isSubmitting,
                     handleChange,
                     handleBlur,
