@@ -3,7 +3,7 @@ using Webapplikasjoner1.Models;
 
 namespace Webapplikasjoner1.DAL
 {
-    public class IKundeRepository
+    public interface IKundeRepository
     {
         Task<bool> Lagre(Lokasjon lokasjon);
         Task<bool> Slett(string id);
