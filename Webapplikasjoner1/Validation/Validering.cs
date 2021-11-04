@@ -80,7 +80,8 @@ namespace Webapplikasjoner1.Validation
         public static bool AvgangValidering(Avgang innAvgang)
         {
             
-            if  (innAvgang.Pris < 0 || innAvgang.Pris > 9999)  
+            if  (innAvgang.Pris < 0 || innAvgang.Pris > 9999 || innAvgang.Dato == null || innAvgang.Klokkeslett ==null 
+                 || innAvgang.Strekning == null)  
             {
                 return false;
             }
