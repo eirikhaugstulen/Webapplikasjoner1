@@ -23,6 +23,7 @@ namespace WebAppTest
         private readonly Mock<HttpContext> mockHttpContext = new Mock<HttpContext>();
         private readonly MockHttpSession mockSession = new MockHttpSession();
 
+        // Tester for registrer lokasjon
         [Fact]
         public async Task RegistrerLokasjonIkkeLoggetInn()
         {
@@ -81,6 +82,7 @@ namespace WebAppTest
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
             // Act
             var resultat = await lokController.Registrer(lokasjon) as BadRequestObjectResult;
 
@@ -106,6 +108,7 @@ namespace WebAppTest
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             lokController.ControllerContext.HttpContext = mockHttpContext.Object;
+            
             // Act
             var resultat = await lokController.Registrer(lokasjon) as BadRequestObjectResult;
 
@@ -138,6 +141,7 @@ namespace WebAppTest
             Assert.Equal("Lokasjonen ble ikke lagret", resultat.Value);
         }
 
+        // Tester for slett lokasjon
         [Fact]
         public async Task SlettLokasjonIkkeLoggetInn()
         {
@@ -159,6 +163,7 @@ namespace WebAppTest
         [Fact]
         public async Task SlettLokasjonLoggetInnOK()
         {
+            // Arrange
             mockRep.Setup(l => l.SlettLokasjon(It.IsAny<string>())).ReturnsAsync(true);
             var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
             mockSession[_loggetInn] = _loggetInn;
@@ -176,6 +181,7 @@ namespace WebAppTest
         [Fact]
         public async Task SlettLokasjonFeilIDb()
         {
+            // Arrange
             mockRep.Setup(l => l.SlettLokasjon(It.IsAny<string>())).ReturnsAsync(false);
             var lokController = new LokasjonController(mockRep.Object, mockLog.Object);
             mockSession[_loggetInn] = _loggetInn;
@@ -190,6 +196,7 @@ namespace WebAppTest
             Assert.Equal("Lokasjonen ble ikke slettet", resultat.Value);
         }
 
+        // Tester for hent alle lokasjoner
         [Fact]
         public async Task HentAlleLokasjonerOk()
         {
@@ -221,6 +228,7 @@ namespace WebAppTest
             Assert.Equal<List<Lokasjon>>((List<Lokasjon>)resultat.Value,alleLokasjoner);
         }
 
+        // Tester for hent en lokasjon
         [Fact]
         public async Task HentEnLokasjonOk()
         {

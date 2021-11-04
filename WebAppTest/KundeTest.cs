@@ -27,6 +27,7 @@ namespace WebAppTest
         [Fact]
         public async Task LagreOk()
         {
+            // Arrange
             Kunde kunde = new Kunde()
             {
                 KundeId = "abcde",
@@ -39,15 +40,16 @@ namespace WebAppTest
             mockRep.Setup(k => k.Lagre(kunde)).ReturnsAsync(true);
 
             var kundeController = new KundeController(mockRep.Object, mockLog.Object);
-
+            // Act
             var resultat = await kundeController.Lagre(kunde) as OkObjectResult;
-            
+            // Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
             Assert.Equal("Kunde lagret", resultat.Value);
         }
         [Fact]
         public async Task LagreFeilIDb()
         {
+            // Arrange
             Kunde kunde = new Kunde()
             {
                 KundeId = "abcde",
@@ -61,15 +63,16 @@ namespace WebAppTest
 
             var kundeController = new KundeController(mockRep.Object, mockLog.Object);
             
-
+            // Act
             var resultat = await kundeController.Lagre(kunde) as BadRequestObjectResult;
-            
+            // Assert
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Kunde ble ikke lagret", resultat.Value);
         }
         [Fact]
         public async Task LagreFeilFornavn()
         {
+            // Arrange
             Kunde kunde = new Kunde()
             {
                 KundeId = "abcde",
@@ -86,9 +89,11 @@ namespace WebAppTest
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             kundeController.ControllerContext.HttpContext = mockHttpContext.Object;
-
+            
+            // Act
             var resultat = await kundeController.Lagre(kunde) as BadRequestObjectResult;
             
+            // Assert
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Feil i validering av kunde", resultat.Value);
         }
@@ -96,6 +101,7 @@ namespace WebAppTest
         [Fact]
         public async Task LagreFeilEtternavn()
         {
+            // Arrange
             Kunde kunde = new Kunde()
             {
                 KundeId = "abcde",
@@ -112,15 +118,16 @@ namespace WebAppTest
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             kundeController.ControllerContext.HttpContext = mockHttpContext.Object;
-
+            // Act
             var resultat = await kundeController.Lagre(kunde) as BadRequestObjectResult;
-            
+            // Assert
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Feil i validering av kunde", resultat.Value);
         }
         [Fact]
         public async Task LagreFeilAdresse()
         {
+            // Arrange
             Kunde kunde = new Kunde()
             {
                 KundeId = "abcde",
@@ -137,9 +144,10 @@ namespace WebAppTest
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             kundeController.ControllerContext.HttpContext = mockHttpContext.Object;
-
-            var resultat = await kundeController.Lagre(kunde) as BadRequestObjectResult;
             
+            // Act
+            var resultat = await kundeController.Lagre(kunde) as BadRequestObjectResult;
+            // Assert
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Feil i validering av kunde", resultat.Value);
         }
@@ -147,6 +155,7 @@ namespace WebAppTest
         [Fact]
         public async Task LagreFeilEpost()
         {
+            // Arrange
             Kunde kunde = new Kunde()
             {
                 KundeId = "abcde",
@@ -163,15 +172,17 @@ namespace WebAppTest
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             kundeController.ControllerContext.HttpContext = mockHttpContext.Object;
-
-            var resultat = await kundeController.Lagre(kunde) as BadRequestObjectResult;
             
+            // Act
+            var resultat = await kundeController.Lagre(kunde) as BadRequestObjectResult;
+            // Assert
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Feil i validering av kunde", resultat.Value);
         }
         [Fact]
         public async Task LagreFeilTelefonnummer()
         {
+            // Arrange
             Kunde kunde = new Kunde()
             {
                 KundeId = "abcde",
@@ -188,9 +199,11 @@ namespace WebAppTest
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             kundeController.ControllerContext.HttpContext = mockHttpContext.Object;
-
+            
+            // Act
             var resultat = await kundeController.Lagre(kunde) as BadRequestObjectResult;
             
+            // Assert
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Feil i validering av kunde", resultat.Value);
         }
@@ -199,6 +212,7 @@ namespace WebAppTest
         [Fact]
         public async Task SlettOk()
         {
+            // Arrange
             mockRep.Setup(k => k.Slett(It.IsAny<string>())).ReturnsAsync(true);
 
             var kundeController = new KundeController(mockRep.Object, mockLog.Object);
@@ -206,9 +220,11 @@ namespace WebAppTest
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             kundeController.ControllerContext.HttpContext = mockHttpContext.Object;
-
+            
+            // Act
             var resultat = await kundeController.Slett(It.IsAny<string>()) as OkObjectResult;
             
+            // Assert
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
             Assert.Equal("Kunde ble slettet", resultat.Value);
         }
@@ -216,6 +232,7 @@ namespace WebAppTest
         [Fact]
         public async Task SlettIkkeOk()
         {
+            // Arrange
             mockRep.Setup(k => k.Slett(It.IsAny<string>())).ReturnsAsync(false);
 
             var kundeController = new KundeController(mockRep.Object, mockLog.Object);
@@ -223,9 +240,11 @@ namespace WebAppTest
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             kundeController.ControllerContext.HttpContext = mockHttpContext.Object;
-
+            
+            // Act
             var resultat = await kundeController.Slett(It.IsAny<string>()) as NotFoundObjectResult;
             
+            // Assert
             Assert.Equal((int)HttpStatusCode.NotFound, resultat.StatusCode);
             Assert.Equal("Kunde ble ikke slettet", resultat.Value);
         }

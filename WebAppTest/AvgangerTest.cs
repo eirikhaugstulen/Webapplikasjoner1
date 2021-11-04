@@ -29,6 +29,7 @@ namespace WebAppTest
         [Fact]
         public async Task LagreAvgangLoggInnOk()
         {
+            // Arrange
             Avgang avgang= new Avgang()
             {  
                 AvgangNummer = "1",
@@ -57,7 +58,6 @@ namespace WebAppTest
         [Fact]
         public async Task LagreAvgangIkkeLoggetInn()
         {
-            
             // Arrange
             mockRep.Setup(a => a.Lagre(It.IsAny<Avgang>())).ReturnsAsync(true);
             var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
@@ -212,6 +212,8 @@ namespace WebAppTest
             Assert.Equal("Avgangen ble ikke lagret", resultat.Value);
         }
         
+        
+        // Tester for slett avgang
         [Fact]
         public async Task SlettAvgangIkkeLoggetInn()
         {
@@ -233,6 +235,7 @@ namespace WebAppTest
         [Fact]
         public async Task SlettAvgangLoggetInnOK()
         {
+            // Arrange
             mockRep.Setup(l => l.Slett(It.IsAny<string>())).ReturnsAsync(true);
             var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
             mockSession[_loggetInn] = _loggetInn;
@@ -250,6 +253,7 @@ namespace WebAppTest
         [Fact]
         public async Task SlettAvgangFeilIDb()
         {
+            // Arrange
             mockRep.Setup(a => a.Slett(It.IsAny<string>())).ReturnsAsync(false);
             var avgangerController = new AvgangerController(mockRep.Object, mockLog.Object);
             mockSession[_loggetInn] = _loggetInn;
@@ -264,6 +268,7 @@ namespace WebAppTest
             Assert.Equal("Avgangen ble ikke slettet", resultat.Value);
         }
      
+        // Tester for hent alle avganger
         [Fact]
         public async Task HentAlleAvgangerOk()
         {
@@ -329,6 +334,7 @@ namespace WebAppTest
             Assert.Equal<List<Avganger>>((List<Avganger>)resultat.Value,alleAvganger);
         }
         
+        // Tester for hent en avgang
         [Fact]
         public async Task HentEnAvgangOk()
         {
@@ -367,6 +373,7 @@ namespace WebAppTest
             Assert.Equal("Fant ikke avgangen", resultat.Value);
         }
         
+        // Tester for endre avgang
         [Fact]
         public async Task EndreAvgangLoggInnOk()
         {
@@ -395,6 +402,7 @@ namespace WebAppTest
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
             Assert.Equal("Avgangen ble endret", resultat.Value);
         }
+        
         [Fact]
         public async Task EndreAvgangIkkeLoggetInn()
         {
