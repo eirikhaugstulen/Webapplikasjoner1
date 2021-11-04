@@ -81,6 +81,7 @@ namespace Webapplikasjoner1.DAL
         public DbSet<Strekninger> Strekningene { get; set; }
         public DbSet<Avganger> Avgangene { get; set; }
         public DbSet<Lokasjoner> Lokasjonene { get; set; }
+        public DbSet<Kunder> Kundene { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

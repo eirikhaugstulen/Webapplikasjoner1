@@ -18,22 +18,26 @@ namespace Webapplikasjoner1.DAL
         
         // Lagre, slett
 
-        public async Task<bool> Lagre(Lokasjon lokasjon)
+        public async Task<bool> Lagre(Kunde innKunde)
         {
             try
             {
-                var nyLokasjonRad = new Lokasjoner();
+                var nyKundeRad = new Kunder();
                 
-                nyLokasjonRad.StedsNummer = lokasjon.StedsNummer;
-                nyLokasjonRad.Stedsnavn = lokasjon.Stedsnavn;
+                nyKundeRad.KundeId = innKunde.KundeId;
+                nyKundeRad.Fornavn = innKunde.Fornavn;
+                nyKundeRad.Etternavn = innKunde.Etternavn;
+                nyKundeRad.Adresse = innKunde.Adresse;
+                nyKundeRad.Telefonnummer = innKunde.Telefonnummer;
+                nyKundeRad.Epost = innKunde.Epost;
                 
-                _db.Lokasjonene.Add(nyLokasjonRad);
+                _db.Kundene.Add(nyKundeRad);
                 await _db.SaveChangesAsync();
                 return true;
             }
             catch(Exception e)
             {
-                _log.LogInformation("Kunne ikke registrere ny lokasjon");
+                _log.LogInformation("Kunne ikke registrere ny Kunde");
                 _log.LogInformation(e.Message);
                 return false;
             }
