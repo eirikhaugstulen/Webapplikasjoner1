@@ -54,23 +54,14 @@ namespace Webapplikasjoner1.Controllers
             _log.LogInformation("Admin ble logget ut");
         }
 
-        public async Task<ActionResult> OpprettAdmin(Admin admin)
+        public async Task<ActionResult> SjekkLoggetInn()
         {
-            bool validerBrukernavn = Validering.GyldigBrukernavn(admin.Brukernavn);
-            bool validerPassord = Validering.GyldigPassord(admin.Passord);
-
-            if (validerBrukernavn && validerPassord)
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggetInn)))
             {
-                bool returOK = await _db.OpprettAdmin(admin);
-                if (!returOK)
-                {
-                    _log.LogInformation("Adminbrukeren ble ikke opprettet");
-                    return BadRequest("Adminbrukeren ble ikke opprettet");
-                }
-                return Ok("Admin med brukernavn " + admin.Brukernavn + " ble opprettet");
+                return Unauthorized("Ikke logget inn");
             }
-            _log.LogInformation("Feil i inputvalidering");
-            return BadRequest("Feil i inputvalidering");
+
+            return Ok("Logget inn");
         }
     }
 }
