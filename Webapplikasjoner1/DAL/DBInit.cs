@@ -83,7 +83,6 @@ namespace Webapplikasjoner1.DAL
                 Id = 0,
                 Retur = true,
                 OrdreNummer = "1",
-                Type = "Student",
                 Antall = 1,
                 Avgang = avgang,
                 TotalPris = 100,

@@ -25,7 +25,6 @@ namespace Webapplikasjoner1.DAL
     {
         public int Id { get; set; }
         public bool Retur { get; set; }
-        public string Type { get; set; }
         public int TotalPris { get; set; }
         public int Antall { get; set; }
         public virtual Avganger Avgang {get;set;}

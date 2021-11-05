@@ -8,13 +8,8 @@ namespace Webapplikasjoner1.Validation
     {
         public static bool BillettValidering(Billett innBillett)
         {
-            Regex reg = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,20}");
-            Regex regEtternavn = new Regex(@"[a-zA-ZæøåÆØÅ. \-]{2,50}");
-            
-            bool testType = reg.IsMatch(innBillett.Type);
-
             if ( innBillett.TotalPris <= 0 || 
-                innBillett.Antall<0 || !testType)
+                 innBillett.Antall<0)
             {
                 return false;
             }
