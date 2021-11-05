@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router-dom';
-import App from './App';
+import { App } from './App';
 import history from "./history";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');

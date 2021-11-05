@@ -21,8 +21,8 @@ export const LeggTilLokasjon = ({ refetch }) => {
                     .then(() => refetch())
                     .catch(e => {
                         console.log(e)
-                        checkUnauthorized(e)
                         formikHelpers.setStatus('Det har skjedd en feil! Se console for mer.');
+                        checkUnauthorized(e)
                     });
                 formikHelpers.resetForm();
                 refetchId();

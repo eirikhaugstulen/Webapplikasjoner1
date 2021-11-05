@@ -23,7 +23,7 @@ export const AdminHome = () => (
                 <NavigationButton
                     tittel={'Avganger'}
                     tekst={'Legg til eller endre avganger. Avganger er strekninger som man kan sette opp til å gå flere ganger.'}
-                    page={'avganger'}
+                    page={'avgang'}
                 />
             </div>
         </div>

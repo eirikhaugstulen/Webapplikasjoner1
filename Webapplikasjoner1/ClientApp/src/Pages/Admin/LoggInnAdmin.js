@@ -31,9 +31,10 @@ export const LoggInnAdmin = () => {
                                 .catch(e => {
                                     if (e.response.status === 400) {
                                         formikHelpers.setStatus('Feil brukernavn eller passord')
+                                    } else {
+                                        formikHelpers.setStatus('Det har skjedd en feil! Se console for mer.')
                                     }
                                     console.log(e.response)
-                                    formikHelpers.setStatus('Det har skjedd en feil! Se console for mer.')
                                 })
                         }}
                         validationSchema={Yup.object().shape({

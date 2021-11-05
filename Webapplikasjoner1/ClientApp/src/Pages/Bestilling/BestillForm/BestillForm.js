@@ -5,7 +5,26 @@ import * as Yup from "yup";
 import {StrekningsVelger} from "./StrekningsVelger";
 import history from "../../../history";
 
-export const BestillForm = ({ lokasjoner, setStep }) => {
+export const BestillForm = (
+    { 
+        lokasjoner, 
+        avgangssted,
+        setAvgangssted, 
+        ankomststed,
+        setAnkomststed, 
+        retur,
+        setRetur,
+        fraDato,
+        setFraDato,
+        fraKlokkeslett,
+        setFraKlokkeslett,
+        tilDato,
+        setTilDato,
+        tilKlokkeslett,
+        setTilKlokkeslett,
+        setStep,
+    }
+) => {
     
     const today = new Date();
     today.setHours(0, 0, 0, 0)
@@ -14,17 +33,18 @@ export const BestillForm = ({ lokasjoner, setStep }) => {
         <>
             <Formik
                 initialValues={{
-                    fraSted: '',
-                    tilSted: '',
-                    avgang: '',
-                    retur: '',
-                    returDato: '',
-                    klokkeslett: '',
+                    fraSted: avgangssted,
+                    tilSted: ankomststed,
+                    avgang: fraDato,
+                    retur: retur,
+                    returDato: tilDato,
+                    klokkeslett: fraKlokkeslett,
+                    returKlokkeslett: tilKlokkeslett,
                 }}
                 validationSchema={Yup.object().shape({
                     fraSted: Yup.string().required('Påkrevd'),
                     tilSted: Yup.string().required('Påkrevd'),
-                    avgang: Yup.date().required('Avgangsdato er påkrevd').min(today, 'Avgang kan ikke være tilbake i tid'),
+                    avgang: Yup.date().required('Påkrevd').min(today, 'Avgang kan ikke være tilbake i tid'),
                     retur: Yup.boolean(),
                     returDato: Yup.date().when(['retur', 'avgang'], (retur, avgang, schema) => {
                             if (retur && avgang) {
@@ -36,10 +56,17 @@ export const BestillForm = ({ lokasjoner, setStep }) => {
                         }
                     ),
                     klokkeslett: Yup.string(),
+                    returKlokkeslett: Yup.string(),
                 })}
-                onSubmit={async values => {
+                onSubmit={values => {
+                    setAvgangssted(values.fraSted);
+                    setAnkomststed(values.tilSted);
+                    setFraDato(values.avgang);
+                    setFraKlokkeslett(values.klokkeslett)
+                    setTilDato(values.ankomst);
+                    setTilKlokkeslett(values.returKlokkeslett);
+                    setRetur(values.retur);
                     setStep(1)
-                    alert(JSON.stringify(values, null, 2))
                 }}
             >
                 {props => {
@@ -69,20 +96,6 @@ export const BestillForm = ({ lokasjoner, setStep }) => {
                                 />
                             </Row>
 
-                            <Row form>
-                                <Col md={12}>
-                                    <FormGroup check>
-                                        <Input
-                                            type={'checkbox'}
-                                            id={'retur'}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            invalid={errors.retur && touched.retur}
-                                        />
-                                        <Label>Retur?</Label>
-                                    </FormGroup>
-                                </Col>
-                            </Row>
 
                             <Row form>
                                 <Col md={6}>
@@ -98,7 +111,37 @@ export const BestillForm = ({ lokasjoner, setStep }) => {
                                         <FormFeedback>{errors.avgang}</FormFeedback>
                                     </FormGroup>
                                 </Col>
+                                <Col md={6}>
+                                    <FormGroup>
+                                        <Label>Avgang etter</Label>
+                                        <Input
+                                            type={'time'}
+                                            id={'klokkeslett'}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            invalid={errors.klokkeslett && touched.klokkeslett}
+                                        />
+                                        <FormFeedback>{errors.klokkeslett}</FormFeedback>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
 
+                            <Row form>
+                                <Col md={12}>
+                                    <FormGroup check>
+                                        <Input
+                                            type={'checkbox'}
+                                            id={'retur'}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            invalid={errors.retur && touched.retur}
+                                        />
+                                        <Label>Retur?</Label>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            
+                            <Row form>
                                 <Col md={6}>
                                     <FormGroup>
                                         <Label>Velg returdato</Label>
@@ -113,20 +156,18 @@ export const BestillForm = ({ lokasjoner, setStep }) => {
                                         <FormFeedback>{errors.returDato}</FormFeedback>
                                     </FormGroup>
                                 </Col>
-                            </Row>
-
-                            <Row form>
                                 <Col md={6}>
                                     <FormGroup>
-                                        <Label>Avgang etter</Label>
+                                        <Label>Returavgang etter</Label>
                                         <Input
                                             type={'time'}
-                                            id={'klokkeslett'}
+                                            id={'returKlokkeslett'}
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            invalid={errors.klokkeslett && touched.klokkeslett}
+                                            disabled={!values.retur}
+                                            invalid={errors.returKlokkeslett && touched.returKlokkeslett}
                                         />
-                                        <FormFeedback>{errors.klokkeslett}</FormFeedback>
+                                        <FormFeedback>{errors.returKlokkeslett}</FormFeedback>
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -145,14 +186,6 @@ export const BestillForm = ({ lokasjoner, setStep }) => {
                                     outline
                                 >
                                     Avbryt
-                                </Button>
-                                <Button
-                                    onClick={() => {
-                                        setStep(1);
-                                        resetForm();
-                                    }}
-                                >
-                                    Vis alle
                                 </Button>
                             </div>
                         </>

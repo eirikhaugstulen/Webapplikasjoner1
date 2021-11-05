@@ -4,17 +4,20 @@ import {Button, Col, Row, Table} from "reactstrap";
 import {BackButton} from "../../components/Admin/BackButton";
 import {LeggTilLokasjon} from "../../components/Admin/LeggTil/LeggTilLokasjon";
 import axios from "axios";
-import {generateStringId} from "../../utils/generateStringId";
 import qs from "qs";
+import {checkUnauthorized} from "../../utils/checkUnauthorized";
 
 
 export const Lokasjoner = ({ apiData, refetch }) => {
     const deleteLokasjon = (id) => {
-        axios.post('Lokasjon/SlettLokasjon', qs.stringify({ id }))
+        axios.post('/Lokasjon/Slett', qs.stringify({ id }))
             .then(() => {
                 refetch()
             })
-            .catch(e => console.log(e))
+            .catch(e => {
+                console.log(e)
+                checkUnauthorized(e)
+            })
     }
     return (
         <div>

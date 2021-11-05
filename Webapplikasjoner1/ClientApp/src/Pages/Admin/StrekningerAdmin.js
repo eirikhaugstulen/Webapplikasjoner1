@@ -5,6 +5,7 @@ import {LeggTilStrekning} from "../../components/Admin/LeggTil/LeggTilStrekning"
 import axios from "axios";
 import qs from "qs";
 import {checkUnauthorized} from "../../utils/checkUnauthorized";
+import history from "../../history";
 // Tabell med aktive strekninger (fra databasen)
 
 // Kolonne fralokasjon og tilLokasjon
@@ -14,10 +15,6 @@ import {checkUnauthorized} from "../../utils/checkUnauthorized";
 // Legg til
 
 export const Strekninger = ({ apiData, refetch }) => {
-    const [selectedStrekning, setSelectedStrekning] = useState({
-        fraSted: '',
-        tilSted: '',
-    })
     
     const deleteStrekning = (id) => {
         axios.post('Strekning/Slett', qs.stringify({ id }))
@@ -62,6 +59,7 @@ return(
                                 <Button
                                     outline
                                     color={'primary'}
+                                    onClick={() => history.push(`/admin/avgang?strekning=${strekning.strekningNummer}`)}
                                 >
                                     Avganger
                                 </Button>

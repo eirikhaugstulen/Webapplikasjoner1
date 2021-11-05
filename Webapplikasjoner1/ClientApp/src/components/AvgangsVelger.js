@@ -4,7 +4,7 @@ import history from "../history";
 
 export const AvgangsVelger = ({ strekninger, strekning }) => {
     console.log(strekning)
-    const handleChange = (e) => history.push(`/admin/avganger?strekning=${e.target.value}`)
+    const handleChange = (e) => history.push(`/admin/avgang?strekning=${e.target.value}`)
     
     return (
         <>

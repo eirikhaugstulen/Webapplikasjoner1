@@ -10,22 +10,19 @@ export const ReiseTableRow = ({b}) => (
     >
         <StatusBadge active={b?.status} />
         <td>
-            {b.dato?.toLocaleDateString()}
+            {b.avgang.dato?.toLocaleDateString()}
         </td>
         <td>
-            {b.fornavn} {b.etternavn}
+            {b.kundeId?.fornavn} {b.kundeId?.etternavn}
         </td>
         <td>
-            {b.fraSted} - {b.tilSted}
+            {b.avgang?.strekning?.fraSted?.stedsnavn} - {b.avgang?.strekning?.tilSted?.stedsnavn}
         </td>
         <td>
             {b.retur ? 'Ja' : 'Nei'}
         </td>
         <td>
-            {b.retur && b.returDato.toLocaleDateString()}
-        </td>
-        <td>
-            {b.pris},-
+            {b.totalPris},-
         </td>
         <td>
             <Button

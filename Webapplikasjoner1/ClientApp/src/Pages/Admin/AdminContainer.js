@@ -7,7 +7,6 @@ import axios from "axios";
 import {Spinner} from "reactstrap";
 import {AdminHome} from "./AdminHome";
 import {LoggInnAdmin} from "./LoggInnAdmin";
-import history from "../../history";
 import {checkUnauthorized} from "../../utils/checkUnauthorized";
 
 export const AdminContainer = () => {
@@ -36,7 +35,10 @@ export const AdminContainer = () => {
             })
             .catch(e => {
                 checkUnauthorized(e);
-                setError(e);
+                if (e?.response?.status !== 401) {
+                    setError(e)
+                }
+                setLoading(false);
             });
     }, [])
     
@@ -97,7 +99,7 @@ export const AdminContainer = () => {
                 />
                 
                 <Route 
-                    path={`${match.url}/avganger`}
+                    path={`${match.url}/avgang`}
                     render={() => (
                         <Avganger
                             apiData={apiData}

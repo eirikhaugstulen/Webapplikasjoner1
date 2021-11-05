@@ -3,6 +3,8 @@ import {Button, Col, Row, Table} from "reactstrap";
 import {BackButton} from "../../components/Admin/BackButton";
 import {useLocationQuery} from "../hooks/useLocationQuery";
 import {AvgangsVelger} from "../../components/AvgangsVelger";
+import {LeggTilAvgang} from "../../components/Admin/LeggTil/LeggTilAvgang";
+import {ref} from "yup";
 // Se ALLE avganger
 
 // Filtrere fraLokasjon, tilLokasjon og Dato'
@@ -13,7 +15,7 @@ export const Avganger = ({ apiData, refetch }) => {
     const outputAvganger =
         useMemo(
             () => apiData?.avganger?.filter(
-                avgang => avgang.strekning.strekningNummer === strekning), [strekning])
+                avgang => avgang.strekning.strekningNummer === strekning), [strekning, apiData.strekninger])
 
     return(
         <div>
@@ -27,7 +29,7 @@ export const Avganger = ({ apiData, refetch }) => {
             </Row>
             <Row>
                 <Col md={6}>
-                    <AvgangsVelger 
+                    <AvgangsVelger
                         strekninger={apiData?.strekninger}
                         strekning={strekning}
                     />
@@ -35,8 +37,9 @@ export const Avganger = ({ apiData, refetch }) => {
             </Row>
             <Row>
                 <Col md={12}>
-                    {outputAvganger?.length > 0 ? <Table className={'table border'}>
-                        <thead className={'thead-light'}>
+                    {outputAvganger?.length > 0 ? (
+                        <Table className={'table border'}>
+                            <thead className={'thead-light'}>
                             <tr className={'table-bordered font-weight-bold'}>
                                 <td>Avreisested</td>
                                 <td>Ankomststed</td>
@@ -45,40 +48,40 @@ export const Avganger = ({ apiData, refetch }) => {
                                 <td>Grunnpris</td>
                                 <td>Slett</td>
                             </tr>
-                        </thead>
-                        <tbody className={'table-bordered'}>
-                        {outputAvganger?.map(avgang => (
-                            <tr key={avgang.avgangNummer}>
-                                <td>{avgang.strekning.fraSted.stedsnavn}</td>
-                                <td>{avgang.strekning.tilSted.stedsnavn}</td>
-                                <td>{avgang.dato}</td>
-                                <td>{avgang.klokkeslett}</td>
-                                <td>{avgang.pris},-</td>
-                                <td>
-                                    <Button
-                                        outline
-                                        color={'danger'}
-                                    >
-                                        Slett
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </Table> : (
+                            </thead>
+                            <tbody className={'table-bordered'}>
+                            {outputAvganger?.map(avgang => (
+                                <tr key={avgang.avgangNummer}>
+                                    <td>{avgang.strekning.fraSted.stedsnavn}</td>
+                                    <td>{avgang.strekning.tilSted.stedsnavn}</td>
+                                    <td>{avgang.dato}</td>
+                                    <td>{avgang.klokkeslett}</td>
+                                    <td>{avgang.pris},-</td>
+                                    <td>
+                                        <Button
+                                            outline
+                                            color={'danger'}
+                                        >
+                                            Slett
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </Table>) : (
                         <p>Ingen aktive avganger</p>
                     )}
                 </Col>
             </Row>
-            
+
             <Row>
-                <Col>
-                    <Button
-                        color={'success'}
-                        disabled={!strekning}
-                    >
-                        Legg til avgang
-                    </Button>
+                <Col md={12}>
+                    {strekning && (
+                        <LeggTilAvgang
+                            refetch={refetch}
+                            strekning={strekning}
+                        />
+                    )}
                 </Col>
             </Row>
         </div>

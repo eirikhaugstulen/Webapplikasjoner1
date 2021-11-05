@@ -22,23 +22,8 @@ export const Home = () => {
                                 color={'primary'}
                                 onClick={() => history.push('/bestill')}
                             >
-                                Fortsett som gjest
+                                Bestill
                             </Button>
-                            
-                            <Button
-                                color={'primary'}
-                                disabled
-                            >
-                                Logg inn
-                            </Button>
-                            
-                            <Button
-                                outline
-                                disabled
-                            >
-                                Registrer ny bruker
-                            </Button>
-                            
                         </div>
                     </Col>
                     <Col sm={12} md={6} className={'p-5'}>
