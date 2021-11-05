@@ -106,7 +106,6 @@ namespace Webapplikasjoner1.DAL
             {
                 Retur = true,
                 OrdreNummer = "mkrsl",
-                Type = "Student",
                 Antall = 1,
                 Avgang = avgang,
                 TotalPris = 100,
@@ -116,7 +115,6 @@ namespace Webapplikasjoner1.DAL
             {
                 Retur = false,
                 OrdreNummer = "mkrsl",
-                Type = "Student",
                 Antall = 1,
                 Avgang = avgang2,
                 TotalPris = 300,
