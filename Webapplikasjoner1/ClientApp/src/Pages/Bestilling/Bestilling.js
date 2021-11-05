@@ -47,7 +47,6 @@ export const Bestilling = () => {
             OrdreNummer: BillettId,
             KundeId: BillettKundeId,
             Avgang: fraAvgang.avgangNummer,
-            Type: 'Test',
         })))
         
         if (retur) {
@@ -58,7 +57,6 @@ export const Bestilling = () => {
                 OrdreNummer: returId,
                 KundeId: BillettKundeId,
                 Avgang: tilAvgang.avgangNummer,
-                Type: 'Test',
             })))
         }
         

@@ -5,12 +5,20 @@ import {useLocationQuery} from "../hooks/useLocationQuery";
 import {AvgangsVelger} from "../../components/AvgangsVelger";
 import {LeggTilAvgang} from "../../components/Admin/LeggTil/LeggTilAvgang";
 import {ref} from "yup";
+import axios from "axios";
 // Se ALLE avganger
 
 // Filtrere fraLokasjon, tilLokasjon og Dato'
 
 export const Avganger = ({ apiData, refetch }) => {
     const { strekning } = useLocationQuery();
+    
+    const slettAvgang = (id) => {
+        axios.get('/Avganger/Slett?id='+id)
+            .then(() => {
+                refetch();
+            })
+    }
 
     const outputAvganger =
         useMemo(
@@ -61,6 +69,7 @@ export const Avganger = ({ apiData, refetch }) => {
                                         <Button
                                             outline
                                             color={'danger'}
+                                            onClick={() => slettAvgang(avgang.avgangNummer)}
                                         >
                                             Slett
                                         </Button>
@@ -68,7 +77,8 @@ export const Avganger = ({ apiData, refetch }) => {
                                 </tr>
                             ))}
                             </tbody>
-                        </Table>) : (
+                        </Table>
+                    ) : (
                         <p>Ingen aktive avganger</p>
                     )}
                 </Col>
