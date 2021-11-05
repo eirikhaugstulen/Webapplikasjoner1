@@ -45,7 +45,17 @@ export const SelectAvgang = (
 
     if (!outputAvganger?.length) {
         return (
-            <p>Ingen avganger tilgjengelig</p>
+            <>
+                <p>Ingen avganger tilgjengelig</p>
+                <Button
+                    outline
+                    color={'secondary'}
+                    onClick={() => setStep(0)}
+                    className={'mt-2'}
+                >
+                    Søk etter annen avgang
+                </Button>
+            </>
         )
     }
 

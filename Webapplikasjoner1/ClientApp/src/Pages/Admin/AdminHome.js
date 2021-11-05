@@ -1,6 +1,8 @@
 import React from "react";
 import {NavigationButton} from "../../components/Admin/NavigationButton";
-import {Col} from "reactstrap";
+import {Button, Col, Row} from "reactstrap";
+import axios from "axios";
+import history from "../../history";
 
 export const AdminHome = () => (
     <div>
@@ -35,5 +37,23 @@ export const AdminHome = () => (
                 />
             </Col>
         </div>
+        <Row>
+            <Col md={4} />
+            <Col md={4} className={'text-center mt-3 '}>
+                <Button
+                    outline
+                    onClick={() => {
+                        axios.get('/Admins/LoggUt')
+                            .then(() => {
+                                history.push('/')
+                            })
+                            .catch(e => console.log(e))
+                    }}
+                >
+                    Logg ut
+                </Button>
+            </Col>
+            <Col md={4} />
+        </Row>
     </div>
 );
