@@ -32,8 +32,14 @@ export const AdminHome = () => (
         <div className="row mt-4">
             <Col lg>
                 <NavigationButton 
-                    tittel={'Readme'}
-                    tekst={'Her kan vi legge inn litt utfyllende info om admin-sidene, hvordan man endrer ulike ting og hvorfor vi har gjort som vi gjør.'}
+                    tittel={'Oppretting av Avgang'}
+                    tekst={'For å opprette en Avgang i admin-grensesnittet må en strekning opprettes. \n' +
+                    'Strekningen krever også at man oppretter to lokasjoner (Avgangslokasjon og Ankomstlokasjon), \n' +
+                    'som strekingen skal gå mellom. Disse kan man opprette i sidene med samme navn. \n\n' +
+                    'For å slette en Strekning så må også alle avgangene som bruker strekningen være slettet på forhånd. \n' +
+                    'For eksempel om man skal slette Oslo-Bergen, så må alle avganger som bruker denne strekningen slettes \n' +
+                    'før dette kan skje. Det samme gjelder også Lokasjon -> Strekning, hvor man må slette strekningen før man sletter lokasjonen.'
+                    }
                 />
             </Col>
         </div>
