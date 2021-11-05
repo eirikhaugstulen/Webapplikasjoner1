@@ -29,7 +29,6 @@ namespace Webapplikasjoner1.DAL
 
                 
                 nyBillettRad.Retur = innBillett.Retur;
-                nyBillettRad.Type = innBillett.Type;
                 nyBillettRad.TotalPris = innBillett.TotalPris;
                 nyBillettRad.Antall = innBillett.Antall;
                 nyBillettRad.OrdreNummer = innBillett.OrdreNummer;
@@ -77,7 +76,6 @@ namespace Webapplikasjoner1.DAL
                     OrdreNummer = b.OrdreNummer,
                     Avgang = b.Avgang,
                     TotalPris = b.TotalPris,
-                    Type = b.Type,
                     Antall =b.Antall,
                     KundeId = b.KundeId,
                     
@@ -109,7 +107,6 @@ namespace Webapplikasjoner1.DAL
                     OrdreNummer = enBillett.OrdreNummer,
                     Avgang = enBillett.Avgang,
                     TotalPris = enBillett.TotalPris,
-                    Type = enBillett.Type,
                     Antall = enBillett.Antall,
                     KundeId = enBillett.KundeId,
                 };
