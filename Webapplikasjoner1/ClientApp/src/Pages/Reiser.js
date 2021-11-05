@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Table} from "reactstrap";
 import axios from "axios";
 import yacht from '../Media/yacht.svg';
 import {ReiseTableRow} from "../components/ReiseTableRow";
+import {KundeContext} from "../Context/KundeContext";
 
 const fetchBilletter = async() => {
     const res = await axios('/Billett/hentalle');
@@ -12,6 +13,7 @@ const fetchBilletter = async() => {
 export const Reiser = () => {
     //usestate
     const [billetter, setBilletter] = useState([]);
+    const { KundeId } = useContext(KundeContext);
     
     
     //useeffect res
@@ -22,20 +24,21 @@ export const Reiser = () => {
             }
             
             const sortedBilletter = inpBilletter
-                .filter(billett => billett.dato)
+                .filter(billett => billett.kundeId.kundeId === KundeId)
                 .map(billett => {
-                    billett.dato = convertDate(billett.dato)
+                    billett.avgang.dato = convertDate(`${billett.avgang.dato} ${billett.avgang.klokkeslett}`)
                     billett.returDato = convertDate(billett.returDato)
-                    billett.status = billett.dato > new Date().setHours(1)
+                    billett.status = billett.avgang.dato > new Date().setHours(1)
                     return billett;
                 })
-                .sort((a,b) => (b.dato - a.dato))
+                .sort((a,b) => (a.avgang.dato - b.avgang.dato))
             
             setBilletter(sortedBilletter);
         }
         
         fetchBilletter()
             .then(res => convertInputBilletter(res.data))
+            .catch(e => console.log(e))
     }, [])
     
     
@@ -52,7 +55,6 @@ export const Reiser = () => {
                     <th>Navn</th>
                     <th>Strekning</th>
                     <th>Retur</th>
-                    <th>Returdato</th>
                     <th>Pris</th>
                     <th>Kvittering</th>
                     

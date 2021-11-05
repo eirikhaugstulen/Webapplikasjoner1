@@ -1,50 +1,97 @@
-import React from "react";
-import {Button, Col, FormFeedback, FormGroup, Input, Label, Progress, Row} from "reactstrap";
-import {Formik} from "formik";
-import * as Yup from 'yup';
-import {StrekningsVelger} from "./BestillForm/StrekningsVelger";
-import {useBestillingsForm} from "../hooks/useBestillingsForm";
+import React, {useEffect, useState} from "react";
+import {Button, Col, Progress, Row} from "reactstrap";
+import axios from "axios";
+import {LoadingScreen} from "../../components/LoadingScreen";
+import {ErrorScreen} from "../../components/ErrorScreen";
+import {BestillForm} from "./BestillForm/BestillForm";
+import {SelectAvgang} from "./BestillForm/SelectAvgang";
+import {Personalia} from "./BestillForm/Personalia";
+import {Pris} from "./BestillForm/Pris";
+import {Confirm} from "./BestillForm/Confirm";
+import qs from "qs";
+import {useGeneratedId} from "../hooks/useGeneratedId";
 import history from "../../history";
 
-// JSON vil byttes ut med API-kall i del 2
-const reiselokasjoner = [
-    {
-        id: 1,
-        displayName: 'Oslo',
-    },
-    {
-        id: 2,
-        displayName: 'Kristiansand',
-    },
-    {
-        id: 3,
-        displayName: 'Stavanger',
-    },
-    {
-        id: 4,
-        displayName: 'Bergen',
-    },
-    {
-        id: 5,
-        displayName: 'Ålesund',
-    },
-    {
-        id: 6,
-        displayName: 'Trondheim',
-    }
-]
+const fetchLokasjoner = async () => axios.get('/Lokasjon/HentAlle');
+const fetchAvganger = async () => axios.get('/Avganger/HentAlle');
 
 export const Bestilling = () => {
-    const [
-        {
-            avgangsstedState,
-            ankomststedState,
-            fraDatoState,
-            tilDatoState,
-            returState,
-        },
-        updateIsTouched,
-    ] = useBestillingsForm();
+    const [lokasjoner, setLokasjoner] = useState([]);
+    const [avganger, setAvganger] = useState([])
+    const [step, setStep] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState();
+    const { generatedId: BillettId } = useGeneratedId();
+    const { generatedId: returId } = useGeneratedId();
+    
+    const [BillettKundeId, setBillettKundeId] = useState('');
+    const [avgangssted, setAvgangssted] = useState('');
+    const [ankomststed, setAnkomssted] = useState('')
+    const [retur, setRetur] = useState(false);
+    const [fraDato, setFraDato] = useState();
+    const [fraKlokkeslett, setFraKlokkeslett] = useState();
+    const [tilDato, setTilDato] = useState();
+    const [tilKlokkeslett, setTilKlokkeslett] = useState();
+    const [totalPris, setTotalpris] = useState(0);
+    const [totaltAntallBilletter, setTotaltAntallBilletter] = useState(0)
+    
+    const [fraAvgang, setFraAvgang] = useState();
+    const [tilAvgang, setTilAvgang] = useState();
+
+    const sendBillett = async () => {
+        let ApiKall = [];
+        ApiKall.push(axios.post('Billett/Lagre', qs.stringify({
+            Retur: retur,
+            TotalPris: totalPris,
+            Antall: totaltAntallBilletter,
+            OrdreNummer: BillettId,
+            KundeId: BillettKundeId,
+            Avgang: fraAvgang.avgangNummer,
+            Type: 'Test',
+        })))
+        
+        if (retur) {
+            ApiKall.push(axios.post('Billett/Lagre', qs.stringify({
+                Retur: retur,
+                TotalPris: totalPris,
+                Antall: totaltAntallBilletter,
+                OrdreNummer: returId,
+                KundeId: BillettKundeId,
+                Avgang: tilAvgang.avgangNummer,
+                Type: 'Test',
+            })))
+        }
+        
+        Promise.all(ApiKall)
+            .then(res => {
+                console.log(res);
+                setStep(6);
+            })
+            .catch(e => console.log(e))
+    }
+
+    useEffect(() => {
+        Promise.all([fetchLokasjoner(), fetchAvganger()])
+            .then(res => {
+                setLokasjoner(res[0].data);
+                setAvganger(res[1].data);
+                setLoading(false);
+            })
+            .catch(e => {
+                console.log(e);
+                setError(e);
+            })
+    }, [])
+    
+    const progress = retur ? [5, 15, 20, 30, 60, 80, 100] : [5, 20, 30, 40, 60, 80, 100];
+
+    if (error) {
+        return ( <ErrorScreen error={error} /> );
+    }
+
+    if (loading) {
+        return ( <LoadingScreen /> );
+    }
     
     return (
         <>
@@ -56,131 +103,108 @@ export const Bestilling = () => {
                             animated
                             bar
                             color={'info'}
-                            value={30}
+                            value={progress[step]}
                         />
                     </Progress>
+                    {/*{step > 0 && (
+                        <div className="mt-3">
+                            <Button
+                                outline
+                                onClick={() => setStep(prevState => prevState - 1)}
+                            >
+                                Tilbake
+                            </Button>
+                        </div>
+                    )}*/}
                 </Col>
             </Row>
-            <Formik
-                initialValues={{
-                    fraSted: avgangsstedState.avgangssted,
-                    tilSted: ankomststedState.ankomststed,
-                    avgang: fraDatoState.fraDato,
-                    retur: returState.retur,
-                    returDato: tilDatoState.tilDato,
-                }}
-                validationSchema={Yup.object().shape({
-                    fraSted: Yup.string().required('Påkrevd'),
-                    tilSted: Yup.string().required('Påkrevd'),
-                    avgang: Yup.date().required('Påkrevd'),
-                    retur: Yup.boolean(),
-                    returDato: Yup.date().when('retur', {
-                        is: true,
-                        then: Yup.date().required('Påkrevd'),
-                    }),
-                })}
-                onSubmit={async values => alert(JSON.stringify(values, null, 2))}
-            >
-                {props => {
-                    const {
-                        values,
-                        touched,
-                        errors,
-                        isSubmitting,
-                        handleChange,
-                        handleBlur,
-                        handleSubmit,
-                    } = props;
-                    return (
-                        <>
-                            <Row
-                                form
-                                className={'mt-3'}
-                            >
-                                <StrekningsVelger
-                                    reiselokasjoner={reiselokasjoner}
-                                    handleChange={handleChange}
-                                    values={values}
-                                    handleBlur={handleBlur}
-                                    errors={errors}
-                                    touched={touched}
-                                />
-                            </Row>
 
-                            <Row form>
-                                <Col md={12}>
-                                    <FormGroup check>
-                                        <Input
-                                            type={'checkbox'}
-                                            id={'retur'}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            invalid={errors.retur && touched.retur}
-                                        />
-                                        <Label>Retur?</Label>
-                                    </FormGroup>
-                                </Col>
-                            </Row>
+            {step === 0 && (
+                <BestillForm
+                    lokasjoner={lokasjoner}
+                    avgangssted={avgangssted}
+                    setAvgangssted={setAvgangssted}
+                    ankomststed={ankomststed}
+                    setAnkomststed={setAnkomssted}
+                    retur={retur}
+                    setRetur={setRetur}
+                    fraDato={fraDato}
+                    setFraDato={setFraDato}
+                    fraKlokkeslett={fraKlokkeslett}
+                    setFraKlokkeslett={setFraKlokkeslett}
+                    tilDato={tilDato}
+                    tilKlokkeslett={tilKlokkeslett}
+                    setTilKlokkeslett={setTilKlokkeslett}
+                    setTilDato={setTilDato}
+                    setStep={setStep}
+                />
+            )}
 
-                            <Row form>
-                                <Col md={6}>
-                                    <FormGroup>
-                                        <Label>Velg avgang</Label>
-                                        <Input
-                                            id={'avgang'}
-                                            type={'date'}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            invalid={errors.avgang && touched.avgang}
-                                        />
-                                        <FormFeedback>{errors.avgang}</FormFeedback>
-                                    </FormGroup>
-                                </Col>
+            {step === 1 && (
+                <SelectAvgang 
+                    avganger={avganger}
+                    avgangssted={avgangssted}
+                    ankomststed={ankomststed}
+                    dato={fraDato}
+                    klokkeslett={fraKlokkeslett}
+                    selectAvgang={setFraAvgang}
+                    skipStep={retur ? 1 : 2}
+                    setStep={setStep}
+                />
+            )}
 
-                                <Col md={6}>
-                                    <FormGroup>
-                                        <Label>Velg returdato</Label>
-                                        <Input
-                                            type={'date'}
-                                            id={'returDato'}
-                                            onChange={handleChange}
-                                            onBlud={handleBlur}
-                                            disabled={!values.retur}
-                                            invalid={errors.returDato && touched.returDato}
-                                        />
-                                        <FormFeedback>{errors.returDato}</FormFeedback>
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                            
-                            <Row form>
-                                <Col md={12}>
-                                    <p>Ordinær:</p>
-                                    <p>Barn:</p>
-                                    <p>Student:</p>
-                                    <p>Honnør:</p>
-                                </Col>
-                            </Row>
-                            <div className={'mt-3 d-flex'} style={{gap: '5px'}}>
-                                <Button
-                                    color={'primary'}
-                                    onClick={handleSubmit}
-                                    disabled={isSubmitting}
-                                >
-                                    Bestill
-                                </Button>
-                                <Button
-                                    color={'secondary'}
-                                    onClick={() => history.push("/")}
-                                    outline
-                                >
-                                    Avbryt
-                                </Button>
-                            </div>
-                        </>
-                    )
-                }}
-            </Formik>
+            {(step === 2 && retur) && (
+                <SelectAvgang 
+                    avganger={avganger}
+                    avgangssted={ankomststed}
+                    ankomststed={avgangssted}
+                    klokkeslett={tilKlokkeslett}
+                    dato={tilDato}
+                    selectAvgang={setTilAvgang}
+                    skipStep={1}
+                    setStep={setStep}
+                />
+            )}
+
+            {step === 3 && (
+                <Personalia 
+                    setBillettKundeId={setBillettKundeId}
+                    setStep={setStep}
+                />
+            )}
+
+            {step === 4 && (
+                <Pris 
+                    fraAvgangPris={fraAvgang?.pris}
+                    tilAvgangPris={tilAvgang?.pris}
+                    setTotalPris={setTotalpris}
+                    setTotaltAntallBilletter={setTotaltAntallBilletter}
+                    setStep={setStep}
+                />
+            )}
+
+            {step === 5 && (
+                <Confirm confirm={sendBillett} />
+            )}
+
+            {step === 6 && (
+                <Row>
+                    <Col md={3} />
+                    <Col md={6} className={'border mt-4 p-4 text-center'}>
+                        <h4>Takk for din bestilling!</h4>
+                        <p>Du er nå klar for å reise med oss i AnvendtLine</p>
+                        <Button
+                            outline
+                            color={'primary'}
+                            size={'sm'}
+                            onClick={() => history.push('/reiser')}
+                        >
+                            Dine billetter
+                        </Button>
+                    </Col>
+                    <Col md={3} />
+                </Row>
+            )}
         </>
     )
 }

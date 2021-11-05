@@ -1,5 +1,5 @@
 import React from "react";
-import {NavigationButton} from "../../components/AdminHome/NavigationButton";
+import {NavigationButton} from "../../components/Admin/NavigationButton";
 import {Col} from "reactstrap";
 
 export const AdminHome = () => (
@@ -23,7 +23,7 @@ export const AdminHome = () => (
                 <NavigationButton
                     tittel={'Avganger'}
                     tekst={'Legg til eller endre avganger. Avganger er strekninger som man kan sette opp til å gå flere ganger.'}
-                    page={'avganger'}
+                    page={'avgang'}
                 />
             </div>
         </div>

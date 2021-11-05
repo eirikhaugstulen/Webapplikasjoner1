@@ -62,27 +62,31 @@ export const Kvittering = () => {
                 <tbody className={'table-bordered'}>
                     <tr>
                         <td>Ordrenummer</td>
-                        <td>{billett.id}</td>
+                        <td>{billett.ordreNummer}</td>
+                    </tr>
+                    <tr>
+                        <td>KundeID</td>
+                        <td>{billett.kundeId.kundeId}</td>
                     </tr>
                     <tr>
                         <td>Navn</td>
-                        <td>{billett.fornavn} {billett.etternavn}</td>
+                        <td>{billett.kundeId.fornavn} {billett.kundeId.etternavn}</td>
                     </tr>
                     <tr>
                         <td>Avreisedato</td>
-                        <td>{new Date(Date.parse(billett.dato)).toLocaleDateString()}</td>
+                        <td>{new Date(Date.parse(`${billett.avgang.dato} ${billett.avgang.klokkeslett}`)).toLocaleDateString()}</td>
                     </tr>
                     <tr>
-                        <td>Returdato</td>
-                        <td>{billett.returDato && new Date(Date.parse(billett.returDato)).toLocaleDateString()}</td>
+                        <td>Klokkeslett</td>
+                        <td>{billett.avgang.klokkeslett}</td>
                     </tr>
                     <tr>
                         <td>Strekning</td>
-                        <td>{billett.fraSted} - {billett.tilSted}</td>
+                        <td>{billett.avgang.strekning.fraSted.stedsnavn} - {billett.avgang.strekning.tilSted.stedsnavn}</td>
                     </tr>
                     <tr>
                         <td>Pris</td>
-                        <td>{billett.pris},-</td>
+                        <td>{billett.totalPris},-</td>
                     </tr>
                 </tbody>
             </Table>

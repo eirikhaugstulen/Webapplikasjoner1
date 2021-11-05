@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect, useCallback} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import { Avganger } from './AvgangerAdmin';
 import { Strekninger } from './StrekningerAdmin';
@@ -7,41 +7,42 @@ import axios from "axios";
 import {Spinner} from "reactstrap";
 import {AdminHome} from "./AdminHome";
 import {LoggInnAdmin} from "./LoggInnAdmin";
-
+import {checkUnauthorized} from "../../utils/checkUnauthorized";
 
 export const AdminContainer = () => {
     const match = useRouteMatch();
     const [apiData, setApiData] = useState({
-        lokasjoner: {}, 
-        strekninger: {},
-        avganger: {},
+        lokasjoner: [], 
+        strekninger: [],
+        avganger: [],
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState();
     
-    
     const fetchApiData = useCallback(() => {
-        axios.get('/Billett/HentEn', {
-            params: {
-                id: '1',
-            }
-        })
-            .then(res => {
-                formaterApiData(res.data)
+        const apiKall = [];
+        apiKall.push(axios.get('/Lokasjon/HentAlle'));
+        apiKall.push(axios.get('/Strekning/HentAlle'));
+        apiKall.push(axios.get('/Avganger/HentAlle'));
+            
+            Promise.all(apiKall).then(res => {
+                setApiData({
+                    lokasjoner: res[0].data,
+                    strekninger: res[1].data,
+                    avganger: res[2].data,
+                });
                 setLoading(false);
             })
-            .catch(e => setError(e));
+            .catch(e => {
+                checkUnauthorized(e);
+                if (e?.response?.status !== 401) {
+                    setError(e)
+                }
+                setLoading(false);
+            });
     }, [])
     
     const refetch = useCallback(() => fetchApiData(), [fetchApiData]);
-    
-    const formaterApiData = (resApiData) => {
-        setApiData({
-            lokasjoner : resApiData?.[0],
-            strekninger : resApiData?.[1],
-            avganger : resApiData?.[2],
-        });
-    }
     
     useEffect(() => {
         fetchApiData();
@@ -80,7 +81,7 @@ export const AdminContainer = () => {
                 <Route 
                     path={`${match.url}/lokasjoner`}
                     render={() => (
-                        <Lokasjoner
+                        <Lokasjoner 
                             apiData={apiData}
                             refetch={refetch}
                         />
@@ -98,7 +99,7 @@ export const AdminContainer = () => {
                 />
                 
                 <Route 
-                    path={`${match.url}/avganger`}
+                    path={`${match.url}/avgang`}
                     render={() => (
                         <Avganger
                             apiData={apiData}

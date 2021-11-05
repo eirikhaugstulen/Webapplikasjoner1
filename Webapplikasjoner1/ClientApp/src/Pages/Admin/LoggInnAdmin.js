@@ -3,6 +3,9 @@ import {Button, Col, FormFeedback, FormGroup, Input, Label, Row} from "reactstra
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import axios from "axios";
+import {StatusMessage} from "../../components/Admin/StatusMessage";
+import qs from "qs";
+import history from "../../history";
 
 export const LoggInnAdmin = () => {
     return (
@@ -19,10 +22,20 @@ export const LoggInnAdmin = () => {
                             brukernavn: '',
                             passord: '',
                         }}
-                        onSubmit={async values => {
-                            axios.post('/Billett/LoggInn', values)
-                                .then(res => console.log(res))
-                                .catch(e => console.log(e))
+                        onSubmit={async (values, formikHelpers) => {
+                            axios.post('/Admins/LoggInn', qs.stringify(values))
+                                .then(res => {
+                                    console.log(res)
+                                    history.push('/admin')
+                                })
+                                .catch(e => {
+                                    if (e.response.status === 400) {
+                                        formikHelpers.setStatus('Feil brukernavn eller passord')
+                                    } else {
+                                        formikHelpers.setStatus('Det har skjedd en feil! Se console for mer.')
+                                    }
+                                    console.log(e.response)
+                                })
                         }}
                         validationSchema={Yup.object().shape({
                             brukernavn: Yup.string().required('Påkrevd'),
@@ -34,6 +47,7 @@ export const LoggInnAdmin = () => {
                                 values,
                                 touched,
                                 errors,
+                                status,
                                 isSubmitting,
                                 handleChange,
                                 handleBlur,
@@ -45,6 +59,7 @@ export const LoggInnAdmin = () => {
                                     onSubmit={handleSubmit}
                                     className={'text-left'}
                                 >
+                                    <StatusMessage status={status} />
                                     <FormGroup>
                                         <Label>Brukernavn</Label>
                                         <Input
